@@ -1,1 +1,8 @@
 /* Empty. Add your own CSS if you like */
+.mum-init {
+    text-align: center;
+}
+
+.mum-init-bg{
+    background: url(../img/background-mum.png) repeat center;
+}
