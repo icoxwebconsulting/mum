@@ -1,5 +1,5 @@
 angular.module('app.controllers', [])
-
+/*
 .controller('DashCtrl', function($scope) {})
 
 .controller('ChatsCtrl', function($scope, Chats) {
@@ -26,3 +26,4 @@ angular.module('app.controllers', [])
     enableFriends: true
   };
 });
+*/

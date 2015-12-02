@@ -3,6 +3,29 @@
     text-align: center;
 }
 
-.mum-init-bg{
+.mum-init-bg {
     background: url(../img/background-mum.png) repeat center;
+}
+
+@media screen
+and (orientation: portrait) {
+    .mum-init-start{
+        margin-top: 50%;
+    }
+
+    .mum-verify{
+        padding-top: 50%;
+    }
+}
+
+@media screen
+and (orientation: landscape) {
+    .mum-init-start{
+        width: 100%;
+        height: 50px;
+    }
+
+    .mum-verify{
+        padding-top: 20%;
+    }
 }
