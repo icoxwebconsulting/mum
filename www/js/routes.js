@@ -40,7 +40,7 @@ angular.module('app.routes', [])
         })
 
         .state('tab.chats', {
-            url: '/chats',
+            url: '/tab/chats',
             views: {
                 'tab-chats': {
                     templateUrl: 'templates/tab-chats.html',
@@ -48,6 +48,7 @@ angular.module('app.routes', [])
                 }
             }
         })
+/*
         .state('tab.chat-detail', {
             url: '/chats/:chatId',
             views: {
@@ -67,6 +68,7 @@ angular.module('app.routes', [])
                 }
             }
         });
+        */
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/init');
