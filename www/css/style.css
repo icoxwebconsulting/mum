@@ -33,3 +33,7 @@ and (orientation: landscape) {
 .custom-tabs{
     position: relative; !important;
 }
+
+.topp{
+    margin-top: 75px;
+}

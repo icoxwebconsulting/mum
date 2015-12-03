@@ -32,6 +32,13 @@ angular.module('app.routes', [])
         templateUrl: 'templates/home.html'
       })
 
+      //for test purposes
+      .state('test', {
+        url: '/test',
+        templateUrl: 'templates/test.html',
+        controller: 'TestCtrl'
+      })
+
       //
       .state('chats', {
         url: '/chats',
