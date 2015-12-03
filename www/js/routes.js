@@ -29,7 +29,8 @@ angular.module('app.routes', [])
       //prueba de pantalla con tabs de forma manual
       .state('home', {
         url: '/home',
-        templateUrl: 'templates/home.html'
+        templateUrl: 'templates/home.html',
+        controller: 'HomeCtrl'
       })
 
       //for test purposes
