@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
-/*
-.controller('DashCtrl', function($scope) {})
+
+//.controller('DashCtrl', function($scope) {})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -17,13 +17,22 @@ angular.module('app.controllers', [])
   };
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+  .controller('ContactCtrl', function($scope, Chats) {
+    //$scope.$on('$ionicView.enter', function(e) {
+    //});
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
-*/
+    $scope.chats = Chats.all();
+    $scope.remove = function(chat) {
+      Chats.remove(chat);
+    };
+  })
+
+//.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+//  $scope.chat = Chats.get($stateParams.chatId);
+//})
+//
+//.controller('AccountCtrl', function($scope) {
+//  $scope.settings = {
+//    enableFriends: true
+//  };
+//});

@@ -29,3 +29,7 @@ and (orientation: landscape) {
         padding-top: 20%;
     }
 }
+
+.custom-tabs{
+    position: relative; !important;
+}
