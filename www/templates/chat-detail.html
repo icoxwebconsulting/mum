@@ -4,11 +4,131 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="{{chat.name}}">
-  <ion-content class="padding">
-    <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
-    <p>
-      {{chat.lastText}}
-    </p>
+<!--<ion-view view-title="{{chat.name}}">-->
+<!--<ion-content class="padding">-->
+<!--<img ng-src="{{chat.face}}" style="width: 64px; height: 64px">-->
+<!--<p>-->
+<!--{{chat.lastText}}-->
+<!--</p>-->
+<!--</ion-content>-->
+<!--</ion-view>-->
+
+<div class="mum">
+  <ion-header-bar style="height: 120px;">
+    <div class="header header-bd">
+      <div class="flex flex-middle-xs">
+        <div class="flex-xs-2">
+          <a href="#/chats">
+            <button class="btn clear-btn header-btn" type="button">
+              <span class="icon icon-arrow-left"></span>
+            </button>
+          </a>
+        </div>
+        <div class="flex-xs p-y-xs">
+          <div class="flex flex-middle-xs">
+            <img class="img-circle m-r-xs" src="img/avatar.jpg" alt="" width="56">
+            Andrea
+          </div>
+        </div>
+        <div class="flex-xs-3">
+          <button class="btn clear-btn header-btn" type="button">
+            <span class="icon icon-clock"></span>
+          </button>
+
+          <button class="btn clear-btn header-btn" type="button">
+            <span class="icon icon-clip"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-header-bar>
+  <ion-content class="topp">
+    <div class="main text-left">
+      <div class="container">
+        <div class="inner-scroll">
+          <div class="messages bg-main">
+            <div class="message message-in">
+              <div class="message-body">
+                <p>Como estas?</p>
+              </div>
+            </div>
+            <div class="message message-out">
+              <div class="message-body">
+                <p>Muy bien</p>
+              </div>
+            </div>
+            <div class="message message-in">
+              <div class="message-body">
+                <p>Esta tarde nos reunimos en el la oficina</p>
+              </div>
+            </div>
+            <div class="message message-out">
+              <div class="message-body">
+                <p>Me puedes enviar el horario?</p>
+              </div>
+            </div>
+            <div class="message message-in">
+              <div class="message-body">
+                <p>Como estas?</p>
+              </div>
+            </div>
+            <div class="message message-out">
+              <div class="message-body">
+                <p>Muy bien</p>
+              </div>
+            </div>
+            <div class="message message-in">
+              <div class="message-body">
+                <p>Esta tarde nos reunimos en el la oficina</p>
+              </div>
+            </div>
+            <div class="message message-out">
+              <div class="message-body">
+                <p>Me puedes enviar el horario?</p>
+              </div>
+            </div>
+            <div class="message message-in">
+              <div class="message-body">
+                <p>Como estas?</p>
+              </div>
+            </div>
+            <div class="message message-out">
+              <div class="message-body">
+                <p>Muy bien</p>
+              </div>
+            </div>
+            <div class="message message-in">
+              <div class="message-body">
+                <p>Esta tarde nos reunimos en el la oficina</p>
+              </div>
+            </div>
+            <div class="message message-out">
+              <div class="message-body">
+                <p>Me puedes enviar el horario?</p>
+              </div>
+            </div>
+          </div>
+          <div id="bottom"></div>
+        </div>
+      </div>
+    </div>
   </ion-content>
-</ion-view>
+  <ion-footer-bar>
+    <div class="footer" style="width: 100%">
+      <form class="form-messages">
+        <div class="form-group">
+          <div class="flex flex-middle-xs">
+            <div class="flex-xs">
+              <input type="text" class="form-control" id="" placeholder="Escribir">
+            </div>
+            <div class="flex-xs-2">
+              <button class="btn clear-btn btn-block">
+                <span class="icon icon-dart-right"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ion-footer-bar>
+</div>

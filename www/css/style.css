@@ -71,20 +71,20 @@ calendar {
     border: solid 1px #CCC;
     margin-bottom: 10px;
 }
-calendar > div.header {
+calendar > div.ca-header {
     float: left;
     width: 100%;
     background: white;
     height: 40px;
     color: gray;
 }
-calendar > div.header > * {
+calendar > div.ca-header > * {
     height: 40px;
     line-height: 40px !important;
     display: inline-block;
     vertical-align: middle;
 }
-calendar > div.header > i {
+calendar > div.ca-header > i {
     float: left;
     width: 40px;
     font-size: 1.125em;
@@ -95,17 +95,16 @@ calendar > div.header > i {
     padding: 0 10px;
     cursor: pointer;
 }
-calendar > div.header > i.fa-angle-left {
+calendar > div.ca-header > i.fa-angle-left {
     text-align: left;
 }
-calendar > div.header > i.fa-angle-right {
+calendar > div.ca-header > i.fa-angle-right {
     text-align: right;
     margin-left: -40px;
 }
-calendar > div.header > span {
+calendar > div.ca-header > span {
     float: left;
     width: 100%;
-    font-weight: bold;
     text-transform: uppercase;
     box-sizing: border-box;
     -moz-box-sizing: border-box;

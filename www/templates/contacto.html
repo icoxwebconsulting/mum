@@ -1,45 +1,54 @@
-<ion-header-bar style="height: 120px;">
-  <div class="row">
-    <div class="col col-10">1</div>
-    <div class="col">2</div>
-    <div class="col col-10">
-      <button class="button" ng-click="show()">Edit</button>
-    </div>
-  </div>
-</ion-header-bar>
-<div class="bar bar-subheader">
-  <div class="row">
-    <div class="col">
-      <div class="tabs custom-tabs">
-        <a class="tab-item" href="#/chats">
-          Chat
-        </a>
-        <a class="tab-item" href="#/home">
-          Mum
-        </a>
-        <a class="tab-item" href="#/contacto">
-          Contacto
-        </a>
+<div class="mum">
+  <ion-header-bar style="height: 120px;">
+    <div class="header">
+      <div class="flex flex-middle-xs">
+        <div class="profile">
+          <img class="img-circle img-responsive" src="img/profile.jpg" alt="" width="56">
+        </div>
+        <div class=" flex-xs p-y-xs">
+          <img class="img-responsive center-block" src="img/logo-alt.png" alt="" width="208">
+        </div>
+        <div class="text-right">
+          <button class="btn menu-btn" type="button">
+            <span class="icon icon-menu"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <ul class="section-menu reset-list flex">
+          <li class="flex-xs"><a href="#/chats">Chat</a></li>
+          <li class="flex-xs"><a href="#/home">Mum</a></li>
+          <li class="flex-xs"><a href="#/contacto">Contacto</a></li>
+        </ul>
       </div>
     </div>
-  </div>
+  </ion-header-bar>
+  <ion-content class="topp">
+    <div class="main">
+      <div class="container p-y-sm text-center">
+        <ion-list>
+          <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap"
+                    href="#/tab/chats/{{chat.id}}">
+            <img ng-src="{{chat.face}}">
+
+            <h2>{{chat.name}}</h2>
+
+            <p></p>
+            <i class="icon ion-chevron-right icon-accessory"></i>
+
+            <ion-option-button class="button-assertive" ng-click="remove(chat)">
+              Delete
+            </ion-option-button>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+
+    <!--<div class="footer">-->
+    <!--<div class="container p-y-sm">-->
+    <!--<a class="btn btn-default text-uppercase" href="#">Nuevo mum</a>-->
+    <!--</div>-->
+    <!--</div>-->
+  </ion-content>
 </div>
-
-<ion-content>
-  <ion-list>
-    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap"
-              href="#/tab/chats/{{chat.id}}">
-      <img ng-src="{{chat.face}}">
-
-      <h2>{{chat.name}}</h2>
-
-      <p>{{chat.lastText}}</p>
-      <i class="icon ion-chevron-right icon-accessory"></i>
-
-      <ion-option-button class="button-assertive" ng-click="remove(chat)">
-        Delete
-      </ion-option-button>
-    </ion-item>
-  </ion-list>
-
-</ion-content>
