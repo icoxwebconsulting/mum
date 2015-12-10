@@ -1,4 +1,4 @@
-<div id="mum">
+<div class="mum">
   <ion-header-bar style="height: 120px;">
     <div class="header">
       <div class="flex flex-middle-xs">
@@ -16,17 +16,22 @@
       </div>
 
       <div class="section-header">
-        <ul class="section-menu reset-list flex">
-          <li class="flex-xs"><a href="#/chats">Chat</a></li>
-          <li class="flex-xs"><a href="#/home">Mum</a></li>
-          <li class="flex-xs"><a href="#/contacto">Contacto</a></li>
-        </ul>
+        <!--<ul class="section-menu reset-list flex">-->
+          <!--<li class="flex-xs"><a href="#/chats">Chat</a></li>-->
+          <!--<li class="flex-xs"><a href="#/home">Mum</a></li>-->
+          <!--<li class="flex-xs"><a href="#/contacto">Contacto</a></li>-->
+        <!--</ul>-->
+        <div class="button-bar">
+          <a class="button" href="#/chats">Chat</a>
+          <a class="button" href="#/home">Mum</a>
+          <a class="button" href="#/contacto">Contacto</a>
+        </div>
       </div>
     </div>
   </ion-header-bar>
-  <ion-content class="topp">
-    <div class="main">
-      <div class="container p-y-sm text-center">
+  <ion-content class="top-margin">
+    <div class="row">
+      <div class="col">
         <calendar selected="day"></calendar>
       </div>
     </div>

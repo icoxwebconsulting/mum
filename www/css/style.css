@@ -34,8 +34,13 @@ and (orientation: landscape) {
     position: relative; !important;
 }
 
-.topp{
-    margin-top: 75px;
+.top-margin{
+    margin-top: 105px;
+}
+
+.h1-splash{
+    color:rgb(115, 123, 130);
+    font-family: Roboto sans-serif;
 }
 
 /*CSS CALENDAR*/
@@ -57,19 +62,21 @@ and (orientation: landscape) {
 /*span > b {*/
     /*color: black;*/
 /*}*/
-.border-box {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
+/*.border-box {*/
+    /*box-sizing: border-box;*/
+    /*-moz-box-sizing: border-box;*/
+/*}*/
 calendar {
-    float: left;
+    /*float: left;*/
     display: block;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     background: white;
     width: 300px;
-    border: solid 1px #CCC;
-    margin-bottom: 10px;
+    /*border: solid 1px #ccc;*/
+    /*margin-bottom: 10px;*/
+    margin: 0 auto;
+    text-align: center;
 }
 calendar > div.ca-header {
     float: left;
@@ -117,7 +124,7 @@ calendar > div.ca-header > span {
 calendar > div.week {
     float: left;
     width: 100%;
-    border-top: solid 1px #CCC;
+    /*border: solid 1px #CCC;*/
 }
 calendar > div.week:first-child {
     border-top: none;
@@ -127,7 +134,7 @@ calendar > div.week > span.day {
     width: 14.28571429%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    border-left: solid 1px #CCC;
+    /*border-left: solid 1px #CCC;*/
     font-size: 0.75em;
     text-align: center;
     height: 30px;
@@ -151,7 +158,12 @@ calendar > div.week > span.day.selected {
     background: indianred;
     color: white;
 }
-calendar > div.week.names > span {
+/*calendar > div.week.names {*/
+    /*border-top-left-radius: 15px;*/
+    /*border-top-right-radius: 15px;*/
+    /*border: 1px solid #ccc;*/
+/*}*/
+div.week.names > span {
     color: darkred;
     font-weight: bold;
 }
