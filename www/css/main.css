@@ -677,7 +677,7 @@ body {
 .header-bar {
   background-image: -webkit-linear-gradient(left, #D73C67, #FF4D79);
   background-image: linear-gradient(to right, #D73C67, #FF4D79);
-  color: #fff;
+  /*color: #fff;*/
   padding: 3rem 15px;
 }
 .header-title {
@@ -685,6 +685,8 @@ body {
   margin-bottom: 0;
   margin-top: 0;
   font-family: 'bentosans_400', sans-serif;
+  color:#ffffff;
+  color:#ffffff;
 }
 .main {
   -webkit-box-flex: 1;
@@ -973,7 +975,7 @@ body {
   border-radius: 50%;
   border: 1px solid #ddd;
   display: block;
-  font-size: 2rem;
+  font-size: 20px;
   height: 2em;
   line-height: 2em;
   margin-bottom: 1rem;
@@ -984,7 +986,7 @@ body {
 .calendar-day.active .day-number {
   border-color: #FF4D79;
   color: #FF4D79;
-  font-size: 2.2rem;
+  font-size: 20px;
   margin-top: -.2rem;
 }
 .calendar-day .day-label {

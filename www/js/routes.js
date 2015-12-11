@@ -59,6 +59,12 @@ angular.module('app.routes', [])
         templateUrl: 'templates/chat-detail.html',
         controller: 'ContactCtrl'
       })
+
+      .state('mum', {
+        url: '/mum',
+        templateUrl: 'templates/mum.html',
+        controller: 'ContactCtrl'
+      })
     // setup an abstract state for the tabs directive
     //.state('tab', {
     //    url: 'tab',
