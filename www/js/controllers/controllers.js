@@ -2,73 +2,32 @@ angular.module('app.controllers', [])
 
 //.controller('DashCtrl', function($scope) {})
 
-.controller('ChatsCtrl', function($scope, $ionicActionSheet, $timeout, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  $scope.show = function() {
+.controller('MainCtrl', function($scope, $state, $ionicActionSheet, $timeout) {
+  $scope.showMenu = function() {
 
     // Show the action sheet
     var hideSheet = $ionicActionSheet.show({
       buttons: [
-        { text: '<b>Share</b> This' },
-        { text: 'Move' }
+        { text: 'Perfil' },
+        { text: 'Nuevo grupo' },
+        { text: 'Política de privacidad' }
       ],
-      destructiveText: 'Delete',
       titleText: 'Opciones',
       cancelText: 'Cancelar',
       cancel: function() {
         // add cancel code..
       },
       buttonClicked: function(index) {
-        return true;
-      }
-    });
+        switch (index)
+        {
+          case 0:
+            $state.go('profile');
+            break;
+          case 2:
+            $state.go('terms');
+            break;
+        }
 
-    // For example's sake, hide the sheet after two seconds
-    $timeout(function() {
-      hideSheet();
-    }, 2000);
-
-  };
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-
-  .controller('ContactCtrl', function($scope, Chats) {
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-
-    $scope.chats = Chats.all();
-    $scope.remove = function(chat) {
-      Chats.remove(chat);
-    };
-  })
-
-.controller('TestCtrl', function($scope, $ionicActionSheet, $timeout) {
-  $scope.show = function() {
-
-    // Show the action sheet
-    var hideSheet = $ionicActionSheet.show({
-      buttons: [
-        { text: '<b>Share</b> This' },
-        { text: 'Move' }
-      ],
-      destructiveText: 'Delete',
-      titleText: 'Opciones',
-      cancelText: 'Cancelar',
-      cancel: function() {
-        // add cancel code..
-      },
-      buttonClicked: function(index) {
         return true;
       }
     });
@@ -79,6 +38,31 @@ angular.module('app.controllers', [])
     //}, 2000);
 
   };
+})
+
+.controller('ChatsCtrl', function($scope, $ionicActionSheet, $timeout, Chats) {
+  // With the new view caching in Ionic, Controllers are only called
+  // when they are recreated or on app start, instead of every page change.
+  // To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  //
+  //$scope.$on('$ionicView.enter', function(e) {
+  //});
+
+  $scope.chats = Chats.all();
+  $scope.remove = function(chat) {
+    Chats.remove(chat);
+  };
+})
+
+.controller('ContactCtrl', function($scope, Chats) {
+    //$scope.$on('$ionicView.enter', function(e) {
+    //});
+
+    $scope.chats = Chats.all();
+    $scope.remove = function(chat) {
+      Chats.remove(chat);
+    };
 })
 
 .controller('HomeCtrl', function($scope) {

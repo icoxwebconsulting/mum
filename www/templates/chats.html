@@ -1,49 +1,20 @@
-<div class="mum">
-  <ion-header-bar style="height: 120px;">
-    <div class="header">
-      <div class="flex flex-middle-xs">
-        <div class="profile">
-          <img class="img-circle img-responsive" src="img/profile.jpg" alt="" width="56">
-        </div>
-        <div class=" flex-xs p-y-xs">
-          <img class="img-responsive center-block" src="img/logo-alt.png" alt="" width="208">
-        </div>
-        <div class="text-right">
-          <!--<button class="btn menu-btn" type="button">-->
-          <div class="top-menu"><span class="icon icon-menu"></span></div>
-          <!--</button>-->
-        </div>
-      </div>
-
-      <div class="section-header">
-        <!--<ul class="section-menu reset-list flex">-->
-        <!--<li class="flex-xs"><a href="#/chats">Chat</a></li>-->
-        <!--<li class="flex-xs"><a href="#/home">Mum</a></li>-->
-        <!--<li class="flex-xs"><a href="#/contacto">Contacto</a></li>-->
-        <!--</ul>-->
-        <div class="button-bar">
-          <a class="button active" href="#/chats">Chat</a>
-          <a class="button" href="#/home">Mum</a>
-          <a class="button" href="#/contacto">Contacto</a>
-        </div>
-      </div>
-    </div>
-  </ion-header-bar>
+<ion-view>
   <ion-content class="top-margin">
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap"
-                href="#/chat">
-        <img ng-src="{{chat.face}}">
+<ion-list>
+  <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap"
+            href="#/chat">
+    <img ng-src="{{chat.face}}">
 
-        <h2>{{chat.name}}</h2>
+    <h2>{{chat.name}}</h2>
 
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+    <p>{{chat.lastText}}</p>
+    <i class="icon ion-chevron-right icon-accessory"></i>
 
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+    <ion-option-button class="button-assertive" ng-click="remove(chat)">
+      Delete
+    </ion-option-button>
+  </ion-item>
+
+</ion-list>
   </ion-content>
-</div>
+</ion-view>

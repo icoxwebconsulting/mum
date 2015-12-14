@@ -26,91 +26,48 @@ angular.module('app.routes', [])
         templateUrl: 'templates/terms.html'
       })
 
-      //prueba de pantalla con tabs de forma manual
-      .state('home', {
+      //perfil
+      .state('profile', {
+        url: '/profile',
+        templateUrl: 'templates/profile.html'
+      })
+
+      //Plantilla del header
+      .state('layout', {
+        url: '/content',
+        abstract: true,
+        templateUrl: 'templates/layout.html',
+        controller: 'MainCtrl'
+      })
+
+      .state('layout.home', {
         url: '/home',
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
       })
 
-      //for test purposes
-      .state('test', {
-        url: '/test',
-        templateUrl: 'templates/test.html',
-        controller: 'TestCtrl'
-      })
-
-      //
-      .state('chats', {
+      .state('layout.chats', {
         url: '/chats',
         templateUrl: 'templates/chats.html',
         controller: 'ChatsCtrl'
       })
 
-      //
-      .state('contacto', {
-        url: '/contacto',
-        templateUrl: 'templates/contacto.html',
-        controller: 'ContactCtrl'
-      })
+    .state('layout.contacts', {
+      url: '/contacts',
+      templateUrl: 'templates/contacts.html',
+      controller: 'ContactCtrl'
+    })
 
-      .state('chat', {
-        url: '/chat',
-        templateUrl: 'templates/chat-detail.html',
-        controller: 'ContactCtrl'
-      })
+    .state('chat', {
+      url: '/chat',
+      templateUrl: 'templates/chat-detail.html',
+      controller: 'ContactCtrl'
+    })
 
-      .state('mum', {
-        url: '/mum',
-        templateUrl: 'templates/mum.html',
-        controller: 'ContactCtrl'
-      })
-    // setup an abstract state for the tabs directive
-    //.state('tab', {
-    //    url: 'tab',
-    //    abstract: true,
-    //    templateUrl: 'templates/tabs.html'
-    //})
-    //
-    //// Each tab has its own nav history stack:
-    //.state('tab.dash', {
-    //    url: '/dash',
-    //    views: {
-    //        'tab-dash': {
-    //            templateUrl: 'templates/tab-dash.html'//,
-    //           // controller: 'DashCtrl'
-    //        }
-    //    }
-    //})
-    //.state('tab.chats', {
-    //    url: '/tab/chats',
-    //    views: {
-    //        'tab-chats': {
-    //            templateUrl: 'templates/tab-chats.html',
-    //            controller: 'ChatsCtrl'
-    //        }
-    //    }
-    //})
-    //
-    //.state('tab.chat-detail', {
-    //    url: '/chats/:chatId',
-    //    views: {
-    //        'tab-chats': {
-    //            templateUrl: 'templates/chat-detail.html',
-    //            controller: 'ChatDetailCtrl'
-    //        }
-    //    }
-    //})
-    //
-    //.state('tab.account', {
-    //    url: '/account',
-    //    views: {
-    //        'tab-account': {
-    //            templateUrl: 'templates/tab-account.html',
-    //            controller: 'AccountCtrl'
-    //        }
-    //    }
-    //});
+    .state('mum', {
+      url: '/mum',
+      templateUrl: 'templates/mum.html'
+    })
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/start');
