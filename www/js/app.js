@@ -1,6 +1,9 @@
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services'])
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.user'])
 
-.run(function($ionicPlatform) {
+.run(function($rootScope, $state, $stateParams, $ionicPlatform, usuario) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -14,4 +17,26 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services']
       StatusBar.styleDefault();
     }
   });
+
+  $rootScope.$on("$stateChangeStart", function (event, toState) {
+
+    if (usuario.isVerified() && (
+        toState.name == 'start' ||
+        toState.name == 'verify')) {
+      event.preventDefault();
+      return $state.go('layout.home');
+    }
+
+    if (!usuario.isVerified() && (
+      toState.name != 'start' &&
+      toState.name != 'verify')) {
+      event.preventDefault();
+      return $state.go('start');
+    }
+
+  });
+})
+
+.constant("SERVER_CONF", {
+  "HOST": "http://192.168.0.101/server/"
 });

@@ -7,6 +7,10 @@
     background: url(../img/background-mum.png) repeat center;
 }
 
+.mum-input{
+    background: #eee;
+}
+
 @media screen
 and (orientation: portrait) {
     .mum-init-start{

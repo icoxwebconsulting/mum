@@ -26,17 +26,17 @@
               </div>
               <div class="flex-xs-2">
                 <label class="item-input-wrapper">
-                <input type="tel"  placeholder=""></label>
+                <input type="tel" class="mum-input" placeholder="" ng-model="data.cc"></label>
               </div>
               <div class="flex-xs">
                 <label class="item-input-wrapper">
-                <input type="tel" placeholder=""></label>
+                <input type="tel" class="mum-input" placeholder="" ng-model="data.phone"></label>
               </div>
               <div class="flex-xs-2 text-left">
                 <!--<a href="#/home">-->
                   <!--<button class="btn btn-default text-uppercase" type="submit">Ok</button>-->
                 <!--</a>-->
-                <a href="#/content/home" class="button button-small button-stable">
+                <a href="#" ng-click="verifyPhone()" class="button button-small button-stable">
                   Ok
                 </a>
               </div>
@@ -44,6 +44,7 @@
           </div>
         </form>
       </div>
+
     </div>
   </ion-content>
 </div>

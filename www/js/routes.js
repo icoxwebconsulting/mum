@@ -17,7 +17,8 @@ angular.module('app.routes', [])
       //pantalla de verificacion de numero telefonico, igual mostrada la primera vez
       .state('verify', {
         url: '/verify',
-        templateUrl: 'templates/verify.html'
+        templateUrl: 'templates/verify.html',
+        controller: 'InitCtrl'
       })
 
       //terminos y condiciones
