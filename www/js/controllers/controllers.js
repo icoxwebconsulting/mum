@@ -3,7 +3,9 @@ angular.module('app.controllers', ['app.user'])
   .controller('InitCtrl', function ($scope, $state, $ionicActionSheet, $timeout, $ionicPopup, $ionicLoading, usuario) {
     $scope.data = {};
 
-    $scope.verifyPhone = function () {
+    $scope.toVerify = false;
+
+    $scope.sendCode = function () {
       if (!$scope.data.cc) {
         $ionicPopup.alert({
           title: 'Ingrese el código del país'
@@ -17,13 +19,35 @@ angular.module('app.controllers', ['app.user'])
           template: 'Verificando...'
         });
 
-        usuario.verifyPhone($scope.data.cc + $scope.data.phone, function (isSuccess) {
+        usuario.sendCode('+' + $scope.data.cc + $scope.data.phone, function (isSuccess) {
           $ionicLoading.hide();
           $ionicPopup.alert({
-            title: (isSuccess) ? 'Correcto' : 'No verificado'
+            title: (isSuccess) ? 'Se envió un mensaje a su teléfono.' : 'No verificado, intente nuevamente.'
           });
           if (isSuccess) {
+            $scope.toVerify = true;
+            usuario.setNumber($scope.data.cc + $scope.data.phone);
+          }
+        });
+      }
+    };
+
+    $scope.verifyCode = function () {
+      if (!$scope.data.code) {
+        $ionicPopup.alert({
+          title: 'Ingrese el código recibido vía SMS'
+        });
+      } else {
+        usuario.verifyCode($scope.data.code, function (isValid) {
+          if (isValid) {
+            $ionicPopup.alert({
+              title: 'Se ha validado correctamente su teléfono.'
+            });
             $state.go('layout.home');
+          }else{
+            $ionicPopup.alert({
+              title: 'Código erróneo, verifique y vuelva a intentar.'
+            });
           }
         });
       }

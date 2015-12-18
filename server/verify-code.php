@@ -1,14 +1,13 @@
 <?php
 
-require 'C:\icox\mum\server\vendor\twilio\sdk\Services\Twilio.php';
 require 'connect.php';
 
 //obtener valores del POST
 
-//$number = $_POST['number'];
-//$code = $_POST['code'];
-$number = "+584123600295";
-$code = "9976";
+$number = $_REQUEST ['number'];
+$code = $_REQUEST ['code'];
+//$number = "+584123600295";
+//$code = "9976";
 
 //defino la respuesta
 $respuesta = array(

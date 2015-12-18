@@ -38,5 +38,5 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 })
 
 .constant("SERVER_CONF", {
-  "HOST": "http://192.168.0.101/server/"
+  "HOST": "http://192.168.1.136/"
 });
