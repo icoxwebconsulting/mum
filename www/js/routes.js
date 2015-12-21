@@ -43,8 +43,7 @@ angular.module('app.routes', [])
 
       .state('layout.home', {
         url: '/home',
-        templateUrl: 'templates/home.html',
-        controller: 'HomeCtrl'
+        templateUrl: 'templates/home.html'
       })
 
       .state('layout.chats', {
