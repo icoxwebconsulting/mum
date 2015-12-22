@@ -29,10 +29,5 @@ angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicAct
       }
     });
 
-    //// For example's sake, hide the sheet after two seconds
-    //$timeout(function() {
-    //  hideSheet();
-    //}, 2000);
-
   };
 });

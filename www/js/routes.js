@@ -67,7 +67,7 @@ angular.module('app.routes', [])
     .state('mum', {
       url: '/mum',
       templateUrl: 'templates/mum.html'
-    })
+    });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/start');

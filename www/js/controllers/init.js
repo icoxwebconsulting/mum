@@ -1,4 +1,4 @@
-angular.module('app').controller('InitCtrl', function ($scope, $state, $ionicActionSheet, $timeout, $ionicPopup, $ionicLoading, usuario) {
+angular.module('app').controller('InitCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, usuario) {
   $scope.data = {};
 
   $scope.toVerify = false;
@@ -40,6 +40,11 @@ angular.module('app').controller('InitCtrl', function ($scope, $state, $ionicAct
         if (isValid) {
           $ionicPopup.alert({
             title: 'Se ha validado correctamente su teléfono.'
+          });
+          $ionicHistory.nextViewOptions({
+            disableAnimate: true,
+            disableBack: true,
+            historyRoot: true
           });
           $state.go('layout.home');
         } else {
