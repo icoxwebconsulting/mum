@@ -7,6 +7,10 @@
     background: url(../img/background-mum.png) repeat center;
 }
 
+.mum-input{
+    background: #eee;
+}
+
 @media screen
 and (orientation: portrait) {
     .mum-init-start{
@@ -34,43 +38,56 @@ and (orientation: landscape) {
     position: relative; !important;
 }
 
-.topp{
-    margin-top: 75px;
+.top-margin{
+    margin-top: 105px;
+}
+
+.h1-splash{
+    color:rgb(115, 123, 130);
+    font-family: Roboto sans-serif;
+}
+
+.top-menu{
+    height: 100px;
+    background-color: #f8f8f8;
+    line-height: 100px;
+    width: 30px;
+    text-align: center;
+    font-size: 20px;
 }
 
 /*CSS CALENDAR*/
-/*body {*/
-    /*font-family: Arial;*/
-    /*font-size: 14px;*/
-/*}*/
-/*body > span,*/
-/*body > h1 {*/
-    /*float: left;*/
-    /*width: 100%;*/
-    /*margin: 0;*/
-    /*padding: 0;*/
-    /*margin-bottom: 10px;*/
-/*}*/
-/*span {*/
-    /*color: #888888;*/
-/*}*/
-/*span > b {*/
-    /*color: black;*/
-/*}*/
-.border-box {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
 calendar {
-    float: left;
+    /*float: left;*/
     display: block;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     background: white;
-    width: 300px;
-    border: solid 1px #CCC;
-    margin-bottom: 10px;
+    /*border: solid 1px #ccc;*/
+    /*margin-bottom: 10px;*/
+    margin: 0 auto;
+    text-align: center;
+    font-size: larger;
 }
+
+@media (min-width: 0px) and (max-width: 512px){
+    calendar {
+        width: 300px;
+    }
+}
+
+@media (min-width: 512px) and (max-width: 1024px){
+    calendar {
+        width: 450px;
+    }
+}
+
+@media (min-width: 1024px){
+    calendar {
+        width: 800px;
+    }
+}
+
 calendar > div.ca-header {
     float: left;
     width: 100%;
@@ -117,7 +134,7 @@ calendar > div.ca-header > span {
 calendar > div.week {
     float: left;
     width: 100%;
-    border-top: solid 1px #CCC;
+    /*border: solid 1px #CCC;*/
 }
 calendar > div.week:first-child {
     border-top: none;
@@ -127,7 +144,7 @@ calendar > div.week > span.day {
     width: 14.28571429%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    border-left: solid 1px #CCC;
+    /*border-left: solid 1px #CCC;*/
     font-size: 0.75em;
     text-align: center;
     height: 30px;
@@ -151,7 +168,12 @@ calendar > div.week > span.day.selected {
     background: indianred;
     color: white;
 }
-calendar > div.week.names > span {
+/*calendar > div.week.names {*/
+    /*border-top-left-radius: 15px;*/
+    /*border-top-right-radius: 15px;*/
+    /*border: 1px solid #ccc;*/
+/*}*/
+div.week.names > span {
     color: darkred;
     font-weight: bold;
 }
