@@ -1,4 +1,7 @@
 {
   "name": "mum",
-  "app_id": ""
+  "app_id": "",
+  "gulpStartupTasks": [
+    "watch"
+  ]
 }
