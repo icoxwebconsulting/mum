@@ -27,12 +27,12 @@ angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.user'])
         return $state.go('layout.home');
       }
 
-      if (!usuario.isVerified() && (
-        toState.name != 'start' &&
-        toState.name != 'verify')) {
-        event.preventDefault();
-        return $state.go('start');
-      }
+      //if (!usuario.isVerified() && (
+      //  toState.name != 'start' &&
+      //  toState.name != 'verify')) {
+      //  event.preventDefault();
+      //  return $state.go('start');
+      //}
 
     });
   });

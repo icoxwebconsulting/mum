@@ -30,7 +30,8 @@ angular.module('app.routes', [])
       //perfil
       .state('profile', {
         url: '/profile',
-        templateUrl: 'templates/profile.html'
+        templateUrl: 'templates/profile.html',
+        controller: 'ProfileCtrl'
       })
 
       //Plantilla del header
