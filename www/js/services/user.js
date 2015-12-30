@@ -1,5 +1,4 @@
-angular.module('app.user', [])
-  .factory('usuario', function ($http, SERVER_CONF) {
+angular.module('app.user', []).factory('usuario', function ($http, SERVER_CONF) {
 
     var profile = {
       name: "",
