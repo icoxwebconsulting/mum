@@ -5,12 +5,12 @@
   <ion-content>
     <div class="list">
       <label class="item item-input">
-        <input type="text" placeholder="Escribe tu nombre">
+        <input type="text" placeholder="Escribe tu nombre" value="{{profile.name}}" ng-model="profile.name">
       </label>
-      <button class="button button-block button-assertive">
+      <button ng-click="acceptChange()" class="button button-block button-assertive">
         Aceptar
       </button>
-      <button ng-click="closeModal()" class="button button-block button-assertive">
+      <button ng-click="cancelChange()" class="button button-block button-assertive">
         Cancelar
       </button>
     </div>

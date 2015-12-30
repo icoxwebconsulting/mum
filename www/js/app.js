@@ -20,19 +20,5 @@ angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.user'])
 
     $rootScope.$on("$stateChangeStart", function (event, toState) {
 
-      if (usuario.isVerified() && (
-        toState.name == 'start' ||
-        toState.name == 'verify')) {
-        event.preventDefault();
-        return $state.go('layout.home');
-      }
-
-      //if (!usuario.isVerified() && (
-      //  toState.name != 'start' &&
-      //  toState.name != 'verify')) {
-      //  event.preventDefault();
-      //  return $state.go('start');
-      //}
-
     });
   });

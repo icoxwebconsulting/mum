@@ -71,5 +71,10 @@ angular.module('app.routes', [])
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/start');
+    if (window.localStorage.getItem('verified')) {
+      $urlRouterProvider.otherwise('/content/home');
+    } else {
+      $urlRouterProvider.otherwise('/start');
+    }
+
   });

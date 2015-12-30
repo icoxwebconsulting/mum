@@ -1,6 +1,11 @@
 angular.module('app.user', [])
   .factory('usuario', function ($http, SERVER_CONF) {
 
+    var profile = {
+      name: "",
+      image: ""
+    };
+
     function isVerified() {
       return window.localStorage.getItem('verified') || false;
     }
@@ -9,11 +14,11 @@ angular.module('app.user', [])
       window.localStorage.setItem('verified', true);
     }
 
-    function setNumber(number){
+    function setNumber(number) {
       window.localStorage.setItem('number', number);
     }
 
-    function getNumber(){
+    function getNumber() {
       return window.localStorage.getItem('number');
     }
 
@@ -57,6 +62,34 @@ angular.module('app.user', [])
         });
     }
 
+    function getProfile() {
+      return profile = {
+        name: window.localStorage.getItem('name'),
+        image: window.localStorage.getItem('image')
+      };
+    }
+
+    function setProfileImage(image) {
+      if (image != undefined) {
+        profile = {
+          image: image
+        };
+        window.localStorage.setItem('image', image);
+      }
+    }
+
+    function setProfileName(name) {
+      console.log(name);
+      if (name != undefined) {
+        console.log("dentro de if");
+        profile = {
+          name: name
+        };
+        window.localStorage.setItem('name', name);
+      } else {
+        console.log("dentro de else");
+      }
+    }
 
     return {
       isVerified: isVerified,
@@ -64,6 +97,9 @@ angular.module('app.user', [])
       setNumber: setNumber,
       getNumber: getNumber,
       sendCode: sendCode,
-      verifyCode: verifyCode
+      verifyCode: verifyCode,
+      getProfile: getProfile,
+      setProfileImage: setProfileImage,
+      setProfileName: setProfileName
     };
   });
