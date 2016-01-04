@@ -42,6 +42,50 @@ angular.module('app.user', [])
                 }, failCallback);
         }
 
+        function refreshAccessToken(successCallback, failCallback) {
+            if (successCallback === null || successCallback === undefined) {
+                successCallback = function () {
+                };
+            }
+
+            if (failCallback === null || failCallback === undefined) {
+                failCallback = function () {
+                };
+            }
+
+            if (userDatastore.isRefreshingAccessToken() == 0) {
+                userDatastore.setRefreshingAccessToken(1);
+                var authData = {
+                    client_id: OAUTH_CONF.CLIENT_ID,
+                    client_secret: OAUTH_CONF.CLIENT_SECRET,
+                    grant_type: 'refresh_token',
+                    redirect_uri: 'www.mum.com',
+                    refresh_token: userDatastore.getTokens().refreshToken
+                };
+                customer.refreshAccessToken(authData,
+                    function (response) {
+                        userDatastore.setTokens(response.access_token, response.refresh_token);
+                        userDatastore.setRefreshingAccessToken(0);
+                        successCallback();
+                    },
+                    function () {
+                        requestAccessToken(function () {
+                            userDatastore.setRefreshingAccessToken(0);
+                            successCallback();
+                        }, function () {
+                            userDatastore.setRefreshingAccessToken(0);
+                            failCallback();
+                        });
+                    });
+
+                // refresh access_token every minute
+                setInterval(refreshAccessToken, 60000);
+            }
+        }
+
+        // refresh access_token at start
+        refreshAccessToken();
+
         return {
             isVerified: userDatastore.isVerified,
             verifyCode: verifyCode,

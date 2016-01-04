@@ -45,6 +45,14 @@ angular.module('app.userDataStore', [])
             };
         }
 
+        function isRefreshingAccessToken() {
+            return window.localStorage.getItem('refreshingAccessToken') || false;
+        }
+
+        function setRefreshingAccessToken(refreshing) {
+            window.localStorage.setItem('refreshingAccessToken', refreshing);
+        }
+
         return {
             isVerified: isVerified,
             setVerified: setVerified,
@@ -55,6 +63,8 @@ angular.module('app.userDataStore', [])
             setCustomerId: setCustomerId,
             getCustomerId: getCustomerId,
             setTokens: setTokens,
-            getTokens: getTokens
+            getTokens: getTokens,
+            isRefreshingAccessToken: isRefreshingAccessToken,
+            setRefreshingAccessToken: setRefreshingAccessToken
         };
     });

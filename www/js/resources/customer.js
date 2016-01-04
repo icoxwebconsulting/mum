@@ -8,12 +8,17 @@ angular.module('app.resources', []).factory('customer', function ($resource, SER
         requestAccessToken: {
             method: 'GET',
             url: SERVER_CONF.OAUTH_HOST + 'token',
-            transformRequest: function (data, headers) {
-                console.log(headers);
-                headers.username = userDatastore.getNumber();
-                headers.password = userDatastore.getPassword();
-                console.log(headers);
-                return data;
+            headers: {
+                username: userDatastore.getNumber,
+                password: userDatastore.getPassword
+            }
+        },
+        refreshAccessToken: {
+            method: 'GET',
+            url: SERVER_CONF.OAUTH_HOST + 'token',
+            headers: {
+                username: userDatastore.getNumber,
+                password: userDatastore.getPassword
             }
         }
     });
