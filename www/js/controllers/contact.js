@@ -1,9 +1,9 @@
-angular.module('app').controller('ContactCtrl', function ($scope, Chats) {
+angular.module('app').controller('ContactCtrl', function ($scope, Contacts) {
     //$scope.$on('$ionicView.enter', function(e) {
     //});
 
-    $scope.chats = Chats.all();
-    $scope.remove = function (chat) {
-        Chats.remove(chat);
-    };
+    Contacts.getAllContacts(function(contacts){
+        $scope.contacts = contacts;
+    });
+
 });

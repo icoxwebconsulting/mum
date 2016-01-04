@@ -1,6 +1,6 @@
-angular.module('app.contacts', []).factory('contactos', function ($cordovaContacts, SERVER_CONF) {
+angular.module('app.contacts', []).factory('Contacts', function ($cordovaContacts, SERVER_CONF) {
 
-  function getAllContacts() {
+  function getAllContacts(callback) {
 
     function onSuccess(contacts) {
       var c = [];
@@ -14,7 +14,7 @@ angular.module('app.contacts', []).factory('contactos', function ($cordovaContac
           }
         }
       }
-      return c;
+      callback(c);
     }
 
     function contactError(error) {

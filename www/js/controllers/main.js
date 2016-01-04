@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet, $cordovaContacts) {
+angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet) {
     $scope.day = moment();
 
     $scope.showMenu = function () {
@@ -31,7 +31,4 @@ angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicAct
 
     };
 
-  $scope.showContacts = function(){
-
-    };
 });
