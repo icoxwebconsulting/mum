@@ -1,104 +1,51 @@
-angular.module('app.user', []).factory('usuario', function ($http, SERVER_CONF) {
+angular.module('app.user', [])
+    .factory('user', function (OAUTH_CONF, customer, userDatastore) {
+        function getProfile() {
+            return {
+                name: window.localStorage.getItem('name'),
+                image: window.localStorage.getItem('image')
+            };
+        }
 
-    var profile = {
-      name: "",
-      image: ""
-    };
+        function register(registrationData, successCallback, failCallback) {
+            customer.save(registrationData, function (response) {
+                userDatastore.setNumber(registrationData.username);
+                userDatastore.setVerified(1);
+                userDatastore.setCustomerId(response.customer);
+                successCallback();
+            }, failCallback);
+        }
 
-    function isVerified() {
-      return window.localStorage.getItem('verified') || false;
-    }
+        function verifyCode(code, successCallback, failCallback) {
+            var confirmationData = {
+                customer: userDatastore.getCustomerId(),
+                confirmationCode: code
+            };
+            customer.confirm(confirmationData, function (response) {
+                userDatastore.setVerified(2);
+                userDatastore.setPassword(response.password);
+                requestAccessToken(successCallback, failCallback);
+            }, failCallback);
+        }
 
-    function setVerified() {
-      window.localStorage.setItem('verified', true);
-    }
+        function requestAccessToken(successCallback, failCallback) {
+            var authData = {
+                client_id: OAUTH_CONF.CLIENT_ID,
+                client_secret: OAUTH_CONF.CLIENT_SECRET,
+                grant_type: 'password',
+                redirect_uri: 'www.mum.com'
+            };
+            customer.requestAccessToken(authData,
+                function (response) {
+                    userDatastore.setTokens(response.access_token, response.refresh_token);
+                    successCallback();
+                }, failCallback);
+        }
 
-    function setNumber(number) {
-      window.localStorage.setItem('number', number);
-    }
-
-    function getNumber() {
-      return window.localStorage.getItem('number');
-    }
-
-    function sendCode(phone, callback) {
-      var config = {
-        method: "POST",
-        url: SERVER_CONF.HOST + 'send-sms.php' +
-        '?number=' + phone
-      };
-
-      $http(config)
-        .then(function successCallback(response) {
-          if (!response.data.error) {
-            callback(true);
-          } else {
-            callback(false);
-          }
-        }, function errorCallback(response) {
-          callback(false);
-        });
-    }
-
-    function verifyCode(code, callback) {
-      var config = {
-        method: "POST",
-        url: SERVER_CONF.HOST + 'verify-code.php' +
-        '?number=' + getNumber() +
-        '&code=' + code
-      };
-
-      $http(config)
-        .then(function successCallback(response) {
-          if (!response.data.error) {
-            setVerified();
-            callback(true);
-          } else {
-            callback(false);
-          }
-        }, function errorCallback(response) {
-          callback(false);
-        });
-    }
-
-    function getProfile() {
-      return profile = {
-        name: window.localStorage.getItem('name'),
-        image: window.localStorage.getItem('image')
-      };
-    }
-
-    function setProfileImage(image) {
-      if (image != undefined) {
-        profile = {
-          image: image
+        return {
+            isVerified: userDatastore.isVerified,
+            verifyCode: verifyCode,
+            getProfile: getProfile,
+            register: register
         };
-        window.localStorage.setItem('image', image);
-      }
-    }
-
-    function setProfileName(name) {
-      console.log(name);
-      if (name != undefined) {
-        console.log("dentro de if");
-        profile = {
-          name: name
-        };
-        window.localStorage.setItem('name', name);
-      } else {
-        console.log("dentro de else");
-      }
-    }
-
-    return {
-      isVerified: isVerified,
-      setVerified: setVerified,
-      setNumber: setNumber,
-      getNumber: getNumber,
-      sendCode: sendCode,
-      verifyCode: verifyCode,
-      getProfile: getProfile,
-      setProfileImage: setProfileImage,
-      setProfileName: setProfileName
-    };
-  });
+    });
