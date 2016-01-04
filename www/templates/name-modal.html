@@ -1,18 +1,18 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Cambiar nombre</h1>
-  </ion-header-bar>
-  <ion-content>
-    <div class="list">
-      <label class="item item-input">
-        <input type="text" placeholder="Escribe tu nombre" value="{{profile.name}}" ng-model="profile.name">
-      </label>
-      <button ng-click="acceptChange()" class="button button-block button-assertive">
-        Aceptar
-      </button>
-      <button ng-click="cancelChange()" class="button button-block button-assertive">
-        Cancelar
-      </button>
-    </div>
-  </ion-content>
+    <ion-header-bar>
+        <h1 class="title">Cambiar nombre</h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <label class="item item-input">
+                <input type="text" placeholder="Escribe tu nombre" value="{{profile.name}}" ng-model="profile.name">
+            </label>
+            <button ng-click="acceptChange()" class="button button-block button-assertive">
+                Aceptar
+            </button>
+            <button ng-click="cancelChange()" class="button button-block button-assertive">
+                Cancelar
+            </button>
+        </div>
+    </ion-content>
 </ion-modal-view>
