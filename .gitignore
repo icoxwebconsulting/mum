@@ -9,3 +9,4 @@ plugins/
 /www/res/main.js
 /www/lib/
 /hooks/
+/www/js/constants.js
