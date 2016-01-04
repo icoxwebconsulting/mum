@@ -8,4 +8,4 @@ plugins/
 .idea/
 /www/res/main.js
 /www/lib/
-/hooks
+/hooks/
