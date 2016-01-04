@@ -6,5 +6,6 @@ angular.module('app')
     })
     .constant("OAUTH_CONF", {
         "CLIENT_ID": "56848ba238161_2ycvebtvse4g8cs84s44kcog40ckwgscc480cgo80kcoowkwso",
-        "CLIENT_SECRET": "2t27ugiufckkckk0sokkogw448gc04s44swskgcwog008owggg"
+        "CLIENT_SECRET": "2t27ugiufckkckk0sokkogw448gc04s44swskgcwog008owggg",
+        REFRESH_INTERVAL: 600000
     });

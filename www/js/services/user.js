@@ -79,7 +79,7 @@ angular.module('app.user', [])
                     });
 
                 // refresh access_token every minute
-                setInterval(refreshAccessToken, 60000);
+                setInterval(refreshAccessToken, OAUTH_CONF.REFRESH_INTERVAL);
             }
         }
 
