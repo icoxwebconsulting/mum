@@ -1,4 +1,4 @@
-angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.user', 'ngResource', 'ngCordova'])
+angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.user', 'app.contacts', 'ngResource', 'ngCordova'])
 
   .run(function ($rootScope, $state, $stateParams, $ionicPlatform, $ionicHistory, usuario) {
     $rootScope.$state = $state;

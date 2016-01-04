@@ -78,15 +78,11 @@ angular.module('app.user', []).factory('usuario', function ($http, SERVER_CONF) 
     }
 
     function setProfileName(name) {
-      console.log(name);
       if (name != undefined) {
-        console.log("dentro de if");
         profile = {
           name: name
         };
         window.localStorage.setItem('name', name);
-      } else {
-        console.log("dentro de else");
       }
     }
 
