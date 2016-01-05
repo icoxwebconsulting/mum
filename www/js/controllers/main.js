@@ -1,16 +1,8 @@
-angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicLoading, $ionicActionSheet, user) {
+angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet, user) {
 
-    //$scope.$on('$ionicView.enter', function () {
-    //    $ionicLoading.show({
-    //        template: 'Cargando ...'
-    //    });
-    //
-    //    user.getProfile().then(function (profile) {
-    //
-    //    }).catch(function () {
-    //        $ionicLoading.hide();
-    //    });
-    //});
+    $scope.$on('$ionicView.enter', function () {
+        user.getProfile();
+    });
 
     $scope.day = moment();
 

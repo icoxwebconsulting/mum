@@ -73,11 +73,16 @@ angular.module('app.user', [])
         // refresh access_token at start
         refreshAccessToken();
 
+        function getProfile() {
+
+        }
+
         return {
             getVerified: userDatastore.getVerified,
             isVerified: userDatastore.isVerified,
             verifyCode: verifyCode,
             getProfile: getProfile,
-            register: register
+            register: register,
+            getProfile: getProfile
         };
     });

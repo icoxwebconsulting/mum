@@ -2,6 +2,7 @@
   "name": "mum",
   "app_id": "c26bb6d0",
   "gulpStartupTasks": [
-    "concatjs"
+    "default",
+    "watch"
   ]
 }
