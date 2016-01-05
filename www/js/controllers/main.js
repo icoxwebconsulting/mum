@@ -1,8 +1,20 @@
-angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet) {
+angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicLoading, $ionicActionSheet, user) {
+
+    //$scope.$on('$ionicView.enter', function () {
+    //    $ionicLoading.show({
+    //        template: 'Cargando ...'
+    //    });
+    //
+    //    user.getProfile().then(function (profile) {
+    //
+    //    }).catch(function () {
+    //        $ionicLoading.hide();
+    //    });
+    //});
+
     $scope.day = moment();
 
     $scope.showMenu = function () {
-
         // Show the action sheet
         var hideSheet = $ionicActionSheet.show({
             buttons: [
@@ -24,11 +36,8 @@ angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicAct
                         $state.go('terms');
                         break;
                 }
-
                 return true;
             }
         });
-
     };
-
 });

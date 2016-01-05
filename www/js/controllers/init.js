@@ -2,7 +2,7 @@ angular.module('app')
     .controller('InitCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, user) {
         $scope.data = {};
 
-        $scope.toVerify = user.isVerified();
+        $scope.toVerify = user.getVerified();
 
         $scope.sendCode = function () {
             if (!$scope.data.cc) {
@@ -22,17 +22,18 @@ angular.module('app')
                     username: $scope.data.cc + $scope.data.phone
                 };
 
-                user.register(customerData,
-                    function () {
+                user.register(customerData)
+                    .then(function () {
                         $ionicLoading.hide();
 
                         $ionicPopup.alert({
                             title: 'Se envió un mensaje a su teléfono.'
                         });
 
-                        $scope.toVerify = user.isVerified();
-                    },
-                    function () {
+                        $scope.toVerify = user.getVerified();
+                        console.log($scope.toVerify);
+                    })
+                    .catch(function () {
                         $ionicLoading.hide();
 
                         $ionicPopup.alert({
@@ -48,8 +49,8 @@ angular.module('app')
                     title: 'Ingrese el código recibido vía SMS'
                 });
             } else {
-                user.verifyCode($scope.data.code,
-                    function () {
+                user.verifyCode($scope.data.code)
+                    .then(function () {
                         $ionicPopup.alert({
                             title: 'Se ha validado correctamente su teléfono.'
                         });
@@ -59,13 +60,12 @@ angular.module('app')
                             historyRoot: true
                         });
                         $state.go('layout.home');
-                    },
-                    function () {
+                    })
+                    .catch(function () {
                         $ionicPopup.alert({
                             title: 'Código erróneo, verifique y vuelva a intentar.'
                         });
                     });
             }
         };
-
     });

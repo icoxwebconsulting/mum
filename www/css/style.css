@@ -7,47 +7,48 @@
     background: url(../img/background-mum.png) repeat center;
 }
 
-.mum-input{
+.mum-input {
     background: #eee;
 }
 
 @media screen
 and (orientation: portrait) {
-    .mum-init-start{
+    .mum-init-start {
         margin-top: 50%;
     }
 
-    .mum-verify{
+    .mum-verify {
         padding-top: 50%;
     }
 }
 
 @media screen
 and (orientation: landscape) {
-    .mum-init-start{
+    .mum-init-start {
         width: 100%;
         height: 50px;
     }
 
-    .mum-verify{
+    .mum-verify {
         padding-top: 20%;
     }
 }
 
-.custom-tabs{
-    position: relative; !important;
+.custom-tabs {
+    position: relative;
+!important;
 }
 
-.top-margin{
+.top-margin {
     margin-top: 105px;
 }
 
-.h1-splash{
-    color:rgb(115, 123, 130);
+.h1-splash {
+    color: rgb(115, 123, 130);
     font-family: Roboto sans-serif;
 }
 
-.top-menu{
+.top-menu {
     height: 100px;
     background-color: #f8f8f8;
     line-height: 100px;
@@ -70,19 +71,19 @@ calendar {
     font-size: larger;
 }
 
-@media (min-width: 0px) and (max-width: 512px){
+@media (min-width: 0px) and (max-width: 512px) {
     calendar {
         width: 300px;
     }
 }
 
-@media (min-width: 512px) and (max-width: 1024px){
+@media (min-width: 512px) and (max-width: 1024px) {
     calendar {
         width: 450px;
     }
 }
 
-@media (min-width: 1024px){
+@media (min-width: 1024px) {
     calendar {
         width: 800px;
     }
@@ -95,12 +96,14 @@ calendar > div.ca-header {
     height: 40px;
     color: gray;
 }
+
 calendar > div.ca-header > * {
     height: 40px;
     line-height: 40px !important;
     display: inline-block;
     vertical-align: middle;
 }
+
 calendar > div.ca-header > i {
     float: left;
     width: 40px;
@@ -112,13 +115,16 @@ calendar > div.ca-header > i {
     padding: 0 10px;
     cursor: pointer;
 }
+
 calendar > div.ca-header > i.fa-angle-left {
     text-align: left;
 }
+
 calendar > div.ca-header > i.fa-angle-right {
     text-align: right;
     margin-left: -40px;
 }
+
 calendar > div.ca-header > span {
     float: left;
     width: 100%;
@@ -131,14 +137,17 @@ calendar > div.ca-header > span {
     padding-right: 40px;
     color: inherit;
 }
+
 calendar > div.week {
     float: left;
     width: 100%;
     /*border: solid 1px #CCC;*/
 }
+
 calendar > div.week:first-child {
     border-top: none;
 }
+
 calendar > div.week > span.day {
     float: left;
     width: 14.28571429%;
@@ -155,23 +164,28 @@ calendar > div.week > span.day {
     cursor: pointer;
     color: black;
 }
+
 calendar > div.week > span.day:first-child {
     border-left: none;
 }
+
 calendar > div.week > span.day.today {
     background: #E3F2FF;
 }
+
 calendar > div.week > span.day.different-month {
     color: #C0C0C0;
 }
+
 calendar > div.week > span.day.selected {
     background: indianred;
     color: white;
 }
+
 /*calendar > div.week.names {*/
-    /*border-top-left-radius: 15px;*/
-    /*border-top-right-radius: 15px;*/
-    /*border: 1px solid #ccc;*/
+/*border-top-left-radius: 15px;*/
+/*border-top-right-radius: 15px;*/
+/*border: 1px solid #ccc;*/
 /*}*/
 div.week.names > span {
     color: darkred;

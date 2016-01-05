@@ -10,14 +10,13 @@
             </div>
         </ion-header-bar>
         <ion-content class="top-margin">
-            <div class="row" ng-show="toVerify == 0">
-                <div class="col">
-                    <p>Mum enviará un mensaje SMS para verificar tu número telefónico.</p>
-                    <p>Confirma tu código de país e introduce tu número telefónico.</p>
-                </div>
-            </div>
-
             <div ng-show="toVerify == 0">
+                <div class="row">
+                    <div class="col">
+                        <p>Mum enviará un mensaje SMS para verificar tu número telefónico.</p>
+                        <p>Confirma tu código de país e introduce tu número telefónico.</p>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <label class="item item-input">
@@ -28,13 +27,11 @@
                         </label>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col">
                         <a href="#" ng-click="sendCode()" class="button button-small button-stable">Aceptar</a>
                     </div>
                 </div>
-
             </div>
 
             <div ng-show="toVerify == 1">
@@ -50,14 +47,12 @@
                         <p>Ingrese el código que recibió por SMS</p>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col">
                         <a href="#" ng-click="verifyCode()" class="button button-small button-stable">Confirmar</a>
                     </div>
                 </div>
             </div>
-
         </ion-content>
     </div>
 </ion-view>

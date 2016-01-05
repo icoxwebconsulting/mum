@@ -1,7 +1,11 @@
 angular.module('app.userDataStore', [])
     .factory('userDatastore', function () {
-        function isVerified() {
+        function getVerified() {
             return window.localStorage.getItem('verified') || 0;
+        }
+
+        function isVerified() {
+            return getVerified() == 2;
         }
 
         function setVerified(status) {
@@ -54,6 +58,7 @@ angular.module('app.userDataStore', [])
         }
 
         return {
+            getVerified: getVerified,
             isVerified: isVerified,
             setVerified: setVerified,
             setNumber: setNumber,

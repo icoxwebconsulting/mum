@@ -7,53 +7,43 @@ angular.module('app.user', [])
             };
         }
 
-        function register(registrationData, successCallback, failCallback) {
-            customer.save(registrationData, function (response) {
-                userDatastore.setNumber(registrationData.username);
-                userDatastore.setVerified(1);
-                userDatastore.setCustomerId(response.customer);
-                successCallback();
-            }, failCallback);
+        function register(registrationData) {
+            return customer.save(registrationData).$promise
+                .then(function (response) {
+                    userDatastore.setNumber(registrationData.username);
+                    userDatastore.setVerified(1);
+                    userDatastore.setCustomerId(response.customer);
+                });
         }
 
-        function verifyCode(code, successCallback, failCallback) {
+        function verifyCode(code) {
             var confirmationData = {
                 customer: userDatastore.getCustomerId(),
                 confirmationCode: code
             };
-            customer.confirm(confirmationData, function (response) {
-                userDatastore.setVerified(2);
-                userDatastore.setPassword(response.password);
-                requestAccessToken(successCallback, failCallback);
-            }, failCallback);
+            return customer.confirm(confirmationData).$promise
+                .then(function (response) {
+                    userDatastore.setVerified(2);
+                    userDatastore.setPassword(response.password);
+                    requestAccessToken();
+                });
         }
 
-        function requestAccessToken(successCallback, failCallback) {
+        function requestAccessToken() {
             var authData = {
                 client_id: OAUTH_CONF.CLIENT_ID,
                 client_secret: OAUTH_CONF.CLIENT_SECRET,
                 grant_type: 'password',
                 redirect_uri: 'www.mum.com'
             };
-            customer.requestAccessToken(authData,
-                function (response) {
+            return customer.requestAccessToken(authData).$promise
+                .then(function (response) {
                     userDatastore.setTokens(response.access_token, response.refresh_token);
-                    successCallback();
-                }, failCallback);
+                });
         }
 
-        function refreshAccessToken(successCallback, failCallback) {
-            if (successCallback === null || successCallback === undefined) {
-                successCallback = function () {
-                };
-            }
-
-            if (failCallback === null || failCallback === undefined) {
-                failCallback = function () {
-                };
-            }
-
-            if (userDatastore.isRefreshingAccessToken() == 0) {
+        function refreshAccessToken() {
+            if (userDatastore.isRefreshingAccessToken() == 0 && userDatastore.isVerified()) {
                 userDatastore.setRefreshingAccessToken(1);
                 var authData = {
                     client_id: OAUTH_CONF.CLIENT_ID,
@@ -62,19 +52,16 @@ angular.module('app.user', [])
                     redirect_uri: 'www.mum.com',
                     refresh_token: userDatastore.getTokens().refreshToken
                 };
-                customer.refreshAccessToken(authData,
-                    function (response) {
+                return customer.refreshAccessToken(authData).$promise
+                    .then(function (response) {
                         userDatastore.setTokens(response.access_token, response.refresh_token);
                         userDatastore.setRefreshingAccessToken(0);
-                        successCallback();
-                    },
-                    function () {
+                    })
+                    .catch(function () {
                         requestAccessToken(function () {
                             userDatastore.setRefreshingAccessToken(0);
-                            successCallback();
                         }, function () {
                             userDatastore.setRefreshingAccessToken(0);
-                            failCallback();
                         });
                     });
 
@@ -87,6 +74,7 @@ angular.module('app.user', [])
         refreshAccessToken();
 
         return {
+            getVerified: userDatastore.getVerified,
             isVerified: userDatastore.isVerified,
             verifyCode: verifyCode,
             getProfile: getProfile,
