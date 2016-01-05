@@ -43,6 +43,9 @@ angular.module('app.user', [])
         }
 
         function refreshAccessToken() {
+            // refresh access_token every minute
+            setInterval(refreshAccessToken, OAUTH_CONF.REFRESH_INTERVAL);
+
             if (userDatastore.isRefreshingAccessToken() == 0 && userDatastore.isVerified()) {
                 userDatastore.setRefreshingAccessToken(1);
                 var authData = {
@@ -64,9 +67,6 @@ angular.module('app.user', [])
                             userDatastore.setRefreshingAccessToken(0);
                         });
                     });
-
-                // refresh access_token every minute
-                setInterval(refreshAccessToken, OAUTH_CONF.REFRESH_INTERVAL);
             }
         }
 
