@@ -1,12 +1,6 @@
 angular.module('app')
     .controller('ProfileCtrl', function ($scope, $ionicModal, user) {
-
         $scope.profile = user.getProfile();
-
-        if (!$scope.profile.image) {
-            user.setProfileImage('img/account.png');
-            $scope.profile.image = 'img/account.png';
-        }
 
         $ionicModal.fromTemplateUrl('templates/name-modal.html', {
             scope: $scope,
@@ -20,13 +14,11 @@ angular.module('app')
         };
 
         $scope.acceptChange = function () {
-            console.log($scope.profile.name);
-            user.setProfileName($scope.profile.name);
+            user.setProfile($scope.profile.displayName);
             $scope.modal.hide();
         };
 
         $scope.cancelChange = function () {
-            $scope.profile = user.getProfile();
             $scope.modal.hide();
         };
 

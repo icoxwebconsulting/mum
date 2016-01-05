@@ -21,6 +21,14 @@ angular.module('app.resources', [])
                     username: userDatastore.getNumber,
                     password: userDatastore.getPassword
                 }
+            },
+            setProfile: {
+                method: 'PUT',
+                url: SERVER_CONF.API_HOST + 'customers/:customer/profile',
+                params: {customer: '@customer'},
+                headers: {
+                    Authorization: 'Bearer ' + userDatastore.getTokens().accessToken
+                }
             }
         });
     });

@@ -1,12 +1,5 @@
 angular.module('app.user', [])
     .factory('user', function (OAUTH_CONF, customer, userDatastore) {
-        function getProfile() {
-            return {
-                name: window.localStorage.getItem('name'),
-                image: window.localStorage.getItem('image')
-            };
-        }
-
         function register(registrationData) {
             return customer.save(registrationData).$promise
                 .then(function (response) {
@@ -73,15 +66,41 @@ angular.module('app.user', [])
         // refresh access_token at start
         refreshAccessToken();
 
-        function getProfile() {
+        function setProfile(displayName, avatarData, avatarMimeType) {
+            var params = {
+                customer: userDatastore.getCustomerId()
+            };
+            var profileData = {
+                displayName: displayName,
+                avatarData: avatarData,
+                avatarMimeType: avatarMimeType
+            };
+            return customer.setProfile(params, profileData).$promise
+                .then(function (response) {
+                    userDatastore.setProfile(response.display_name, response.avatar_url);
+                });
+        }
 
+        function getProfile() {
+            var profile = userDatastore.getProfile();
+            if (profile.avatarURL == null ||
+                profile.avatarURL == undefined ||
+                profile.avatarURL == 'undefined') {
+                profile.avatarURL = 'img/account.png';
+            }
+            if (profile.displayName == null ||
+                profile.displayName == undefined ||
+                profile.displayName == 'undefined') {
+                profile.displayName = userDatastore.getNumber();
+            }
+            return profile;
         }
 
         return {
             getVerified: userDatastore.getVerified,
             isVerified: userDatastore.isVerified,
+            setProfile: setProfile,
             verifyCode: verifyCode,
-            getProfile: getProfile,
             register: register,
             getProfile: getProfile
         };

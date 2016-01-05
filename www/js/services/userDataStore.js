@@ -30,22 +30,22 @@ angular.module('app.userDataStore', [])
         }
 
         function setCustomerId(id) {
-            window.localStorage.setItem('customer_id', id);
+            window.localStorage.setItem('customerId', id);
         }
 
         function getCustomerId() {
-            return window.localStorage.getItem('customer_id');
+            return window.localStorage.getItem('customerId');
         }
 
         function setTokens(accessToken, refreshToken) {
-            window.localStorage.setItem('access_token', accessToken);
-            window.localStorage.setItem('refresh_token', refreshToken);
+            window.localStorage.setItem('accessToken', accessToken);
+            window.localStorage.setItem('refreshToken', refreshToken);
         }
 
         function getTokens() {
             return {
-                accessToken: window.localStorage.getItem('access_token'),
-                refreshToken: window.localStorage.getItem('refresh_token')
+                accessToken: window.localStorage.getItem('accessToken'),
+                refreshToken: window.localStorage.getItem('refreshToken')
             };
         }
 
@@ -55,6 +55,18 @@ angular.module('app.userDataStore', [])
 
         function setRefreshingAccessToken(refreshing) {
             window.localStorage.setItem('refreshingAccessToken', refreshing);
+        }
+
+        function setProfile(displayName, avatarURL) {
+            window.localStorage.setItem('displayName', displayName);
+            window.localStorage.setItem('avatarURL', avatarURL);
+        }
+
+        function getProfile() {
+            return {
+                displayName: window.localStorage.getItem('displayName'),
+                avatarURL: window.localStorage.getItem('avatarURL')
+            }
         }
 
         return {
@@ -70,6 +82,8 @@ angular.module('app.userDataStore', [])
             setTokens: setTokens,
             getTokens: getTokens,
             isRefreshingAccessToken: isRefreshingAccessToken,
-            setRefreshingAccessToken: setRefreshingAccessToken
+            setRefreshingAccessToken: setRefreshingAccessToken,
+            setProfile: setProfile,
+            getProfile: getProfile
         };
     });

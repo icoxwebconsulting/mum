@@ -1,9 +1,4 @@
 angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet, user) {
-
-    $scope.$on('$ionicView.enter', function () {
-        user.getProfile();
-    });
-
     $scope.day = moment();
 
     $scope.showMenu = function () {

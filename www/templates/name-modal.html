@@ -5,7 +5,8 @@
     <ion-content>
         <div class="list">
             <label class="item item-input">
-                <input type="text" placeholder="Escribe tu nombre" value="{{profile.name}}" ng-model="profile.name">
+                <input type="text" placeholder="Escribe tu nombre" value="{{profile.displayName}}"
+                       ng-model="profile.displayName">
             </label>
             <button ng-click="acceptChange()" class="button button-block button-assertive">
                 Aceptar
