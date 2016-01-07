@@ -57,10 +57,11 @@ angular.module('app.routes', [])
                 templateUrl: 'templates/chat-detail.html',
                 controller: 'ContactCtrl'
             })
-
+            //pantalla de crear mum
             .state('mum', {
                 url: '/mum',
-                templateUrl: 'templates/mum.html'
+                templateUrl: 'templates/mum.html',
+                controller: 'MumCtrl'
             });
 
         // if none of the above states are matched, use this as the fallback

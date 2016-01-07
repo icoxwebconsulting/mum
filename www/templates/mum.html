@@ -26,52 +26,40 @@
                 <div class="calendar">
                     <div class="calendar-month flex flex-middle-xs">
                         <div class="flex-xs">
-                            <button type="button" class="btn clear-btn">
+                            <button type="button" class="btn clear-btn" ng-click="monthDown()">
                                 <span class="icon icon-pointer-left"></span>
                             </button>
                         </div>
                         <div class="flex-xs">
-                            <span class="text-uppercase">Mayo 2015</span>
+                            <span class="text-uppercase">{{months[month]}} {{year}}</span>
                         </div>
                         <div class="flex-xs">
-                            <button type="button" class="btn clear-btn">
+                            <button type="button" class="btn clear-btn" ng-click="monthUp()">
                                 <span class="icon icon-pointer-right"></span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="calendar-days flex flex-middle-xs">
-                        <button class="calendar-day clear-btn flex-xs" type="button">
-                            <span class="day-number">12</span>
-                            <span class="day-label">Dom</span>
-                        </button>
-                        <button class="calendar-day clear-btn flex-xs" type="button">
-                            <span class="day-number">13</span>
-                            <span class="day-label">Lun</span>
-                        </button>
-                        <button class="calendar-day clear-btn flex-xs" type="button">
-                            <span class="day-number">14</span>
-                            <span class="day-label">Mar</span>
-                        </button>
-                        <button class="calendar-day active clear-btn flex-xs" type="button">
-                            <span class="day-number">15</span>
-                            <span class="day-label">Mie</span>
-                        </button>
-                        <button class="calendar-day clear-btn flex-xs" type="button">
-                            <span class="day-number">16</span>
-                            <span class="day-label">Jue</span>
-                        </button>
-                        <button class="calendar-day clear-btn flex-xs" type="button">
-                            <span class="day-number">17</span>
-                            <span class="day-label">Vie</span>
-                        </button>
-                        <button class="calendar-day clear-btn flex-xs" type="button">
-                            <span class="day-number">18</span>
-                            <span class="day-label">Sab</span>
-                        </button>
-                    </div>
-                </div>
+                    <ion-scroll zooming="false" direction="x" style="width: 100%;" >
+                        <div class="calendar-days flex flex-middle-xs" style="width: 1400px;">
+                            <button class="calendar-day clear-btn flex-xs" type="button" ng-repeat="day in getMaxDay() track by $index">
+                                <span class="day-number">{{$index + 1}}</span>
+                                <span class="day-label">Dom</span>
+                            </button>
+                        </div>
 
+                        <!--<button class="calendar-day active clear-btn flex-xs" type="button">-->
+                            <!--<span class="day-number">15</span>-->
+                            <!--<span class="day-label">Mie</span>-->
+                        <!--</button>-->
+                    </ion-scroll>
+                </div>
+                <ionic-timepicker input-obj="timePickerObject">
+                    <button class="button overflowShow">
+                        <standard-time-meridian etime='timePickerObject.inputEpochTime'></standard-time-meridian>
+                        <strong etime="timePickerObject12Hour.inputEpochTime" class="ng-binding"></strong>
+                    </button>
+                </ionic-timepicker>
                 <div class="timer">
                     <button type="button" class="btn clear-btn">
                         <span class="icon icon-pointer-up"></span>
@@ -83,6 +71,8 @@
                         <span class="icon icon-pointer-down"></span>
                     </button>
                 </div>
+
+
 
                 <div class="row">
                     <div class="col"><a class="button">Mum</a></div>
