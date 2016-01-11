@@ -23,6 +23,7 @@ angular.module('app').controller('MumCtrl', function ($scope) {
         $scope.month = $scope.f.getMonth();
         $scope.year = $scope.f.getFullYear();
         maxDay();
+        console.log("en el enter");
     });
 
     $scope.monthUp = function () {
