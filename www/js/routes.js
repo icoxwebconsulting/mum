@@ -52,17 +52,19 @@ angular.module('app.routes', [])
                 controller: 'ContactCtrl'
             })
 
+            //pantalla de crear mum
+            .state('layout.mum', {
+                url: '/mum',
+                templateUrl: 'templates/mum.html',
+                controller: 'MumCtrl'
+            })
+
             .state('chat', {
                 url: '/chat',
                 templateUrl: 'templates/chat-detail.html',
                 controller: 'ContactCtrl'
-            })
-            //pantalla de crear mum
-            .state('mum', {
-                url: '/mum',
-                templateUrl: 'templates/mum.html',
-                controller: 'MumCtrl'
-            });
+            }); 
+
 
         // if none of the above states are matched, use this as the fallback
         if (window.localStorage.getItem('verified') == 2) {
