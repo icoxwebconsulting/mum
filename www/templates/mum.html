@@ -10,7 +10,7 @@
                             </button>
                         </div>
                         <div class="flex-xs">
-                            <span class="text-uppercase">{{months[month]}} {{year}}</span>
+                            <span class="text-uppercase">{{fecha.format("MMMM, YYYY")}}</span>
                         </div>
                         <div class="flex-xs">
                             <button type="button" class="btn clear-btn" ng-click="monthUp()">
@@ -20,9 +20,11 @@
                     </div>
 
                     <ion-scroll zooming="false" direction="x" style="width: 100%;">
-                        <div class="calendar-days flex flex-middle-xs" style="width: 1400px;">
+                        <div class="calendar-days flex flex-middle-xs" style="width: 1700px;">
                             <button class="calendar-day clear-btn flex-xs" type="button"
-                                    ng-repeat="day in getMaxDay() track by $index">
+                                    ng-repeat="day in getMaxDay() track by $index"
+                                    ng-class="{active: ($index+1)==fecha.date()}"
+                                    ng-click="changeDay($index)">
                                 <span class="day-number">{{$index + 1}}</span>
                                 <span class="day-label">{{calculateWeekDay($index + 1)}}</span>
                             </button>
@@ -41,14 +43,14 @@
                 <!--</button>-->
                 <!--</ionic-timepicker>-->
                 <div class="timer">
-                    <button type="button" class="btn clear-btn">
+                    <button type="button" class="btn clear-btn" ng-click="timeUp()">
                         <span class="icon icon-pointer-up"></span>
                     </button>
                     <ionic-timepicker input-obj="timePickerObject">
                         <input class="form-control" type="text" id="" ng-model="selectedTime"
                                input-obj="timePickerObject"/>
                     </ionic-timepicker>
-                    <button type="button" class="btn clear-btn">
+                    <button type="button" class="btn clear-btn" ng-click="timeDown()">
                         <span class="icon icon-pointer-down"></span>
                     </button>
                 </div>
@@ -59,7 +61,7 @@
                     <div class="col"><a class="button">Sms</a></div>
                     <div class="col"><a class="button">Mail</a></div>
                 </div>
-
+                {{fecha.format("LLLL")}}
             </div>
         </div>
     </ion-content>

@@ -1,4 +1,5 @@
 angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet, user) {
+    moment.locale('es');
     $scope.day = moment();
 
     $scope.showMenu = function () {
