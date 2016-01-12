@@ -21,7 +21,6 @@ angular.module('app').controller('MumCtrl', function ($scope) {
     };
 
     $scope.timeUp = function () {
-        console.log($scope.fecha.unix());
         $scope.fecha.add(1, 'm');
         $scope.selectedTime = $scope.fecha.format('hh:mm a');
     };
@@ -51,11 +50,14 @@ angular.module('app').controller('MumCtrl', function ($scope) {
         } else {
             var selectedTime = new Date(val * 1000);
             console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+            $scope.fecha.hour(selectedTime.getUTCHours());
+            $scope.fecha.minute(selectedTime.getUTCMinutes());
+            $scope.selectedTime = $scope.fecha.format('hh:mm a');
         }
     }
 
     $scope.timePickerObject = {
-        inputEpochTime: ($scope.fecha.unix()),  //Optional
+        inputEpochTime: ($scope.fecha.unix() + ($scope.fecha.utcOffset() * 60)),  //Optional
         step: 1,  //Optional
         format: 12,  //Optional
         titleLabel: 'Seleccione una hora',  //Optional
