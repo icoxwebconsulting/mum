@@ -1,8 +1,16 @@
-angular.module('app').controller('MumCtrl', function ($scope) {
+angular.module('app').controller('MumCtrl', function ($scope, $state, messageSrv) {
 
     //fechas
     $scope.fecha = moment();
     $scope.selectedTime = $scope.fecha.format('hh:mm a');
+
+    $scope.newMum = function (type) {
+        messageSrv.setMum({
+            type: type,
+            date: $scope.fecha
+        });
+        $state.go('message');
+    };
 
     $scope.changeDay = function ($index) {
         $scope.fecha.date($index + 1);

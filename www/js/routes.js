@@ -59,6 +59,12 @@ angular.module('app.routes', [])
                 controller: 'MumCtrl'
             })
 
+            .state('message', {
+                url: '/message/create',
+                templateUrl: 'templates/message.html',
+                controller: 'MessageCtrl'
+            })
+
             .state('chat', {
                 url: '/chat',
                 templateUrl: 'templates/chat-detail.html',
