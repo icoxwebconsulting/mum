@@ -33,9 +33,9 @@ angular.module('app.contacts', []).factory('Contacts', function ($cordovaContact
 
         function onSuccess(contacts) {
             var c = [];
-            for (var i = 0; i < contacts.length; i++) {
-                if (contacts[i].displayName) {  // many contacts don't have displayName
-                    for (var j = 0; j < contacts[i].phoneNumbers.length; j++) {
+            for (var i = 0, length = contacts.length; i < length; i++) {
+                if (contacts[i].displayName && contacts[i].phoneNumbers) {  // many contacts don't have displayName
+                    for (var j = 0, innerLength = contacts[i].phoneNumbers.length; j < innerLength; j++) {
                         c.push({
                             name: contacts[i].displayName,
                             number: contacts[i].phoneNumbers[j]

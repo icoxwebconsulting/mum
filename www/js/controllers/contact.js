@@ -5,7 +5,7 @@ angular.module('app').controller('ContactCtrl', function ($scope, $state, Contac
     });
 
     $scope.pickContact = function (number) {
-        var mum = messageSrv.getMum()
+        var mum = messageSrv.getMum();
         mum.number = number;
         messageSrv.setMum(mum);
 
