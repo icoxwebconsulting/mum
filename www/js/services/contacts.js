@@ -2,6 +2,35 @@ angular.module('app.contacts', []).factory('Contacts', function ($cordovaContact
 
     function getAllContacts(callback) {
 
+        //var chats = [{
+        //    id: 0,
+        //    name: 'Ben Sparrow',
+        //    number: '04123600295',
+        //    face: 'img/ben.png'
+        //}, {
+        //    id: 1,
+        //    name: 'Max Lynx',
+        //    number: '04123600295',
+        //    face: 'img/max.png'
+        //}, {
+        //    id: 2,
+        //    name: 'Adam Bradleyson',
+        //    number: '04123600295',
+        //    face: 'img/adam.jpg'
+        //}, {
+        //    id: 3,
+        //    name: 'Perry Governor',
+        //    number: '04123600295',
+        //    face: 'img/perry.png'
+        //}, {
+        //    id: 4,
+        //    name: 'Mike Harrington',
+        //    number: '04123600295',
+        //    face: 'img/mike.png'
+        //}];
+
+        //callback(chats);
+
         function onSuccess(contacts) {
             var c = [];
             for (var i = 0; i < contacts.length; i++) {
@@ -9,7 +38,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($cordovaContact
                     for (var j = 0; j < contacts[i].phoneNumbers.length; j++) {
                         c.push({
                             name: contacts[i].displayName,
-                            phone: contacts[i].phoneNumbers[j]
+                            number: contacts[i].phoneNumbers[j]
                         });
                     }
                 }

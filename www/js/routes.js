@@ -52,6 +52,12 @@ angular.module('app.routes', [])
                 controller: 'ContactCtrl'
             })
 
+            .state('contacts', {
+                url: '/pick/contact',
+                templateUrl: 'templates/contacts.html',
+                controller: 'ContactCtrl'
+            })
+
             //pantalla de crear mum
             .state('layout.mum', {
                 url: '/mum',

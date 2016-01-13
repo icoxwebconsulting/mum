@@ -1,14 +1,19 @@
 <ion-view>
-    <ion-content class="top-margin">
+    <ion-header-bar align-title="center" class="bar-assertive">
+        <div class="buttons">
+            <a href="#/content/mum" class="button icon-left ion-chevron-left"></a>
+        </div>
+        <h1 class="title">Seleccionar contacto</h1>
+    </ion-header-bar>
+    <ion-content>
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts"
+                      ng-click="pickContact(contact.number)"
                       type="item-text-wrap"
-                      href="#/tab/chats/{{contact}}">
+                      href="#">
                 <img ng-src="img/account.png">
-
-                <h2>{{contact.displayName}}</h2>
-
-                <p></p>
+                <h2>{{contact.name}}</h2>
+                <p>{{contact.number}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
                 <ion-option-button class="button-assertive" ng-click="remove(contact)">
