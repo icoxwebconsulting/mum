@@ -1,4 +1,4 @@
-angular.module('app').controller('ContactCtrl', function ($scope, Contacts, messageSrv) {
+angular.module('app').controller('ContactCtrl', function ($scope, $state, Contacts, messageSrv) {
 
     Contacts.getAllContacts(function (contacts) {
         $scope.contacts = contacts;
