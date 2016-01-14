@@ -11,7 +11,7 @@
                       ng-click="pickContact(contact)"
                       type="item-text-wrap"
                       href="#">
-                <img ng-src="img/account.png">
+                <img ng-src="{{contact.photo}}">
                 <h2>{{contact.name}}</h2>
                 <p ng-show="contact.number">{{contact.number}}</p>
                 <p ng-show="contact.email">{{contact.email}}</p>
