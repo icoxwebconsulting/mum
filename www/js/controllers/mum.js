@@ -9,7 +9,19 @@ angular.module('app').controller('MumCtrl', function ($scope, $state, messageSrv
             type: type,
             date: $scope.fecha
         });
-        $state.go('contacts');
+
+        switch (type) {
+            case 'email':
+            {
+                $state.go('email_contacts');
+                break;
+            }
+            case 'sms':
+            {
+                $state.go('sms_contacts');
+                break;
+            }
+        }
     };
 
     $scope.changeDay = function ($index) {

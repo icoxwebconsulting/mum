@@ -1,10 +1,10 @@
 angular.module('app.contacts', []).factory('Contacts', function () {
 
-    function getAllContacts(callback) {
+    function getContactsWithPhoneNumber(callback) {
         function onSuccess(contacts) {
             var c = [];
             for (var i = 0, length = contacts.length; i < length; i++) {
-                if (contacts[i].displayName && contacts[i].phoneNumbers) {  // many contacts don't have displayName
+                if (contacts[i].displayName && contacts[i].phoneNumbers) {
                     for (var j = 0, innerLength = contacts[i].phoneNumbers.length; j < innerLength; j++) {
                         c.push({
                             name: contacts[i].displayName,
@@ -16,20 +16,56 @@ angular.module('app.contacts', []).factory('Contacts', function () {
             callback(c);
         }
 
-        function contactError(error) {
+        function onError(error) {
             console.log("Error: ", error);
         }
 
         var options = new ContactFindOptions();
-        options.filter = "";
         options.multiple = true;
         options.hasPhoneNumber = true;
-        var filter = ["displayName", "phoneNumbers"];
+        var fields = [
+            navigator.contacts.fieldType.displayName,
+            navigator.contacts.fieldType.name,
+            navigator.contacts.fieldType.emails,
+            navigator.contacts.fieldType.phoneNumbers
+        ];
+        navigator.contacts.find(fields, onSuccess, onError, options);
+    }
 
-        navigator.contacts.find(filter, onSuccess, contactError, options);
+    function getContactsWithEmail(callback) {
+        function onSuccess(contacts) {
+            var c = [];
+            for (var i = 0, length = contacts.length; i < length; i++) {
+                if (contacts[i].displayName && contacts[i].emails) {
+                    for (var j = 0, innerLength = contacts[i].emails.length; j < innerLength; j++) {
+                        c.push({
+                            name: contacts[i].displayName,
+                            email: contacts[i].emails[j].value
+                        });
+                    }
+                }
+            }
+            callback(c);
+        }
+
+        function onError(error) {
+            console.log("Error: ", error);
+        }
+
+        var options = new ContactFindOptions();
+        options.multiple = true;
+        options.hasPhoneNumber = false;
+        var fields = [
+            navigator.contacts.fieldType.displayName,
+            navigator.contacts.fieldType.name,
+            navigator.contacts.fieldType.emails,
+            navigator.contacts.fieldType.phoneNumbers
+        ];
+        navigator.contacts.find(fields, onSuccess, onError, options);
     }
 
     return {
-        getAllContacts: getAllContacts
+        getContactsWithPhoneNumber: getContactsWithPhoneNumber,
+        getContactsWithEmail: getContactsWithEmail
     };
 });

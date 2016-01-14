@@ -8,12 +8,13 @@
     <ion-content>
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts"
-                      ng-click="pickContact(contact.number)"
+                      ng-click="pickContact(contact)"
                       type="item-text-wrap"
                       href="#">
                 <img ng-src="img/account.png">
                 <h2>{{contact.name}}</h2>
-                <p>{{contact.number}}</p>
+                <p ng-show="contact.number">{{contact.number}}</p>
+                <p ng-show="contact.email">{{contact.email}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
                 <ion-option-button class="button-assertive" ng-click="remove(contact)">
