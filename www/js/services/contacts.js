@@ -1,68 +1,102 @@
-angular.module('app.contacts', []).factory('Contacts', function () {
+angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope) {
 
-    var fields = [
-        navigator.contacts.fieldType.displayName,
-        navigator.contacts.fieldType.name,
-        navigator.contacts.fieldType.emails,
-        navigator.contacts.fieldType.phoneNumbers,
-        navigator.contacts.fieldType.photos
-    ];
+    var contacts = null;
+    var loading = false;
 
-    function getContactsWithPhoneNumber(callback) {
-        function onSuccess(contacts) {
-            var c = [];
-            for (var i = 0, length = contacts.length; i < length; i++) {
-                if (contacts[i].displayName && contacts[i].phoneNumbers) {
-                    for (var j = 0, innerLength = contacts[i].phoneNumbers.length; j < innerLength; j++) {
-                        c.push({
-                            photo: (contacts[i].photos) ? contacts[i].photos[0].value : 'img/account.png',
-                            name: contacts[i].displayName,
-                            number: contacts[i].phoneNumbers[j].value
-                        });
-                    }
-                }
-            }
-            callback(c);
+    var Contact = function (displayNameArg, photoArg, emailArg, phoneNumberArg, mumIdArg) {
+        var displayName = displayNameArg;
+        var photo = photoArg;
+        var email = emailArg || null;
+        var phoneNumber = phoneNumberArg || null;
+        var mumId = mumIdArg || null;
+
+        function toString() {
+            return displayName;
         }
 
-        function onError(error) {
-            console.log("Error: ", error);
+        return {
+            displayName: displayName,
+            photo: photo,
+            email: email,
+            phoneNumber: phoneNumber,
+            mumId: mumId,
+            toString: toString
         }
+    };
 
-        var options = new ContactFindOptions();
-        options.multiple = true;
-        options.hasPhoneNumber = true;
-        navigator.contacts.find(fields, onSuccess, onError, options);
-    }
+    function loadContacts() {
+        var deferred = $q.defer();
 
-    function getContactsWithEmail(callback) {
-        function onSuccess(contacts) {
-            var c = [];
-            for (var i = 0, length = contacts.length; i < length; i++) {
-                if (contacts[i].displayName && contacts[i].emails) {
-                    for (var j = 0, innerLength = contacts[i].emails.length; j < innerLength; j++) {
-                        c.push({
-                            name: contacts[i].displayName,
-                            email: contacts[i].emails[j].value
-                        });
-                    }
-                }
-            }
-            callback(c);
-        }
+        var loading = true;
+        var temContacts = [];
 
-        function onError(error) {
-            console.log("Error: ", error);
-        }
+        var fields = [
+            navigator.contacts.fieldType.displayName,
+            navigator.contacts.fieldType.name,
+            navigator.contacts.fieldType.emails,
+            navigator.contacts.fieldType.phoneNumbers,
+            navigator.contacts.fieldType.photos
+        ];
 
         var options = new ContactFindOptions();
         options.multiple = true;
         options.hasPhoneNumber = false;
-        navigator.contacts.find(fields, onSuccess, onError, options);
+
+        navigator.contacts.find(fields,
+            function onSuccess(loadedContacts) {
+                for (var i = 0, length = loadedContacts.length; i < length; i++) {
+                    var loadedContact = loadedContacts[i];
+                    // only those hwo has display name
+                    if (loadedContact.displayName) {
+                        // create new contact
+                        var contact = new Contact(loadedContact.displayName,
+                            (loadedContact.photos) ? loadedContact.photos[0].value : 'img/account.png');
+
+                        if (loadedContact.emails) {
+                            contact.email = loadedContact.emails[0].value;
+                        } else {
+                            contact.email = null;
+                        }
+
+                        if (loadedContact.phoneNumbers) {
+                            contact.phoneNumber = loadedContact.phoneNumbers[0].value;
+                        } else {
+                            contact.phoneNumber = null;
+                        }
+
+                        temContacts.push(contact);
+                    }
+                }
+                temContacts.sort();
+                contacts = temContacts;
+                loading = false;
+                $rootScope.$emit('notifying-contact-loaded');
+                deferred.resolve(contacts);
+            }, function onError(error) {
+                deferred.reject(error);
+            }, options);
+
+        return deferred.promise;
+    }
+
+    function getContacts() {
+        var deferred = $q.defer();
+
+        if (contacts !== null && loading === false) {
+            deferred.resolve(contacts);
+        } else if (contacts === false && loading === false) {
+            return loadContacts();
+        } else {
+            $rootScope.$on('notifying-contact-loaded', function () {
+                deferred.resolve(contacts);
+            });
+        }
+
+        return deferred.promise;
     }
 
     return {
-        getContactsWithPhoneNumber: getContactsWithPhoneNumber,
-        getContactsWithEmail: getContactsWithEmail
+        loadContacts: loadContacts,
+        getContacts: getContacts
     };
 });

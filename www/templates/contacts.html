@@ -7,14 +7,15 @@
     </ion-header-bar>
     <ion-content>
         <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts"
+            <ion-item class="item-remove-animate item-avatar item-icon-right"
+                      ng-repeat="contact in contacts | filter:filterContacts"
                       ng-click="pickContact(contact)"
                       type="item-text-wrap"
                       href="#">
                 <img ng-src="{{contact.photo}}">
-                <h2>{{contact.name}}</h2>
-                <p ng-show="contact.number">{{contact.number}}</p>
-                <p ng-show="contact.email">{{contact.email}}</p>
+                <h2>{{contact.displayName}}</h2>
+                <p ng-show="contactsType == 'sms' && contact.phoneNumber">{{contact.phoneNumber}}</p>
+                <p ng-show="contactsType == 'email' && contact.email">{{contact.email}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
                 <ion-option-button class="button-assertive" ng-click="remove(contact)">

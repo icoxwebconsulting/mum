@@ -1,6 +1,6 @@
 angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.userDataStore', 'app.user',
         'app.resources', 'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker'])
-    .run(function ($rootScope, $state, $stateParams, $ionicPlatform, $ionicHistory, user) {
+    .run(function ($rootScope, $state, $stateParams, $ionicPlatform, Contacts) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -16,6 +16,8 @@ angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.userDataStore
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
+
+            Contacts.loadContacts();
         });
 
         $rootScope.$on("$stateChangeStart", function (event, toState) {

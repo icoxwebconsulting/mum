@@ -1,24 +1,25 @@
 angular.module('app').controller('SMSContactCtrl', function ($scope, $state, $ionicLoading, Contacts, messageSrv) {
 
     var mum = messageSrv.getMum();
-    console.log(mum);
-
-    $ionicLoading.show();
     $scope.contacts = [];
+    $scope.contactsType = mum.type;
 
     function showContacts(contacts) {
-        $scope.$apply(function () {
-            $scope.contacts = contacts;
-            $ionicLoading.hide();
-        });
+        $scope.contacts = contacts;
+        $ionicLoading.hide();
     }
 
-    Contacts.getContactsWithPhoneNumber(function (contacts) {
-        showContacts(contacts);
-    });
+    $ionicLoading.show();
+    Contacts.getContacts()
+        .then(function (contacts) {
+            showContacts(contacts);
+        });
+
+    $scope.filterContacts = function (contact) {
+        return contact.phoneNumber !== null;
+    };
 
     $scope.pickContact = function (contact) {
-        var mum = messageSrv.getMum();
         mum.number = contact.number;
         messageSrv.setMum(mum);
 

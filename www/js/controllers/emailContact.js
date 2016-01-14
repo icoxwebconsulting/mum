@@ -1,21 +1,25 @@
 angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $ionicLoading, Contacts, messageSrv) {
 
-    $ionicLoading.show();
+    var mum = messageSrv.getMum();
     $scope.contacts = [];
+    $scope.contactsType = mum.type;
 
     function showContacts(contacts) {
-        $scope.$apply(function () {
-            $scope.contacts = contacts;
-            $ionicLoading.hide();
-        });
+        $scope.contacts = contacts;
+        $ionicLoading.hide();
     }
 
-    Contacts.getContactsWithEmail(function (contacts) {
-        showContacts(contacts);
-    });
+    $ionicLoading.show();
+    Contacts.getContacts()
+        .then(function (contacts) {
+            showContacts(contacts);
+        });
+
+    $scope.filterContacts = function (contact) {
+        return contact.email !== null;
+    };
 
     $scope.pickContact = function (contact) {
-        var mum = messageSrv.getMum();
         mum.email = contact.email;
         messageSrv.setMum(mum);
 
