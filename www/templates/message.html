@@ -1,65 +1,35 @@
 <div class="mum">
-    <ion-header-bar style="height: 120px;">
+    <ion-header-bar>
         <div class="header header-bd">
             <div class="flex flex-middle-xs">
                 <div class="flex-xs-2">
-                    <a href="#/content/mum" class="btn clear-btn header-btn" type="button">
-                        <span class="icon icon-arrow-left"></span>
-                    </a>
+                    <a href="#/content/mum" class="button button-icon ion-chevron-left"></a>
                 </div>
                 <div class="flex-xs p-y-xs">
                     <div class="flex flex-middle-xs">
-                        <img class="img-circle m-r-xs" src="img/avatar.jpg" alt="" width="56">
+                        <img class="img-circle m-r-xs" src="img/avatar.jpg" style="border-radius: 50%;" alt="" width="56">
                         Andrea
                     </div>
                 </div>
             </div>
         </div>
     </ion-header-bar>
-    <ion-content class="top-margin">
+    <ion-content style="margin-top: 75px;">
         <p class="text-primary">Enviar {{fecha.format("LLLL")}}</p>
 
         <form class="form-paper">
             <div class="form-group flex flex-middle-xs">
                 <label>Asunto:</label>
                 <div class="flex-xs">
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="form-group flex flex-middle-xs">
-                <label>Cc:</label>
-                <div class="flex-xs">
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="form-group flex flex-middle-xs">
-                <label>Cco:</label>
-                <div class="flex-xs">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" style="width:90%;">
                 </div>
             </div>
             <div class="form-group">
-                <textarea class="form-control" rows="5" style="width: 100%"></textarea>
+                <textarea class="form-control" rows="10" style="width: 100%"></textarea>
             </div>
-
         </form>
     </ion-content>
     <ion-footer-bar>
-        <div class="footer" style="width: 100%">
-            <form class="form-messages">
-                <div class="form-group">
-                    <div class="flex flex-middle-xs">
-                        <div class="flex-xs">
-
-                        </div>
-                        <div class="flex-xs-2">
-                            <button class="btn clear-btn btn-block">
-                                Enviar <span class="icon icon-dart-right"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+        <button class="button button-icon ion-android-send" style="padding-left: 50%"></button>
     </ion-footer-bar>
 </div>
