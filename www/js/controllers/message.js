@@ -11,22 +11,12 @@ angular.module('app').controller('MessageCtrl', function ($scope, $ionicLoading,
 
     function sendSms() {
         $ionicLoading.show();
-        messageSrv.sendSms($scope.mum)
+        messageSrv.sendSms($scope.message)
             .then(function () {
                 $ionicLoading.hide();
-
-                $ionicPopup.alert({
-                    title: 'Mensaje enviado!'
-                });
-
-
             })
             .catch(function () {
                 $ionicLoading.hide();
-
-                $ionicPopup.alert({
-                    title: 'Error'
-                });
             });
     }
 

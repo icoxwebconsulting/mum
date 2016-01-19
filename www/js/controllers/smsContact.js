@@ -20,7 +20,7 @@ angular.module('app').controller('SMSContactCtrl', function ($scope, $state, $io
     };
 
     $scope.pickContact = function (contact) {
-        mum.number = contact.number;
+        mum.phoneNumber = contact.phoneNumber;
         mum.displayName = contact.displayName;
         messageSrv.setMum(mum);
 

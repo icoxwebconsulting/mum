@@ -11,9 +11,16 @@ angular.module('app').service('messageSrv', function (messageRes) {
     };
 
     function sendSms(data) {
-        return messageRes.sendSms(data).$promise
+        var messageData = {
+            message: {
+                body: data.body,
+                receivers: JSON.stringify([mum.phoneNumber]),
+                at: mum.date.format("DD-MM-YYYY HH:mm:ss")
+            }
+        };
+
+        return messageRes.sendSms(messageData).$promise
             .then(function (response) {
-                console.log("ok");
             });
     }
 
