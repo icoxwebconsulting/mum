@@ -36,7 +36,7 @@ angular.module('app')
                             SMS.startWatch(function () {
                                 document.addEventListener('onSMSArrive', function (e) {
                                     try {
-                                        var code = e.data.body.match(/Your confirmation number is kk\d+/)[0].match(/\d+/);
+                                        var code = e.data.body.match(/Your confirmation number is \d+/)[0].match(/\d+/);
 
                                         if (code) {
                                             $scope.data.code = code;
