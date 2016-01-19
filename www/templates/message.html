@@ -8,28 +8,32 @@
                 <div class="flex-xs p-y-xs">
                     <div class="flex flex-middle-xs">
                         <img class="img-circle m-r-xs" src="img/avatar.jpg" style="border-radius: 50%;" alt="" width="56">
-                        Andrea
+                        {{mum.displayName}}
                     </div>
                 </div>
             </div>
         </div>
     </ion-header-bar>
     <ion-content style="margin-top: 75px;">
-        <p class="text-primary">Enviar {{fecha.format("LLLL")}}</p>
+        <p class="text-primary">Enviar {{mum.date.format("LLLL")}}</p>
+        <p class="text-primary">Destinatario {{mum.displayName}}
+            <span ng-show="mum.type == 'sms' && mum.number">({{mum.number}})</span>
+            <span ng-show="mum.type == 'email' && mum.email">({{mum.email}})</span>
+        </p>
 
         <form class="form-paper">
-            <div class="form-group flex flex-middle-xs">
+            <div class="form-group flex flex-middle-xs" ng-show="mum.type == 'email'">
                 <label>Asunto:</label>
                 <div class="flex-xs">
-                    <input type="text" class="form-control" style="width:90%;">
+                    <input type="text" class="form-control" style="width:90%;" ng-model="message.subject" />
                 </div>
             </div>
             <div class="form-group">
-                <textarea class="form-control" rows="10" style="width: 100%"></textarea>
+                <textarea class="form-control" rows="10" style="width: 100%" ng-model="message.body"></textarea>
             </div>
         </form>
     </ion-content>
     <ion-footer-bar>
-        <button class="button button-icon ion-android-send" style="padding-left: 50%"></button>
+        <button class="button button-icon ion-android-send" style="padding-left: 50%" ng-click="sendMessage()"></button>
     </ion-footer-bar>
 </div>

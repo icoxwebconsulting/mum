@@ -49,18 +49,18 @@ angular.module('app.routes', [])
             .state('layout.contacts', {
                 url: '/contacts',
                 templateUrl: 'templates/contacts.html',
-                controller: 'ContactCtrl'
+                controller: 'ContactsCtrl'
             })
 
             .state('email_contacts', {
                 url: '/pick/email/contact',
-                templateUrl: 'templates/contacts.html',
+                templateUrl: 'templates/pick-contacts.html',
                 controller: 'EmailContactCtrl'
             })
 
             .state('sms_contacts', {
                 url: '/pick/email/contact',
-                templateUrl: 'templates/contacts.html',
+                templateUrl: 'templates/pick-contacts.html',
                 controller: 'SMSContactCtrl'
             })
 
@@ -77,8 +77,8 @@ angular.module('app.routes', [])
                 controller: 'MessageCtrl'
             })
 
-            .state('chat', {
-                url: '/chat',
+            .state('inbox', {
+                url: '/inbox',
                 templateUrl: 'templates/chat-detail.html',
                 controller: 'ContactCtrl'
             }); 

@@ -1,26 +1,15 @@
 <ion-view>
-    <ion-header-bar align-title="center" class="bar-assertive">
-        <div class="buttons">
-            <a href="#/content/mum" class="button icon-left ion-chevron-left"></a>
-        </div>
-        <h1 class="title">Seleccionar contacto</h1>
-    </ion-header-bar>
-    <ion-content>
+    <ion-content class="top-margin">
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
-                      ng-repeat="contact in contacts | filter:filterContacts"
-                      ng-click="pickContact(contact)"
+                      ng-repeat="contact in contacts"
                       type="item-text-wrap"
                       href="#">
                 <img ng-src="{{contact.photo}}">
                 <h2>{{contact.displayName}}</h2>
-                <p ng-show="contactsType == 'sms' && contact.phoneNumber">{{contact.phoneNumber}}</p>
-                <p ng-show="contactsType == 'email' && contact.email">{{contact.email}}</p>
+                <p ng-show="contact.phoneNumber">{{contact.phoneNumber}}</p>
+                <p ng-show="contact.email">{{contact.email}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
-
-                <ion-option-button class="button-assertive" ng-click="remove(contact)">
-                    Delete
-                </ion-option-button>
             </ion-item>
         </ion-list>
     </ion-content>

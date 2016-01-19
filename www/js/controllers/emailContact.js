@@ -21,6 +21,7 @@ angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $
 
     $scope.pickContact = function (contact) {
         mum.email = contact.email;
+        mum.displayName = contact.displayName;
         messageSrv.setMum(mum);
 
         $state.go('message');
