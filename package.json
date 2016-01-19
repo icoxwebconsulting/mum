@@ -22,7 +22,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-contacts@2.0.0"
+    "cordova-plugin-contacts@2.0.0",
+    "cordova-plugin-sms"
   ],
   "cordovaPlatforms": [
     "ios",
