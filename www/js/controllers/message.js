@@ -16,11 +16,10 @@ angular.module('app').controller('MessageCtrl', function ($scope, $ionicLoading,
                 $ionicLoading.hide();
 
                 $ionicPopup.alert({
-                    title: 'Probando probando'
+                    title: 'Mensaje enviado!'
                 });
 
-                $scope.toVerify = user.getVerified();
-                console.log($scope.toVerify);
+
             })
             .catch(function () {
                 $ionicLoading.hide();
@@ -36,12 +35,11 @@ angular.module('app').controller('MessageCtrl', function ($scope, $ionicLoading,
     }
 
     $scope.sendMessage = function () {
-        alert("por enviar mensaje");
-        //if ($scope.mum.type == 'sms') {
+        if ($scope.mum.type == 'sms') {
             sendSms();
-        //} else if ($scope.mum.type == 'email') {
-        //    sendEmail();
-        //}
+        } else if ($scope.mum.type == 'email') {
+            sendEmail();
+        }
     };
 
 });
