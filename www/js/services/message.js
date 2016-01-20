@@ -10,24 +10,32 @@ angular.module('app').service('messageSrv', function (messageRes) {
         return mum;
     };
 
-    function sendSms(data) {
+    function sendMessage(data) {
         var messageData = {
             message: {
                 body: data.body,
-                receivers: JSON.stringify([mum.phoneNumber]),
+                receivers: (type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]),
                 at: moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss")
             }
         };
 
-        return messageRes.sendSms(messageData).$promise
-            .then(function (response) {
-            });
+        if (mum.type == 'email') {
+            messageData.about = data.subject;
+            messageData.from = mum.email;
+            return messageRes.sendEmail(messageData).$promise
+                .then(function (response) {
+                });
+        } else {
+            return messageRes.sendSms(messageData).$promise
+                .then(function (response) {
+                });
+        }
     }
 
     return {
         setMum: setMum,
         getMum: getMum,
-        sendSms: sendSms
+        sendMessage: sendMessage
     };
 
 });

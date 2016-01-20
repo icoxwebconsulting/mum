@@ -9,6 +9,14 @@ angular.module('app.messageResource', [])
                 headers: {
                     Authorization: 'Bearer ' + userDatastore.getTokens().accessToken
                 }
+            },
+            sendEmail:{
+                method: 'POST',
+                url: SERVER_CONF.API_HOST + 'messages/email',
+                params: null,
+                headers: {
+                    Authorization: 'Bearer ' + userDatastore.getTokens().accessToken
+                }
             }
         });
 
