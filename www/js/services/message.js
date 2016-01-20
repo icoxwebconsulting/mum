@@ -15,7 +15,7 @@ angular.module('app').service('messageSrv', function (messageRes) {
             message: {
                 body: data.body,
                 receivers: JSON.stringify([mum.phoneNumber]),
-                at: mum.date.format("DD-MM-YYYY HH:mm:ss")
+                at: moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss")
             }
         };
 
