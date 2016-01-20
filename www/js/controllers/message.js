@@ -13,8 +13,9 @@ angular.module('app').controller('MessageCtrl', function ($scope, $ionicLoading,
     $scope.sendMessage = function () {
         $ionicLoading.show();
         messageSrv.sendMessage($scope.message)
-            .then(function () {
+            .then(function (resp) {
                 $ionicLoading.hide();
+                console.log(resp);
             })
             .catch(function () {
                 $ionicLoading.hide();

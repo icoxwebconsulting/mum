@@ -14,7 +14,7 @@ angular.module('app').service('messageSrv', function (messageRes) {
         var messageData = {
             message: {
                 body: data.body,
-                receivers: (type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]),
+                receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]),
                 at: moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss")
             }
         };
