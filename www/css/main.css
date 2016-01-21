@@ -1213,10 +1213,6 @@ body {
     border-right: 1px solid #ddd;
 }
 
-.header .profile img {
-    border: 1px solid #ccc;
-}
-
 .header-btn {
     font-size: 30px;
     padding: .3rem;

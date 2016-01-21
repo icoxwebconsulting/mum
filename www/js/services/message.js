@@ -21,7 +21,7 @@ angular.module('app').service('messageSrv', function (messageRes) {
 
         if (mum.type == 'email') {
             messageData.about = data.subject;
-            messageData.from = mum.email;
+            messageData.from = data.from;
             return messageRes.sendEmail(messageData).$promise
                 .then(function (response) {
                 });
