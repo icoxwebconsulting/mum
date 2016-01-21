@@ -1,11 +1,52 @@
 angular.module('app.user', [])
-    .factory('user', function (OAUTH_CONF, customer, userDatastore) {
+    .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore) {
         function register(registrationData) {
             return customer.save(registrationData).$promise
                 .then(function (response) {
                     userDatastore.setNumber(registrationData.username);
                     userDatastore.setVerified(1);
                     userDatastore.setCustomerId(response.customer);
+                });
+        }
+
+        function registerPushNotifications() {
+            var deferred = $q.defer();
+
+            //if (window.PushNotification) {
+            //    var PushNotification = window.PushNotification;
+            //
+            //    var push = PushNotification.init({
+            //        android: {
+            //            senderID: "140186210091",
+            //            icon: "mum",
+            //            iconColor: "lightgrey"
+            //        }
+            //    });
+            //
+            //    push.on('registration',
+            //        function (data) {
+            //            deferred.resolve(data.registrationId);
+                        deferred.resolve('000000000000000000');
+            //        },
+            //        function () {
+            //            deferred.reject('No push notification available');
+            //        });
+            //}
+
+            return deferred.promise;
+        }
+
+        function registerDevice() {
+            return registerPushNotifications()
+                .then(function (deviceToken) {
+                    var data = {
+                        token: deviceToken,
+                        os: 'Android'
+                    };
+                    return device(userDatastore.getTokens().accessToken).save(data).$promise;
+                })
+                .then(function (response) {
+                    deviceDatastore.setDeviceId(response.device);
                 });
         }
 
@@ -18,7 +59,10 @@ angular.module('app.user', [])
                 .then(function (response) {
                     userDatastore.setVerified(2);
                     userDatastore.setPassword(response.password);
-                    requestAccessToken();
+                    requestAccessToken()
+                        .then(function () {
+                            return registerDevice();
+                        });
                 });
         }
 
