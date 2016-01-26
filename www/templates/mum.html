@@ -29,19 +29,8 @@
                                 <span class="day-label">{{calculateWeekDay($index + 1)}}</span>
                             </button>
                         </div>
-
-                        <!--<button class="calendar-day active clear-btn flex-xs" type="button">-->
-                        <!--<span class="day-number">15</span>-->
-                        <!--<span class="day-label">Mie</span>-->
-                        <!--</button>-->
                     </ion-scroll>
                 </div>
-                <!--<ionic-timepicker input-obj="timePickerObject">-->
-                <!--<button class="button overflowShow">-->
-                <!--<standard-time-meridian etime='timePickerObject.inputEpochTime'></standard-time-meridian>-->
-                <!--<strong etime="timePickerObject12Hour.inputEpochTime" class="ng-binding"></strong>-->
-                <!--</button>-->
-                <!--</ionic-timepicker>-->
                 <div class="timer">
                     <button type="button" class="btn clear-btn" ng-click="timeUp()">
                         <span class="icon icon-pointer-up"></span>
@@ -67,7 +56,7 @@
                         <a href="#" ng-click="newMum('email')"><img src="img/nuevo-mail.png" /></a>
                     </div>
                 </div>
-                {{fecha.format("LLLL")}}
+               Programado para: <br /> {{fecha.format("dddd, D MMMM  YYYY, h:mm a")}}
             </div>
         </div>
     </ion-content>

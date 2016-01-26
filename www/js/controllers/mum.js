@@ -1,25 +1,33 @@
-angular.module('app').controller('MumCtrl', function ($scope, $state, messageSrv) {
+angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopup, messageSrv) {
 
     //fechas
-    $scope.fecha = moment();
+    $scope.fecha = moment().add(1, 'hours');
     $scope.selectedTime = $scope.fecha.format('hh:mm a');
 
     $scope.newMum = function (type) {
-        messageSrv.setMum({
-            type: type,
-            date: $scope.fecha
-        });
+        var now = moment();
+        if($scope.fecha.diff(now, 'seconds') < 3500){
+            $ionicPopup.alert({
+                title: 'Fecha inválida',
+                template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con una hora o más de retardo.</p>'
+            });
+        }else{
+            messageSrv.setMum({
+                type: type,
+                date: $scope.fecha
+            });
 
-        switch (type) {
-            case 'email':
-            {
-                $state.go('email_contacts');
-                break;
-            }
-            case 'sms':
-            {
-                $state.go('sms_contacts');
-                break;
+            switch (type) {
+                case 'email':
+                {
+                    $state.go('email_contacts');
+                    break;
+                }
+                case 'sms':
+                {
+                    $state.go('sms_contacts');
+                    break;
+                }
             }
         }
     };
