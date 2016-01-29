@@ -1,6 +1,6 @@
 angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.userDataStore', 'app.user',
-        'app.resources', 'app.messageResource', 'app.device', 'app.deviceDataStore', 'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker'])
-    .run(function ($rootScope, $state, $stateParams, $ionicPlatform, Contacts) {
+        'app.resources', 'app.messageResource', 'app.device', 'app.deviceDataStore', 'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore', 'app.inbox'])
+    .run(function ($rootScope, $state, $stateParams, $ionicPlatform, Contacts, sqliteDatastore) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -17,7 +17,10 @@ angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.userDataStore
                 StatusBar.styleDefault();
             }
 
-            Contacts.loadContacts();
+            if (ionic.Platform.isAndroid()) {
+                Contacts.loadContacts();
+            }
+            sqliteDatastore.initDb();
         });
 
         $rootScope.$on("$stateChangeStart", function (event, toState) {

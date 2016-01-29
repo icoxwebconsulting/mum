@@ -23,7 +23,11 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-contacts@2.0.0",
-    "cordova-plugin-sms"
+    "cordova-plugin-sms",
+    {
+      "locator": "https://github.com/litehelpers/Cordova-sqlite-storage.git",
+      "id": "cordova-sqlite-storage"
+    }
   ],
   "cordovaPlatforms": [
     "ios",
