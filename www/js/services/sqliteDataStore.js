@@ -107,7 +107,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             }
         }
 
-        function saveSendMessage(data, type, serverData) {
+        function saveSendMessage(data, type, serverData) { //serverData = {"message":"56b0d96fa7538","delivered":false}
             var defered = $q.defer();
             var promise = defered.promise;
 
@@ -126,7 +126,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                     function (tx, result) {
                         console.log("primer query ejecutado");
                         var values2 = [
-                            0, //TODO: obtener clave del servidor de serverData
+                            serverData.message,
                             db.lastInsertRowId, //key del registro creado anteriormente en conversation
                             type,
                             data.message.body || null,
@@ -159,21 +159,24 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         }
 
         function getConversations(){
-            sqliteDatastore
-                .execute('SELECT * FROM conversation')
-                .then(function (data) {
-                    chats = data;
-                    return chats;
-                })
-                .catch(function (error) {
-                    // Tratar el error
-                    console.log("error en consulta", error);
-                });
+            var defered = $q.defer();
+            var promise = defered.promise;
+
+            db.transaction(function (tx) {
+                tx.executeSql('SELECT * FROM conversation', [], function (tx, result) {
+                        defered.resolve(result);
+                    },
+                    function (transaction, error) {
+                        defered.reject(error);
+                    });
+            });
+            return promise;
         }
 
         return {
             execute: execute,
             initDb: initDb,
-            saveSendMessage: saveSendMessage
+            saveSendMessage: saveSendMessage,
+            getConversations: getConversations
         };
     });

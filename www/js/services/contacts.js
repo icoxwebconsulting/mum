@@ -105,7 +105,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
     function getContacts() {
         var deferred = $q.defer();
 
-        if (!ionic.Platform.isAndroid() && !ionic.Platform.isIOS) {
+        if (!ionic.Platform.isAndroid() && !ionic.Platform.isIOS()) {
             return loadContacts();
         } else {
 
