@@ -30,6 +30,27 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
         var loading = true;
         var temContacts = [];
 
+        if (!ionic.Platform.isAndroid()) {
+            //dummy data
+            var dummyName = ['David','Jesus','Ricardo'];
+            var dummyEmail = ['davidjdr@gmail.com', 'davidjdr+1@gmail.com','davidjdr+2@gmail.com'];
+            var dummyPhone = ['+584123600295','+584123600295','+584123600295'];
+            for (var i = 0, length = 3; i < length; i++) {
+                // create new contact
+                var contact = new Contact(dummyName[i],'img/account.png');
+                contact.email = dummyEmail[i];
+                contact.phoneNumber = dummyPhone[i];
+                temContacts.push(contact);
+            }
+
+            temContacts.sort();
+            contacts = temContacts;
+            loading = false;
+            $rootScope.$emit('notifying-contact-loaded');
+            deferred.resolve(contacts);
+
+        } else {
+
         var fields = [
             navigator.contacts.fieldType.displayName,
             navigator.contacts.fieldType.name,
@@ -76,11 +97,17 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
                 deferred.reject(error);
             }, options);
 
+        }
+
         return deferred.promise;
     }
 
     function getContacts() {
         var deferred = $q.defer();
+
+        if (!ionic.Platform.isAndroid() && !ionic.Platform.isIOS) {
+            return loadContacts();
+        } else {
 
         if (contacts !== null && loading === false) {
             deferred.resolve(contacts);
@@ -93,6 +120,8 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
         }
 
         return deferred.promise;
+
+        }
     }
 
     return {

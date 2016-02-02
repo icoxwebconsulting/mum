@@ -30,16 +30,12 @@ angular.module('app.inbox', [])
             //    lastText: 'This is wicked good ice cream.',
             //    face: 'img/mike.png'
             //}];
-            chats = sqliteDatastore
-                .execute('SELECT * FROM message')
-                .then(function (data) {
-                    chats = data;
-                    return chats;
-                })
-                .catch(function (error) {
-                    // Tratar el error
-                    console.log("error en consulta", error);
-                });
+            sqliteDatastore.getConversations().then(function(){
+
+            }).catch(function (error) {
+                // Tratar el error
+                console.log("error en consulta en inbox", error);
+            });
         }
 
         return {

@@ -158,6 +158,19 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         }
 
+        function getConversations(){
+            sqliteDatastore
+                .execute('SELECT * FROM conversation')
+                .then(function (data) {
+                    chats = data;
+                    return chats;
+                })
+                .catch(function (error) {
+                    // Tratar el error
+                    console.log("error en consulta", error);
+                });
+        }
+
         return {
             execute: execute,
             initDb: initDb,
