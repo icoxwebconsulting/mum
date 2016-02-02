@@ -29,8 +29,9 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function createTables() {
             $q.all([
-                createTableMessage(),
-                createTableScheduledMessage()
+                createTableMessageHistory(),
+                createTablePendingMessage(),
+                createTableConversation()
             ]).then(function (value) {
                 console.log("creadas las tablas");
             }, function (reason) {
@@ -57,30 +58,41 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return promise;
         }
 
-        function createTableMessage() {
-            var query = 'CREATE TABLE IF NOT EXISTS message (' +
-                'id TEXT primary key,' +
-                'customer TEXT,' +
+        function createTableMessageHistory() {
+            var query = 'CREATE TABLE IF NOT EXISTS message_history (' +
+                'id TEXT primary key,' + //key obtenida del servidor
+                'id_conversation TEXT,' + //fk contra conversation
+                'type INTEGER,' + //fk contra conversation
                 'body TEXT,' +
-                'type TEXT,' + //--tipo de mensaje (sms, email, instant)
-                'room TEXT,' + //--de instant
                 'message TEXT,' + //-- de sms y email
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
                 'at TEXT,' + //--solo para mensajes programados
-                'created TEXT,' +
-                'updated TEXT)';
+                'created DATETIME)';
             return execute(query);
         }
 
-        function createTableScheduledMessage() {
-            var query = 'CREATE TABLE IF NOT EXISTS message_receiver (' +
-                'id TEXT,' +
-                'customer TEXT,' +
-                'message TEXT,' +
-                'receivers TEXT,' +
-                'created TEXT,' +
-                'updated TEXT)';
+        function createTablePendingMessage() {
+            var query = 'CREATE TABLE IF NOT EXISTS pending_message (' +
+                'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                'body TEXT,' +
+                'message TEXT,' + //-- de sms y email
+                'about TEXT,' + //-- de email
+                'from_address TEXT,' + // de email
+                'at TEXT,' + //--solo para mensajes programados
+                'receivers TEXT,' + //guarda arreglo con los destinatarios, solo en esta tabla, una vez enviado se crea conversation
+                'created DATETIME)';
+            return execute(query);
+        }
+
+        function createTableConversation() {
+            var query = 'CREATE TABLE IF NOT EXISTS conversation (' +
+                'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                'type INTEGER,' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
+                'message TEXT,' + //<- id del mensaje segun tabla en backend
+                'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
+                'created DATETIME,' + //fecha de creacion
+                'updated DATETIME)'; // fecha de actualizacion
             return execute(query);
         }
 
@@ -95,8 +107,60 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             }
         }
 
+        function saveSendMessage(data, type, serverData) {
+            var defered = $q.defer();
+            var promise = defered.promise;
+
+            var query = 'INSERT INTO conversation (type, message, receivers, created, updated) VALUES(?,?,?,?,?)';
+            var values = [
+                type,
+                "", //TODO: quitar message?
+                data.message.receivers,
+                moment.utc().format("DD-MM-YYYY HH:mm:ss"),
+                moment.utc().format("DD-MM-YYYY HH:mm:ss")
+            ];
+
+
+            db.transaction(function (tx) {
+                tx.executeSql(query, values,
+                    function (tx, result) {
+                        console.log("primer query ejecutado");
+                        var values2 = [
+                            0, //TODO: obtener clave del servidor de serverData
+                            db.lastInsertRowId, //key del registro creado anteriormente en conversation
+                            type,
+                            data.message.body || null,
+                            data.message.message || null,
+                            data.message.about || null,
+                            data.message.from_address || null,
+                            data.message.at || null,
+                            moment.utc().format("DD-MM-YYYY HH:mm:ss")
+                        ];
+
+                        var query2 = 'INSERT INTO message_history (id, id_conversation, type, body, message, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?)';
+                        tx.executeSql(query2, values2,
+                            function (tx, result) {
+                                console.log("segundo query ejecutado");
+                                defered.resolve(result);
+                            },
+                            function (transaction, error) {
+                                defered.reject(error);
+                            });
+                    },
+                    function (transaction, error) {
+                        defered.reject(error);
+                    });
+            });
+            return promise;
+        }
+
+        function saveDelayMessage() {
+
+        }
+
         return {
             execute: execute,
-            initDb: initDb
+            initDb: initDb,
+            saveSendMessage: saveSendMessage
         };
     });
