@@ -12,26 +12,25 @@ angular.module('app.user', [])
         function registerPushNotifications() {
             var deferred = $q.defer();
 
-            //if (window.PushNotification) {
-            //    var PushNotification = window.PushNotification;
-            //
-            //    var push = PushNotification.init({
-            //        android: {
-            //            senderID: "140186210091",
-            //            icon: "mum",
-            //            iconColor: "lightgrey"
-            //        }
-            //    });
-            //
-            //    push.on('registration',
-            //        function (data) {
-            //            deferred.resolve(data.registrationId);
-                        deferred.resolve('000000000000000000');
-            //        },
-            //        function () {
-            //            deferred.reject('No push notification available');
-            //        });
-            //}
+            if (window.PushNotification) {
+                var PushNotification = window.PushNotification;
+
+                var push = PushNotification.init({
+                    android: {
+                        senderID: "850066050595",
+                        icon: "mum",
+                        iconColor: "lightgrey"
+                    }
+                });
+
+                push.on('registration',
+                    function (data) {
+                        deferred.resolve(data.registrationId);
+                    },
+                    function () {
+                        deferred.reject('No push notification available');
+                    });
+            }
 
             return deferred.promise;
         }
