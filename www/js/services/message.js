@@ -26,7 +26,8 @@ angular.module('app').service('messageSrv', function (messageRes, sqliteDatastor
                 body: data.body,
                 receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]),
                 at: moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss")
-            }
+            },
+            displayName: mum.displayName
         };
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
         if (mum.type == 'email') {

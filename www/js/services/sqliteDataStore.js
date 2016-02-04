@@ -89,6 +89,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'type INTEGER,' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'id_message TEXT,' + //<- id del mensaje segun tabla en backend
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
+                'display_name TEXT,' + //nombre para mostrar
+                'image TEXT,' +
                 'created DATETIME,' + //fecha de creacion
                 'updated DATETIME)'; // fecha de actualizacion
             return execute(query);
@@ -109,11 +111,13 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var defered = $q.defer();
             var promise = defered.promise;
 
-            var query = 'INSERT INTO conversation (type, id_message, receivers, created, updated) VALUES(?,?,?,?,?)';
+            var query = 'INSERT INTO conversation (type, id_message, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?,?)';
             var values = [
                 type,
                 "", //TODO: quitar id_message?
-                data.message.receivers, // como json en string
+                data.message.receivers, // como json en string,
+                data.displayName, //nombre para mostrar
+                data.image || null,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss"),
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];
@@ -127,7 +131,6 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                             result.insertId, //key del registro creado anteriormente en conversation
                             type,
                             data.message.body || null,
-                            data.message.message || null,
                             data.message.about || null,
                             data.message.from_address || null,
                             data.message.at || null,
@@ -161,7 +164,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
             db.transaction(function (tx) {
                 var query = 'SELECT c.id, ' +
-                    'c.type, c.receivers, c.created, c.updated, ' +
+                    'c.type, c.receivers, c.created, c.updated, c.display_name, c.image,  ' +
                     'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
                     'FROM conversation c JOIN message_history mh  ON c.id = mh.id_conversation ' +
                     'ORDER BY updated DESC';
