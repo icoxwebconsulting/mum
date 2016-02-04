@@ -127,7 +127,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                         console.log("primer query ejecutado");
                         var values2 = [
                             serverData.message,
-                            db.lastInsertRowId, //key del registro creado anteriormente en conversation
+                            result.insertId, //key del registro creado anteriormente en conversation
                             type,
                             data.message.body || null,
                             data.message.message || null,
@@ -163,7 +163,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var promise = defered.promise;
 
             db.transaction(function (tx) {
-                tx.executeSql('SELECT * FROM conversation', [], function (tx, result) {
+                tx.executeSql('SELECT * FROM conversation ORDER BY created DESC', [], function (tx, result) {
                         defered.resolve(result);
                     },
                     function (transaction, error) {

@@ -40,10 +40,10 @@ angular.module('app.routes', [])
                 templateUrl: 'templates/home.html'
             })
 
-            .state('layout.chats', {
-                url: '/chats',
-                templateUrl: 'templates/chats.html',
-                controller: 'ChatsCtrl'
+            .state('layout.inbox', {
+                url: '/inbox',
+                templateUrl: 'templates/inbox.html',
+                controller: 'InboxCtrl'
             })
 
             .state('layout.contacts', {

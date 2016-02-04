@@ -15,9 +15,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $state, $ionic
         messageSrv.sendMessage($scope.message)
             .then(function (resp) {
                 $ionicLoading.hide();
-                console.log(resp);
-                //TODO handle response
-                $state.go('layout.chats');
+                $state.go('layout.inbox');
             })
             .catch(function () {
                 $ionicLoading.hide();
