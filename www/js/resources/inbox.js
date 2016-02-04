@@ -2,19 +2,20 @@ angular.module('app.inbox', [])
     .factory('inbox', function ($resource, $q, SERVER_CONF, sqliteDatastore) {
 
         function getTopMessages() {
-
             var deferred = $q.defer();
             sqliteDatastore.getConversations().then(function (results) {
                 var chats = [];
                 var t = {};
+                var rec = [];
                 for (var i = 0; i < results.rows.length; i++) {
                     t = results.rows.item(i);
+                    rec = JSON.parse(t.receivers);
                     chats.push({
                         id: t.id,
-                        name: JSON.parse(t.receivers)[0],
-                        lastText: "TODO",
-                        face: 'img/mike.png',
-                        type: t.type,
+                        name: rec[0],
+                        lastText: t.body,
+                        image: (rec.length > 1)? 'img/persons.png' : 'img/person.png',
+                        type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant)
                         created: t.created,
                         updated: t.updated
                     });

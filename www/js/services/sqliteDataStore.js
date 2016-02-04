@@ -62,9 +62,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var query = 'CREATE TABLE IF NOT EXISTS message_history (' +
                 'id TEXT primary key,' + //key obtenida del servidor
                 'id_conversation TEXT,' + //fk contra conversation
-                'type INTEGER,' + //fk contra conversation
-                'body TEXT,' +
-                'message TEXT,' + //-- de sms y email
+                'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
+                'body TEXT,' + // -- de todos
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
                 'at TEXT,' + //--solo para mensajes programados
@@ -75,8 +74,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function createTablePendingMessage() {
             var query = 'CREATE TABLE IF NOT EXISTS pending_message (' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-                'body TEXT,' +
-                'message TEXT,' + //-- de sms y email
+                'body TEXT,' + // -- de todos
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
                 'at TEXT,' + //--solo para mensajes programados
@@ -89,7 +87,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var query = 'CREATE TABLE IF NOT EXISTS conversation (' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
                 'type INTEGER,' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
-                'message TEXT,' + //<- id del mensaje segun tabla en backend
+                'id_message TEXT,' + //<- id del mensaje segun tabla en backend
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
                 'created DATETIME,' + //fecha de creacion
                 'updated DATETIME)'; // fecha de actualizacion
@@ -111,15 +109,14 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var defered = $q.defer();
             var promise = defered.promise;
 
-            var query = 'INSERT INTO conversation (type, message, receivers, created, updated) VALUES(?,?,?,?,?)';
+            var query = 'INSERT INTO conversation (type, id_message, receivers, created, updated) VALUES(?,?,?,?,?)';
             var values = [
                 type,
-                "", //TODO: quitar message?
-                data.message.receivers,
+                "", //TODO: quitar id_message?
+                data.message.receivers, // como json en string
                 moment.utc().format("DD-MM-YYYY HH:mm:ss"),
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];
-
 
             db.transaction(function (tx) {
                 tx.executeSql(query, values,
@@ -137,7 +134,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                             moment.utc().format("DD-MM-YYYY HH:mm:ss")
                         ];
 
-                        var query2 = 'INSERT INTO message_history (id, id_conversation, type, body, message, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?)';
+                        var query2 = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
                         tx.executeSql(query2, values2,
                             function (tx, result) {
                                 console.log("segundo query ejecutado");
@@ -158,12 +155,17 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         }
 
-        function getConversations(){
+        function getConversations() {
             var defered = $q.defer();
             var promise = defered.promise;
 
             db.transaction(function (tx) {
-                tx.executeSql('SELECT * FROM conversation ORDER BY created DESC', [], function (tx, result) {
+                var query = 'SELECT c.id, ' +
+                    'c.type, c.receivers, c.created, c.updated, ' +
+                    'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
+                    'FROM conversation c JOIN message_history mh  ON c.id = mh.id_conversation ' +
+                    'ORDER BY updated DESC';
+                tx.executeSql(query, [], function (tx, result) {
                         defered.resolve(result);
                     },
                     function (transaction, error) {
