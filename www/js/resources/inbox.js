@@ -3,7 +3,7 @@ angular.module('app.inbox', [])
 
         function getTopMessages() {
             var deferred = $q.defer();
-            sqliteDatastore.getConversations().then(function (results) {
+            sqliteDatastore.getInboxConversations().then(function (results) {
                 var chats = [];
                 var t = {};
                 var rec = [];

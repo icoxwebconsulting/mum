@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicActionSheet, user) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, user) {
     moment.locale('es');
     $scope.day = moment();
 
@@ -28,4 +28,13 @@ angular.module('app').controller('MainCtrl', function ($scope, $state, $ionicAct
             }
         });
     };
+
+    //$rootScope.previousState;
+    //$rootScope.currentState;
+    $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+        $rootScope.previousState = from.name;
+        $rootScope.currentState = to.name;
+        console.log('Previous state:'+$rootScope.previousState);
+        console.log('Current state:'+$rootScope.currentState)
+    });
 });

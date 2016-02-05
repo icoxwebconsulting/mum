@@ -3,7 +3,7 @@
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats"
                       type="item-text-wrap"
-                      href="#/chat">
+                      ng-click="open(chat)">
                 <img ng-src="{{chat.image}}">
 
                 <h2>{{chat.name}}</h2>

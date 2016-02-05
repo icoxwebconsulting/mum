@@ -1,7 +1,9 @@
-angular.module('app').controller('MessageCtrl', function ($scope, $state, $ionicLoading, $ionicPopup, messageSrv) {
+angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageSrv) {
 
     $scope.$on('$ionicView.enter', function () {
-        $scope.mum = messageSrv.getMum();
+        if ($rootScope.previousState != 'layout.inbox') {
+            $scope.mum = messageSrv.getMum();
+        }
     });
 
     $scope.message = {
@@ -21,5 +23,11 @@ angular.module('app').controller('MessageCtrl', function ($scope, $state, $ionic
                 $ionicLoading.hide();
             });
     };
+    
+    $scope.getConversationMessage = function(){
+        messageSrv().then(function (msjs) {
+            
+        })
+    }
 
 });

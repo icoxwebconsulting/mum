@@ -26,8 +26,7 @@ angular.module('app').service('messageSrv', function (messageRes, sqliteDatastor
                 body: data.body,
                 receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]),
                 at: moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss")
-            },
-            displayName: mum.displayName
+            }
         };
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
         if (mum.type == 'email') {
@@ -35,20 +34,27 @@ angular.module('app').service('messageSrv', function (messageRes, sqliteDatastor
             messageData.from = data.from;
             return messageRes.sendEmail(messageData).$promise
                 .then(function (response) {
-                    saveSendMessage(messageData, 2, response);
+                    //TODO handle server side error in data
+                    saveSendMessage(messageData, mum, response);
                 });
         } else {
             return messageRes.sendSms(messageData).$promise
                 .then(function (response) {
-                    saveSendMessage(messageData, 1, response);
+                    //TODO handle server side error in data
+                    saveSendMessage(messageData, mum, response);
                 });
         }
+    }
+
+    function getConversationMessage(){
+        sqliteDatastore
     }
 
     return {
         setMum: setMum,
         getMum: getMum,
-        sendMessage: sendMessage
+        sendMessage: sendMessage,
+        getConversationMessage: getConversationMessage
     };
 
 });

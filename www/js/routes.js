@@ -81,7 +81,13 @@ angular.module('app.routes', [])
                 url: '/inbox',
                 templateUrl: 'templates/chat-detail.html',
                 controller: 'ContactCtrl'
-            }); 
+            })
+
+            .state('conversation', {
+                url: '/conversation',
+                templateUrl: 'templates/conversation.html',
+                controller: 'MessageCtrl'
+            });
 
 
         // if none of the above states are matched, use this as the fallback
