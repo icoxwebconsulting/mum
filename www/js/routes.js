@@ -77,16 +77,10 @@ angular.module('app.routes', [])
                 controller: 'MessageCtrl'
             })
 
-            .state('inbox', {
-                url: '/inbox',
-                templateUrl: 'templates/chat-detail.html',
-                controller: 'ContactCtrl'
-            })
-
             .state('conversation', {
                 url: '/conversation',
                 templateUrl: 'templates/conversation.html',
-                controller: 'MessageCtrl'
+                controller: 'ConversationCtrl'
             });
 
 

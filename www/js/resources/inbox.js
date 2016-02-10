@@ -1,7 +1,7 @@
 angular.module('app.inbox', [])
     .factory('inbox', function ($resource, $q, SERVER_CONF, sqliteDatastore) {
 
-        function getTopMessages() {
+        function getInboxMessages() {
             var deferred = $q.defer();
             sqliteDatastore.getInboxConversations().then(function (results) {
                 var chats = [];
@@ -31,7 +31,7 @@ angular.module('app.inbox', [])
         }
 
         return {
-            getTopMessages: getTopMessages
+            getInboxMessages: getInboxMessages
         };
 
     });

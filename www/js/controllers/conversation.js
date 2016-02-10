@@ -1,10 +1,15 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicActionSheet, $timeout, inbox, messageSrv) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $state, messageSrv) {
+
+    $scope.messages;
 
     $scope.$on('$ionicView.enter', function (e) {
-        console.log("en el modulo de inbox");
-        inbox.getInboxMessages().then(function (resp) {
-            $scope.chats = resp;
+        console.log("en el modulo de conversation");
+        messageSrv.getConversationMessages().then(function (msjs) {
+            $scope.messages = msjs;
         });
+
+        $scope.conversation = messageSrv.getConversation();
+        console.log("la querida conversation", $scope.conversation)
     });
 
     $scope.remove = function (chat) {

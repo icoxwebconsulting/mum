@@ -10,8 +10,7 @@
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       ng-repeat="contact in contacts | filter:filterContacts"
                       ng-click="pickContact(contact)"
-                      type="item-text-wrap"
-                      href="#">
+                      type="item-text-wrap">
                 <img ng-src="{{contact.photo}}">
                 <h2>{{contact.displayName}}</h2>
                 <p ng-show="contactsType == 'sms' && contact.phoneNumber">{{contact.phoneNumber}}</p>

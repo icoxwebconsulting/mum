@@ -1,6 +1,7 @@
-angular.module('app').service('messageSrv', function (messageRes, sqliteDatastore) {
+angular.module('app').service('messageSrv', function (messageRes, $q, sqliteDatastore) {
 
     var mum = {};
+    var conversation = {};
 
     var setMum = function (obj) {
         mum = obj;
@@ -8,6 +9,14 @@ angular.module('app').service('messageSrv', function (messageRes, sqliteDatastor
 
     var getMum = function () {
         return mum;
+    };
+
+    var setConversation = function (c) {
+        conversation = c;
+    };
+
+    var getConversation = function () {
+        return conversation;
     };
 
     function saveSendMessage(msj, type, serverData) {
@@ -46,15 +55,30 @@ angular.module('app').service('messageSrv', function (messageRes, sqliteDatastor
         }
     }
 
-    function getConversationMessage(){
-        sqliteDatastore
+    function getConversationMessages() {
+        var deferred = $q.defer();
+        sqliteDatastore.getConversationMessages(conversation.id).then(function (results) {
+            var messages = [];
+            for (var i = 0; i < results.rows.length; i++) {
+                messages.push(results.rows.item(i));
+            }
+            console.log("muestra", messages);
+            deferred.resolve(messages);
+        }).catch(function (error) {
+            // Tratar el error
+            console.log(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
     }
 
     return {
         setMum: setMum,
         getMum: getMum,
+        setConversation: setConversation,
+        getConversation: getConversation,
         sendMessage: sendMessage,
-        getConversationMessage: getConversationMessage
+        getConversationMessages: getConversationMessages
     };
 
 });

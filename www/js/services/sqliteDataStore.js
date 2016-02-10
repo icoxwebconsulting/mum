@@ -183,10 +183,18 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return promise;
         }
 
+        function getConversationMessages(id) {
+            console.log('y el id es', id);
+            var query = 'SELECT * FROM message_history WHERE id_conversation = '+id+' ORDER BY created';
+            var values = [];
+            return execute(query, values);
+        }
+
         return {
             execute: execute,
             initDb: initDb,
             saveSendMessage: saveSendMessage,
-            getInboxConversations: getInboxConversations
+            getInboxConversations: getInboxConversations,
+            getConversationMessages: getConversationMessages
         };
     });

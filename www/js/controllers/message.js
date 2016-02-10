@@ -23,11 +23,5 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
                 $ionicLoading.hide();
             });
     };
-    
-    $scope.getConversationMessage = function(){
-        messageSrv().then(function (msjs) {
-            
-        })
-    }
 
 });
