@@ -1,0 +1,72 @@
+<div class="mum">
+    <ion-header-bar>
+        <div class="header header-bd">
+            <div class="flex flex-middle-xs">
+                <div class="flex-xs-2">
+                    <div class="flex-xs-2">
+                        <a href="#/content/inbox" class="button button-icon ion-chevron-left"></a>
+                    </div>
+                </div>
+                <div class="flex-xs p-y-xs">
+                    <div class="flex flex-middle-xs">
+                        <img class="img-circle m-r-xs" src="{{conversation.image}}" style="border-radius: 50%;" alt="" width="56">
+                        {{conversation.name}}
+                    </div>
+                </div>
+                <div class="flex-xs-3">
+                    <!--<button class="btn clear-btn header-btn" type="button">-->
+                        <!--<span class="icon icon-clock"></span>-->
+                    <!--</button>-->
+
+                    <!--<button class="btn clear-btn header-btn" type="button">-->
+                        <!--<span class="icon icon-clip"></span>-->
+                    <!--</button>-->
+                </div>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content class="bg-main" style="margin-top: 65px">
+        <div class="text-left">
+            <div class="container">
+                <div class="messages ">
+
+                    <div class="message message-in" ng-repeat="msj in messages">
+                        <div class="message-body">
+                            <p>{{msj.body}}</p>
+                        </div>
+                    </div>
+                    <!--<div class="message message-in">-->
+                        <!--<div class="message-body">-->
+                            <!--<p>Como estas?</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="message message-out">-->
+                        <!--<div class="message-body">-->
+                            <!--<p>Muy bien</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                </div>
+                <div id="bottom"></div>
+            </div>
+        </div>
+    </ion-content>
+    <ion-footer-bar>
+        <div class="footer" style="width: 100%">
+            <form class="form-messages">
+                <div class="form-group">
+                    <div class="flex flex-middle-xs">
+                        <div class="flex-xs">
+                            <input type="text" class="form-control" style="width: 90%" placeholder="Escribir">
+                        </div>
+                        <div class="flex-xs-2">
+                            <button class="btn clear-btn btn-block">
+                                <span class="icon icon-dart-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-footer-bar>
+</div>

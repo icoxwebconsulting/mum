@@ -2,6 +2,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
 
     $scope.messages;
 
+    $scope.message;
+
     $scope.$on('$ionicView.enter', function (e) {
         console.log("en el modulo de conversation");
         messageSrv.getConversationMessages().then(function (msjs) {
@@ -24,4 +26,16 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         }
         //$state.go('layout.inbox');
     }
+
+    $scope.sendMessage = function () {
+        //$ionicLoading.show();
+        messageSrv.sendMessage($scope.message)
+            .then(function (resp) {
+                $ionicLoading.hide();
+                $state.go('layout.inbox');
+            })
+            .catch(function () {
+                $ionicLoading.hide();
+            });
+    };
 });
