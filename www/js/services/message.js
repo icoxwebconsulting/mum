@@ -1,6 +1,14 @@
 angular.module('app').service('messageSrv', function (messageRes, $q, sqliteDatastore) {
 
-    var mum = {};
+    //mum = message
+    var mum = {
+        type: "",
+        date: "",
+        phoneNumber: "",
+        email: "",
+        displayName: ""
+    };
+
     var conversation = {};
 
     var setMum = function (obj) {
@@ -19,8 +27,8 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         return conversation;
     };
 
-    function saveSendMessage(msj, type, serverData) {
-        sqliteDatastore.saveSendMessage(msj, type, serverData)
+    function saveSendMessage(msj, type, serverData, ids) {
+        sqliteDatastore.saveSendMessage(msj, type, serverData, ids)
             .then(function (response) {
                 console.log("mensaje enviado y guardado");
             }).catch(function (error) {
@@ -29,14 +37,18 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
 
     }
 
-    function sendMessage(data) {
+    function sendMessage(data, ids) {
         var messageData = {
             message: {
                 body: data.body,
-                receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]),
-                at: moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss")
+                receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email])
             }
         };
+
+        if (mum.date) {
+            messageData.message.at = moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss");
+        }
+
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
         if (mum.type == 'email') {
             messageData.about = data.subject;
@@ -44,13 +56,15 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
             return messageRes.sendEmail(messageData).$promise
                 .then(function (response) {
                     //TODO handle server side error in data
-                    saveSendMessage(messageData, mum, response);
+                    console.log(response);
+                    saveSendMessage(messageData, mum, response, ids || null);
                 });
         } else {
             return messageRes.sendSms(messageData).$promise
                 .then(function (response) {
                     //TODO handle server side error in data
-                    saveSendMessage(messageData, mum, response);
+                    console.log(response);
+                    saveSendMessage(messageData, mum, response, ids || null);
                 });
         }
     }

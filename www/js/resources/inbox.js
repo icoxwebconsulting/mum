@@ -12,10 +12,12 @@ angular.module('app.inbox', [])
                     rec = JSON.parse(t.receivers);
                     chats.push({
                         id: t.id,
+                        id_conversation: t.id_conversation,
                         name: t.display_name,
                         lastText: t.body,
-                        image: (t.image)? t.image : 'img/person.png',
-                        type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant)
+                        image: (t.image) ? t.image : 'img/person.png',
+                        type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant),
+                        receivers: rec,
                         created: t.created,
                         updated: t.updated
                     });

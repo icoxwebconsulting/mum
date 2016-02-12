@@ -1,7 +1,7 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $state, messageSrv) {
 
+    $scope.conversation;
     $scope.messages;
-
     $scope.message;
 
     $scope.$on('$ionicView.enter', function (e) {
@@ -11,31 +11,36 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         });
 
         $scope.conversation = messageSrv.getConversation();
-        console.log("la querida conversation", $scope.conversation)
     });
 
     $scope.remove = function (chat) {
         Chats.remove(chat);
     };
 
-    $scope.open = function (chat) {
-        //{id: 1, name: "David", lastText: "da", image: "img/person.png", type: "sms", updated: "04-02-2016 18:46:33"}
-        if (chat.type == 'sms') {
-            messageSrv.setConversation(chat);
-            $state.go('conversation');
-        }
-        //$state.go('layout.inbox');
-    }
 
     $scope.sendMessage = function () {
-        //$ionicLoading.show();
-        messageSrv.sendMessage($scope.message)
-            .then(function (resp) {
-                $ionicLoading.hide();
-                $state.go('layout.inbox');
+        var type = $scope.conversation.type;
+        var mum = {
+            type: type,
+            date: null,
+            phoneNumber: (type == 'sms') ? $scope.conversation.receivers : null,
+            email: (type == 'email') ? $scope.conversation.receivers : null,
+            displayName: $scope.conversation.name
+        };
+
+        messageSrv.setMum(mum);
+
+        messageSrv.sendMessage({
+            body: $scope.message
+        }, {
+            id_message: $scope.conversation.id,
+            id_conversation: $scope.conversation.id_conversation
+        }).then(function (resp) {
+                //TODO: manejo después del envío
+                console.log("resp", resp)
             })
-            .catch(function () {
-                $ionicLoading.hide();
+            .catch(function (error) {
+                console.log("error", error)
             });
     };
 });

@@ -57,10 +57,10 @@
                 <div class="form-group">
                     <div class="flex flex-middle-xs">
                         <div class="flex-xs">
-                            <input type="text" class="form-control" style="width: 90%" placeholder="Escribir">
+                            <input type="text" class="form-control" style="width: 90%" placeholder="Escribir" ng-model="message">
                         </div>
                         <div class="flex-xs-2">
-                            <button class="btn clear-btn btn-block">
+                            <button class="btn clear-btn btn-block" ng-click="sendMessage()">
                                 <span class="icon icon-dart-right"></span>
                             </button>
                         </div>

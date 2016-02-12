@@ -61,7 +61,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function createTableMessageHistory() {
             var query = 'CREATE TABLE IF NOT EXISTS message_history (' +
                 'id TEXT primary key,' + //key obtenida del servidor
-                'id_conversation TEXT,' + //fk contra conversation
+                'id_conversation INTEGER,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
                 'about TEXT,' + //-- de email
@@ -107,11 +107,12 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             }
         }
 
-        function saveSendMessage(data, mum, serverData) { //serverData = {"message":"56b0d96fa7538","delivered":false}
+        function saveSendMessage(data, mum, serverData, ids) { //serverData = {"message":"56b0d96fa7538","delivered":false}
             var defered = $q.defer();
             var promise = defered.promise;
 
             var query = 'INSERT INTO conversation (type, id_message, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?,?)';
+            var query2 = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
                 mum.type,
                 "", //TODO: quitar id_message?
@@ -123,33 +124,55 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             ];
 
             db.transaction(function (tx) {
-                tx.executeSql(query, values,
-                    function (tx, result) {
-                        console.log("primer query ejecutado");
-                        var values2 = [
-                            serverData.message,
-                            result.insertId, //key del registro creado anteriormente en conversation
-                            mum.type,
-                            data.message.body || null,
-                            data.message.about || null,
-                            data.message.from_address || null,
-                            data.message.at || null,
-                            moment.utc().format("DD-MM-YYYY HH:mm:ss")
-                        ];
+                if (!ids) {
+                    tx.executeSql(query, values,
+                        function (tx, result) {
+                            console.log("primer query ejecutado");
+                            var values2 = [
+                                serverData.message,
+                                parseInt(result.insertId), //key del registro creado anteriormente en conversation
+                                mum.type,
+                                data.message.body || null,
+                                data.message.about || null,
+                                data.message.from_address || null,
+                                data.message.at || null,
+                                moment.utc().format("DD-MM-YYYY HH:mm:ss")
+                            ];
 
-                        var query2 = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
-                        tx.executeSql(query2, values2,
-                            function (tx, result) {
-                                console.log("segundo query ejecutado");
-                                defered.resolve(result);
-                            },
-                            function (transaction, error) {
-                                defered.reject(error);
-                            });
-                    },
-                    function (transaction, error) {
-                        defered.reject(error);
-                    });
+                            tx.executeSql(query2, values2,
+                                function (tx, result) {
+                                    console.log("segundo query ejecutado");
+                                    defered.resolve(result);
+                                },
+                                function (transaction, error) {
+                                    defered.reject(error);
+                                });
+                        },
+                        function (transaction, error) {
+                            defered.reject(error);
+                        });
+                } else {
+                    console.log(ids)
+                    var values2 = [
+                        serverData.message,
+                        parseInt(ids.id_conversation), //key del registro creado anteriormente en conversation
+                        mum.type,
+                        data.message.body || null,
+                        data.message.about || null,
+                        data.message.from_address || null,
+                        data.message.at || null,
+                        moment.utc().format("DD-MM-YYYY HH:mm:ss")
+                    ];
+
+                    tx.executeSql(query2, values2,
+                        function (tx, result) {
+                            console.log("segundo query ejecutado");
+                            defered.resolve(result);
+                        },
+                        function (transaction, error) {
+                            defered.reject(error);
+                        });
+                }
             });
             return promise;
         }
@@ -163,7 +186,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var promise = defered.promise;
 
             db.transaction(function (tx) {
-                var query = 'SELECT  c.id, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
+                var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
                     'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
                     'FROM    conversation c INNER JOIN ' +
                     '(SELECT  id_conversation, ' +
@@ -185,7 +208,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function getConversationMessages(id) {
             console.log('y el id es', id);
-            var query = 'SELECT * FROM message_history WHERE id_conversation = '+id+' ORDER BY created';
+            var query = 'SELECT * FROM message_history WHERE id_conversation = ' + id + ' ORDER BY created';
             var values = [];
             return execute(query, values);
         }
