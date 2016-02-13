@@ -17,7 +17,6 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         Chats.remove(chat);
     };
 
-
     $scope.sendMessage = function () {
         var type = $scope.conversation.type;
         var mum = {

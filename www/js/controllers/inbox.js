@@ -1,8 +1,8 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicActionSheet, $timeout, inbox, messageSrv) {
+angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicActionSheet, $timeout, messageSrv) {
 
     $scope.$on('$ionicView.enter', function (e) {
         console.log("en el modulo de inbox");
-        inbox.getInboxMessages().then(function (resp) {
+        messageSrv.getInboxMessages().then(function (resp) {
             $scope.chats = resp;
         });
     });
