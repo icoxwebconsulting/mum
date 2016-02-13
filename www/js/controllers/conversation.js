@@ -29,6 +29,16 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
 
         messageSrv.setMum(mum);
 
+        $scope.messages.push({
+            about: null,
+            at: null,
+            from_address: null,
+            id: null,
+            id_conversation: $scope.conversation.id,
+            body: $scope.message,
+            created: moment.utc().format("DD-MM-YYYY HH:mm:ss")
+        });
+
         messageSrv.sendMessage({
             body: $scope.message
         }, {
@@ -36,9 +46,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
             id_conversation: $scope.conversation.id_conversation
         }).then(function (resp) {
                 //TODO: manejo después del envío
+                $scope.message = "";
                 console.log("resp", resp)
             })
             .catch(function (error) {
+                $scope.message = "";
                 console.log("error", error)
             });
     };
