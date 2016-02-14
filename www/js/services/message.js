@@ -37,6 +37,15 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
 
     }
 
+    function saveMessage(msj, type, serverData, ids) {
+        sqliteDatastore.saveMessage(msj, type, serverData, ids)
+            .then(function (response) {
+                console.log("mensaje guardado [pending_message]");
+            }).catch(function (error) {
+            console.log("error al guardar msj", error);
+        });
+    }
+
     function sendMessage(data, ids) {
         var messageData = {
             message: {
