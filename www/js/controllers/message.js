@@ -14,14 +14,16 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
 
     $scope.sendMessage = function () {
         $ionicLoading.show();
-        messageSrv.sendMessage($scope.message)
-            .then(function (resp) {
+        messageSrv.saveConversation($scope.message).then(function (resp) {
+            messageSrv.sendMessage($scope.message, resp.insertId).then(function () {
                 $ionicLoading.hide();
                 $state.go('layout.inbox');
-            })
-            .catch(function () {
+            }).catch(function (error) {
+                console.log('hay un error', error);
                 $ionicLoading.hide();
             });
+        });
+
     };
 
 });

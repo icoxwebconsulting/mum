@@ -67,6 +67,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
                 'at TEXT,' + //--solo para mensajes programados
+                'is_received INTEGER,' + //especifica si es un mensaje recibido
+                'status INTEGER,' + //0 - to send, 1 sent, 2 delivered ??? 3 read?
                 'created DATETIME)';
             return execute(query);
         }
@@ -74,6 +76,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function createTablePendingMessage() {
             var query = 'CREATE TABLE IF NOT EXISTS pending_message (' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                'id_conversation INTEGER,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
                 'about TEXT,' + //-- de email
@@ -88,7 +91,6 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var query = 'CREATE TABLE IF NOT EXISTS conversation (' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
                 'type INTEGER,' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
-                'id_message TEXT,' + //<- id del mensaje segun tabla en backend
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
                 'display_name TEXT,' + //nombre para mostrar
                 'image TEXT,' +
@@ -108,15 +110,14 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             }
         }
 
-        function saveConversation(data, mum) {
+        function saveConversation(data, mum, receivers) {
             var defered = $q.defer();
             var promise = defered.promise;
 
-            var query = 'INSERT INTO conversation (type, id_message, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?,?)';
+            var query = 'INSERT INTO conversation (type, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?)';
             var values = [
                 mum.type,
-                "", //TODO: quitar id_message?
-                data.message.receivers, // como json en string,
+                receivers, // como json en string,
                 mum.displayName, //nombre para mostrar
                 data.image || null,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss"),
@@ -136,18 +137,19 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return promise;
         }
 
-        function savePendingMessage(data, mum, message, insertId) {
+        function savePendingMessage(data, mum, idConversation) {
             var defered = $q.defer();
             var promise = defered.promise;
 
-            var query = 'INSERT INTO pending_message (type, body, about, from_address, at, receivers, created) VALUES(?,?,?,?,?,?,?)';
+            var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, created) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
+                parseInt(idConversation), //key del registro creado anteriormente en conversation
                 mum.type,
                 data.message.body || null,
                 data.message.about || null,
                 data.message.from_address || null,
                 data.message.at || null,
-                data.receivers || null,
+                data.message.receivers || null,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];
 
@@ -170,7 +172,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
             var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
-                messageId,
+                messageId,//key obtenida del servidor
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
                 mum.type,
                 data.message.body || null,
@@ -193,80 +195,6 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return promise;
         }
 
-        function saveSendMessage(data, mum, serverData, ids) { //serverData = {"message":"56b0d96fa7538","delivered":false}
-            var defered = $q.defer();
-            var promise = defered.promise;
-
-            var query = 'INSERT INTO conversation (type, id_message, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?,?)';
-            var query2 = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
-            var values = [
-                mum.type,
-                "", //TODO: quitar id_message?
-                data.message.receivers, // como json en string,
-                mum.displayName, //nombre para mostrar
-                data.image || null,
-                moment.utc().format("DD-MM-YYYY HH:mm:ss"),
-                moment.utc().format("DD-MM-YYYY HH:mm:ss")
-            ];
-
-            db.transaction(function (tx) {
-                if (!ids) {
-                    tx.executeSql(query, values,
-                        function (tx, result) {
-                            console.log("primer query ejecutado");
-                            var values2 = [
-                                serverData.message,
-                                parseInt(result.insertId), //key del registro creado anteriormente en conversation
-                                mum.type,
-                                data.message.body || null,
-                                data.message.about || null,
-                                data.message.from_address || null,
-                                data.message.at || null,
-                                moment.utc().format("DD-MM-YYYY HH:mm:ss")
-                            ];
-
-                            tx.executeSql(query2, values2,
-                                function (tx, result) {
-                                    console.log("segundo query ejecutado");
-                                    defered.resolve(result);
-                                },
-                                function (transaction, error) {
-                                    defered.reject(error);
-                                });
-                        },
-                        function (transaction, error) {
-                            defered.reject(error);
-                        });
-                } else {
-                    console.log(ids)
-                    var values2 = [
-                        serverData.message,
-                        parseInt(ids.id_conversation), //key del registro creado anteriormente en conversation
-                        mum.type,
-                        data.message.body || null,
-                        data.message.about || null,
-                        data.message.from_address || null,
-                        data.message.at || null,
-                        moment.utc().format("DD-MM-YYYY HH:mm:ss")
-                    ];
-
-                    tx.executeSql(query2, values2,
-                        function (tx, result) {
-                            console.log("segundo query ejecutado");
-                            defered.resolve(result);
-                        },
-                        function (transaction, error) {
-                            defered.reject(error);
-                        });
-                }
-            });
-            return promise;
-        }
-
-        function saveDelayMessage() {
-
-        }
-
         function getInboxConversations() {
             var defered = $q.defer();
             var promise = defered.promise;
@@ -274,12 +202,12 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             db.transaction(function (tx) {
                 var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
                     'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
-                    'FROM    conversation c INNER JOIN ' +
+                    'FROM    conversation c LEFT JOIN ' +
                     '(SELECT  id_conversation, ' +
                     'MAX(created) MaxDate ' +
                     'FROM    message_history ' +
-                    'GROUP BY id_conversation ' +
-                    ') MaxDates ON c.id = MaxDates.id_conversation INNER JOIN ' +
+                    'GROUP BY id_conversation UNION SELECT id_conversation, MAX(created) MaxDate FROM pending_message GROUP BY id_conversation' +
+                    ') MaxDates ON c.id = MaxDates.id_conversation LEFT JOIN ' +
                     'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
                     'AND MaxDates.MaxDate = mh.created ';
                 tx.executeSql(query, [], function (tx, result) {
@@ -302,7 +230,10 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         return {
             execute: execute,
             initDb: initDb,
-            saveSendMessage: saveSendMessage,
+            //saveSendMessage: saveSendMessage,
+            savePendingMessage: savePendingMessage,
+            saveMessageHistory: saveMessageHistory,
+            saveConversation: saveConversation,
             getInboxConversations: getInboxConversations,
             getConversationMessages: getConversationMessages
         };

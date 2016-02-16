@@ -36,22 +36,25 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
             id: null,
             id_conversation: $scope.conversation.id,
             body: $scope.message,
+            to_send: true,
             created: moment.utc().format("DD-MM-YYYY HH:mm:ss")
         });
 
+        var lastItem = $scope.messages.length - 1;
+
+        var message = $scope.message;
+        $scope.message = "";
+
         messageSrv.sendMessage({
-            body: $scope.message
-        }, {
-            id_message: $scope.conversation.id,
-            id_conversation: $scope.conversation.id_conversation
-        }).then(function (resp) {
-                //TODO: manejo después del envío
-                $scope.message = "";
-                console.log("resp", resp)
-            })
-            .catch(function (error) {
-                $scope.message = "";
-                console.log("error", error)
-            });
+            body: message
+        }, $scope.conversation.id_conversation).then(function (id, toSend) {
+            //TODO: manejo después del envío
+            $scope.messages[lastItem].id = id;
+            $scope.messages[lastItem].to_send = toSend;
+
+        }).catch(function (error) {
+            $scope.message = "";
+            console.log("error", error);
+        });
     };
 });

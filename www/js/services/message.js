@@ -27,26 +27,9 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         return conversation;
     };
 
-    function saveSendMessage(msj, type, serverData, ids) {
-        sqliteDatastore.saveSendMessage(msj, type, serverData, ids)
-            .then(function (response) {
-                console.log("mensaje enviado y guardado");
-            }).catch(function (error) {
-            console.log("error al guardar msj", error);
-        });
+    function sendMessage(data, idConversation) {
+        var deferred = $q.defer();
 
-    }
-
-    function saveMessage(msj, type, serverData, ids) {
-        sqliteDatastore.saveMessage(msj, type, serverData, ids)
-            .then(function (response) {
-                console.log("mensaje guardado [pending_message]");
-            }).catch(function (error) {
-            console.log("error al guardar msj", error);
-        });
-    }
-
-    function sendMessage(data, ids) {
         var messageData = {
             message: {
                 body: data.body,
@@ -62,20 +45,53 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         if (mum.type == 'email') {
             messageData.about = data.subject;
             messageData.from = data.from;
-            return messageRes.sendEmail(messageData).$promise
-                .then(function (response) {
-                    //TODO handle server side error in data
-                    console.log(response);
-                    saveSendMessage(messageData, mum, response, ids || null);
+            messageRes.sendEmail(messageData).$promise.then(function (response) {
+                //TODO handle server side error in data
+                console.log(response);
+                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation).then(function (resp) {
+                    var toSend = false;
+                    deferred.resolve(resp.insertId, toSend);
                 });
+            }).catch(function (error) {
+                if (error.code != 500) {
+                    sqliteDatastore.savePendingMessage(messageData, mum, idConversation).then(function (resp) {
+                        var toSend = true;
+                        deferred.resolve(resp.insertId, toSend);
+                    });
+                }
+            });
         } else {
-            return messageRes.sendSms(messageData).$promise
-                .then(function (response) {
-                    //TODO handle server side error in data
-                    console.log(response);
-                    saveSendMessage(messageData, mum, response, ids || null);
+            messageRes.sendSms(messageData).$promise.then(function (response) {
+                //TODO handle server side error in data
+                console.log(response);
+                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation).then(function (resp) {
+                    var toSend = false;
+                    deferred.resolve(resp.insertId, toSend);
                 });
+            }).catch(function (error) {
+                if (error.code != 500) {
+                    sqliteDatastore.savePendingMessage(messageData, mum, idConversation).then(function (resp) {
+                        var toSend = true;
+                        deferred.resolve(resp.insertId, toSend);
+                    });
+                }
+            });
         }
+
+        return deferred.promise;
+    }
+
+    function saveConversation(messageData) {
+        var mum = getMum();
+        var receivers = (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]);
+        var deferred = $q.defer();
+        sqliteDatastore.saveConversation(messageData, mum, receivers).then(function (resp) {
+            deferred.resolve(resp);
+        }).catch(function (error) {
+            console.log("error en el manejo de conversation", error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
     }
 
     function getConversationMessages() {
@@ -131,6 +147,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         getMum: getMum,
         setConversation: setConversation,
         getConversation: getConversation,
+        saveConversation: saveConversation,
         sendMessage: sendMessage,
         getConversationMessages: getConversationMessages,
         getInboxMessages: getInboxMessages
