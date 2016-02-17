@@ -1,0 +1,33 @@
+<ion-view>
+    <ion-content class="top-margin">
+        <div class="list card">
+
+            <div class="item item-avatar">
+                <img src="{{contact.photo}}">
+                <h2>{{contact.displayName}}</h2>
+            </div>
+
+            <div class="item item-body">
+                <!--<p ng-if="contact.phoneNumber">-->
+                    <!--<button class="button button-outline button-assertive">-->
+                        <!--Mum a: {{contact.phoneNumber}}-->
+                    <!--</button>-->
+                <!--</p>-->
+
+                <!--<p ng-if="contact.email">-->
+                    <!--<button class="button button-outline button-assertive">-->
+                        <!--Correo a: {{contact.email}}-->
+                    <!--</button>-->
+                <!--</p>-->
+
+                <p ng-if="contact.phoneNumber">
+                    <button class="button button-outline button-assertive" ng-click="startConversation()">
+                        Sms a: {{contact.phoneNumber}}
+                    </button>
+                </p>
+
+            </div>
+
+        </div>
+    </ion-content>
+</ion-view>

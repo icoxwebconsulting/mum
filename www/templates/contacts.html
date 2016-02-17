@@ -4,7 +4,7 @@
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       ng-repeat="contact in contacts"
                       type="item-text-wrap"
-                      href="#">
+                      ng-click="contactDetail(contact)">
                 <img ng-src="{{contact.photo}}">
                 <h2>{{contact.displayName}}</h2>
                 <p ng-show="contact.phoneNumber">{{contact.phoneNumber}}</p>

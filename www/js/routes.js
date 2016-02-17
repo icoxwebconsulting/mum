@@ -52,6 +52,12 @@ angular.module('app.routes', [])
                 controller: 'ContactsCtrl'
             })
 
+            .state('layout.contactDetail', {
+                url: '/contacts/detail',
+                templateUrl: 'templates/contactDetail.html',
+                controller: 'ContactDetailCtrl'
+            })
+
             .state('email_contacts', {
                 url: '/pick/email/contact',
                 templateUrl: 'templates/pick-contacts.html',

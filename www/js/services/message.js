@@ -9,7 +9,14 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         displayName: ""
     };
 
-    var conversation = {};
+    var conversation = {
+        id: "",
+        image: "",
+        displayName: "",
+        type: "",
+        receivers: "",
+        lastText: ""
+    };
 
     var setMum = function (obj) {
         mum = obj;
@@ -81,12 +88,10 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         return deferred.promise;
     }
 
-    function saveConversation(messageData) {
-        var mum = getMum();
-        var receivers = (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]);
+    function saveConversation(conversation) {
         var deferred = $q.defer();
-        sqliteDatastore.saveConversation(messageData, mum, receivers).then(function (resp) {
-            deferred.resolve(resp);
+        sqliteDatastore.saveConversation(conversation).then(function (resp) {
+            deferred.resolve(resp.insertId);
         }).catch(function (error) {
             console.log("error en el manejo de conversation", error);
             deferred.reject(error);
@@ -101,7 +106,6 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
             for (var i = 0; i < results.rows.length; i++) {
                 messages.push(results.rows.item(i));
             }
-            console.log("muestra", messages);
             deferred.resolve(messages);
         }).catch(function (error) {
             // Tratar el error

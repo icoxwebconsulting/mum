@@ -2,6 +2,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
 
     var contacts = null;
     var loading = false;
+    var singleContact;
 
     var Contact = function (displayNameArg, photoArg, emailArg, phoneNumberArg, mumIdArg) {
         var displayName = displayNameArg;
@@ -124,8 +125,18 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
         }
     }
 
+    function setSingleContact(contact) {
+        singleContact = contact;
+    }
+
+    function getSingleContact() {
+        return singleContact;
+    }
+
     return {
         loadContacts: loadContacts,
-        getContacts: getContacts
+        getContacts: getContacts,
+        setSingleContact: setSingleContact,
+        getSingleContact: getSingleContact
     };
 });

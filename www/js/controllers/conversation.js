@@ -1,16 +1,16 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $state, messageSrv) {
 
-    $scope.conversation;
-    $scope.messages;
+    $scope.conversation = {};
+    $scope.messages = [];
     $scope.message;
 
     $scope.$on('$ionicView.enter', function (e) {
-        console.log("en el modulo de conversation");
-        messageSrv.getConversationMessages().then(function (msjs) {
-            $scope.messages = msjs;
-        });
-
         $scope.conversation = messageSrv.getConversation();
+        if ($scope.conversation.id) {
+            messageSrv.getConversationMessages().then(function (msjs) {
+                $scope.messages = msjs;
+            });
+        }
     });
 
     $scope.remove = function (chat) {
@@ -24,7 +24,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
             date: null,
             phoneNumber: (type == 'sms') ? $scope.conversation.receivers : null,
             email: (type == 'email') ? $scope.conversation.receivers : null,
-            displayName: $scope.conversation.name
+            displayName: $scope.conversation.displayName
         };
 
         messageSrv.setMum(mum);
@@ -45,16 +45,27 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         var message = $scope.message;
         $scope.message = "";
 
-        messageSrv.sendMessage({
-            body: message
-        }, $scope.conversation.id_conversation).then(function (id, toSend) {
-            //TODO: manejo después del envío
-            $scope.messages[lastItem].id = id;
-            $scope.messages[lastItem].to_send = toSend;
+        function sendMessage() {
+            messageSrv.sendMessage({
+                body: message
+            }, $scope.conversation.id).then(function (id, toSend) {
+                //TODO: manejo después del envío
+                $scope.messages[lastItem].id = id;
+                $scope.messages[lastItem].to_send = toSend;
 
-        }).catch(function (error) {
-            $scope.message = "";
-            console.log("error", error);
-        });
+            }).catch(function (error) {
+                $scope.message = "";
+                console.log("error", error);
+            });
+        }
+
+        if (!$scope.conversation.id) {
+            messageSrv.saveConversation($scope.conversation).then(function (insertId) {
+                $scope.conversation.id = insertId;
+                sendMessage();
+            });
+        } else {
+            sendMessage();
+        }
     };
 });

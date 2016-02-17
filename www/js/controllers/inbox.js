@@ -12,9 +12,15 @@ angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicAc
     };
 
     $scope.open = function (chat) {
-        //{id: 1, name: "David", lastText: "da", image: "img/person.png", type: "sms", updated: "04-02-2016 18:46:33"}
         if (chat.type == 'sms') {
-            messageSrv.setConversation(chat);
+            messageSrv.setConversation({
+                id: chat.id_conversation,
+                image: chat.image,
+                displayName: chat.name,
+                type: chat.type,
+                receivers: chat.receivers,
+                lastText: chat.lastText
+            });
             $state.go('conversation');
         }
         //$state.go('layout.inbox');
