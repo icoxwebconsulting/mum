@@ -2,7 +2,6 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
     .factory('sqliteDatastore', function ($cordovaSQLite, $q, deviceDatastore) {
 
         var db;
-        var tables = ["Message", "InstantMessage", "SMSMessage", "EmailMessage", "ScheduledMessage"];
 
         function openDatabase() {
             try {
@@ -44,18 +43,17 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             if (!values) {
                 values = [];
             }
-            var defered = $q.defer();
-            var promise = defered.promise;
+            var deferred = $q.defer();
 
             db.transaction(function (tx) {
                 tx.executeSql(query, values, function (tx, result) {
-                        defered.resolve(result);
+                        deferred.resolve(result);
                     },
                     function (transaction, error) {
-                        defered.reject(error);
+                        deferred.reject(error);
                     });
             });
-            return promise;
+            return deferred.promise;
         }
 
         function createTableMessageHistory() {
@@ -111,8 +109,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         }
 
         function saveConversation(data) {
-            var defered = $q.defer();
-            var promise = defered.promise;
+            var deferred = $q.defer();
 
             var query = 'INSERT INTO conversation (type, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?)';
             var values = [
@@ -127,19 +124,18 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             db.transaction(function (tx) {
                 tx.executeSql(query, values,
                     function (tx, result) {
-                        defered.resolve(result);
+                        deferred.resolve(result);
                     },
                     function (transaction, error) {
-                        defered.reject(error);
+                        deferred.reject(error);
                     });
             });
 
-            return promise;
+            return deferred.promise;
         }
 
         function savePendingMessage(data, mum, idConversation) {
-            var defered = $q.defer();
-            var promise = defered.promise;
+            var deferred = $q.defer();
 
             var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, created) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
@@ -156,19 +152,18 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             db.transaction(function (tx) {
                 tx.executeSql(query, values,
                     function (tx, result) {
-                        defered.resolve(result);
+                        deferred.resolve(result);
                     },
                     function (transaction, error) {
-                        defered.reject(error);
+                        deferred.reject(error);
                     });
             });
 
-            return promise;
+            return deferred.promise;
         }
 
         function saveMessageHistory(data, mum, messageId, idConversation) {
-            var defered = $q.defer();
-            var promise = defered.promise;
+            var deferred = $q.defer();
 
             var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
@@ -185,19 +180,18 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             db.transaction(function (tx) {
                 tx.executeSql(query, values,
                     function (tx, result) {
-                        defered.resolve(result);
+                        deferred.resolve(result);
                     },
                     function (transaction, error) {
-                        defered.reject(error);
+                        deferred.reject(error);
                     });
             });
 
-            return promise;
+            return deferred.promise;
         }
 
         function getInboxConversations() {
-            var defered = $q.defer();
-            var promise = defered.promise;
+            var deferred = $q.defer();
 
             db.transaction(function (tx) {
                 var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
@@ -211,13 +205,13 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                     'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
                     'AND MaxDates.MaxDate = mh.created ';
                 tx.executeSql(query, [], function (tx, result) {
-                        defered.resolve(result);
+                        deferred.resolve(result);
                     },
                     function (transaction, error) {
-                        defered.reject(error);
+                        deferred.reject(error);
                     });
             });
-            return promise;
+            return deferred.promise;
         }
 
         function getConversationMessages(id) {
@@ -227,6 +221,38 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query, values);
         }
 
+        function deleteMessageHistory(id) {
+            var query = 'DELETE FROM message_history WHERE id_conversation = ' + id;
+            execute(query, []);
+        }
+
+        function deletePendingMessage(id) {
+            var query = 'DELETE FROM pending_message WHERE id_conversation = ' + id;
+            execute(query, []);
+        }
+
+        function deleteFromConveresation(id) {
+            var query = 'DELETE FROM conversation WHERE id = ' + id;
+            execute(query, []);
+        }
+
+        function deleteConversation(id) {
+            var deferred = $q.defer();
+            $q.all([
+                deleteMessageHistory(id),
+                deletePendingMessage(id),
+                deleteFromConveresation(id)
+            ]).then(function (value) {
+                console.log("VALUE", value);
+                deferred.resolve();
+            }, function (reason) {
+                console.log(reason);
+                deferred.reject();
+            });
+
+            return deferred.promise;
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -234,6 +260,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             savePendingMessage: savePendingMessage,
             saveMessageHistory: saveMessageHistory,
             saveConversation: saveConversation,
+            deleteConversation: deleteConversation,
             getInboxConversations: getInboxConversations,
             getConversationMessages: getConversationMessages
         };

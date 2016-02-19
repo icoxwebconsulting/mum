@@ -18,6 +18,8 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         lastText: ""
     };
 
+    var conversations = [];
+
     var setMum = function (obj) {
         mum = obj;
     };
@@ -118,13 +120,13 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
     function getInboxMessages() {
         var deferred = $q.defer();
         sqliteDatastore.getInboxConversations().then(function (results) {
-            var chats = [];
+            conversations = [];
             var t = {};
             var rec = [];
             for (var i = 0; i < results.rows.length; i++) {
                 t = results.rows.item(i);
                 rec = JSON.parse(t.receivers);
-                chats.push({
+                conversations.push({
                     id: t.id,
                     id_conversation: t.id_conversation,
                     name: t.display_name,
@@ -136,11 +138,21 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
                     updated: t.updated
                 });
             }
-            console.log("por retornar chats", chats);
-            deferred.resolve(chats);
+            deferred.resolve(conversations);
         }).catch(function (error) {
             // Tratar el error
             console.log("error en consulta en inbox", error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    function deleteConversation(conversation) {
+        var deferred = $q.defer();
+        sqliteDatastore.deleteConversation(conversation.id_conversation).then(function (result) {
+            conversations.splice(conversations.indexOf(conversation), 1);
+            deferred.resolve(conversations);
+        }).catch(function (error) {
             deferred.reject(error);
         });
         return deferred.promise;
@@ -154,7 +166,8 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
         saveConversation: saveConversation,
         sendMessage: sendMessage,
         getConversationMessages: getConversationMessages,
-        getInboxMessages: getInboxMessages
+        getInboxMessages: getInboxMessages,
+        deleteConversation: deleteConversation
     };
 
 });

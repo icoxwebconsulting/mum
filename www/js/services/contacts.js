@@ -38,7 +38,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
             var dummyPhone = ['+584123600295', '+584123600295', '+584123600295'];
             for (var i = 0, length = 3; i < length; i++) {
                 // create new contact
-                var contact = new Contact(dummyName[i], 'img/account.png');
+                var contact = new Contact(dummyName[i], 'img/person.png');
                 contact.email = dummyEmail[i];
                 contact.phoneNumber = dummyPhone[i];
                 temContacts.push(contact);
@@ -72,7 +72,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
                         if (loadedContact.displayName) {
                             // create new contact
                             var contact = new Contact(loadedContact.displayName,
-                                (loadedContact.photos) ? loadedContact.photos[0].value : 'img/account.png');
+                                (loadedContact.photos) ? loadedContact.photos[0].value : 'img/person.png');
 
                             if (loadedContact.emails) {
                                 contact.email = loadedContact.emails[0].value;

@@ -1,4 +1,6 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicActionSheet, $timeout, messageSrv) {
+angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPopup, messageSrv) {
+
+    $scope.conversation;
 
     $scope.$on('$ionicView.enter', function (e) {
         console.log("en el modulo de inbox");
@@ -6,10 +8,6 @@ angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicAc
             $scope.chats = resp;
         });
     });
-
-    $scope.remove = function (chat) {
-        Chats.remove(chat);
-    };
 
     $scope.open = function (chat) {
         if (chat.type == 'sms') {
@@ -24,5 +22,32 @@ angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicAc
             $state.go('conversation');
         }
         //$state.go('layout.inbox');
+    };
+
+    function toDelete() {
+        messageSrv.deleteConversation($scope.conversation).then(function () {
+            console.log("conversacion borrada exitosamente")
+        }).catch(function (e) {
+            console.log("no se borro la conversacion", e)
+        })
     }
+
+    $scope.deleteConversation = function (c) {
+        $scope.conversation = c;
+        $ionicPopup.alert({
+            title: 'Eliminar mensajes',
+            subTitle: '¿Desea eliminar el mensaje?',
+            scope: $scope,
+            buttons: [
+                {
+                    text: '<b>Aceptar</b>',
+                    type: 'button-positive',
+                    onTap: function (e) {
+                        toDelete();
+                    }
+                },
+                {text: 'Cancelar'}
+            ]
+        });
+    };
 });
