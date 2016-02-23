@@ -191,3 +191,18 @@ div.week.names > span {
     color: darkred;
     font-weight: bold;
 }
+
+.bg-msg-mail {
+    background: url('../img/nuevo-mail.png') no-repeat left top;
+    background-size: 20px 20px;
+}
+
+.bg-msg-mum {
+    background: url('../img/nuevo-mum.png') no-repeat left top;
+    background-size: 20px 20px;
+}
+
+.bg-msg-sms {
+    background: url('../img/nuevo-sms.png') no-repeat left top;
+    background-size: 20px 20px;
+}
