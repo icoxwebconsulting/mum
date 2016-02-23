@@ -1278,11 +1278,20 @@ body {
     color: #FF4D79;
 }
 
+.message-out-pending .message-body:before {
+    content: "\e602";
+    color: #FF4D79;
+}
+
 .message-in .message-body {
     font-weight: 300;
 }
 
 .message-out {
+    text-align: right;
+}
+
+.message-out-pending {
     text-align: right;
 }
 

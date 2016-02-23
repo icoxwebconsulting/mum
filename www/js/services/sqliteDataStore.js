@@ -162,16 +162,17 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return deferred.promise;
         }
 
-        function saveMessageHistory(data, mum, messageId, idConversation) {
+        function saveMessageHistory(data, mum, messageId, idConversation, is_received) {
             var deferred = $q.defer();
 
-            var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, from_address, at, created) VALUES(?,?,?,?,?,?,?,?)';
+            var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, is_received, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?)';
             var values = [
                 messageId,//key obtenida del servidor
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
                 mum.type,
                 data.message.body || null,
                 data.message.about || null,
+                is_received,
                 data.message.from_address || null,
                 data.message.at || null,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
@@ -194,16 +195,33 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var deferred = $q.defer();
 
             db.transaction(function (tx) {
+                //original
+                /*
                 var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
                     'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
-                    'FROM    conversation c LEFT JOIN ' +
+                    'FROM    conversation c INNER JOIN ' +
                     '(SELECT  id_conversation, ' +
                     'MAX(created) MaxDate ' +
                     'FROM    message_history ' +
-                    'GROUP BY id_conversation UNION SELECT id_conversation, MAX(created) MaxDate FROM pending_message GROUP BY id_conversation' +
-                    ') MaxDates ON c.id = MaxDates.id_conversation LEFT JOIN ' +
+                    'GROUP BY id_conversation ' +
+                    ') MaxDates ON c.id = MaxDates.id_conversation INNER JOIN ' +
                     'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
                     'AND MaxDates.MaxDate = mh.created ';
+                    */
+
+                var query = 'SELECT  c.id, c.id as id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
+                    'SUBSTR(mh.body,0,20) as body, SUBSTR(pm.body,0,20)as body2, mh.about, mh.from_address, mh.at ' +
+                    'FROM    conversation c INNER JOIN ' +
+                    '(SELECT  id_conversation, ' +
+                    'MAX(created) MaxDate ' +
+                    'FROM    message_history UNION SELECT id_conversation, MAX(created) MaxDate FROM pending_message ' +
+                    //'GROUP BY id_conversation ' +
+                    ') MaxDates ON c.id = MaxDates.id_conversation LEFT JOIN ' +
+                    'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
+                    'AND MaxDates.MaxDate = mh.created ' +
+                    ' LEFT JOIN ' +
+                    'pending_message pm ON   MaxDates.id_conversation = pm.id_conversation ' +
+                    'AND MaxDates.MaxDate = pm.created ';
                 tx.executeSql(query, [], function (tx, result) {
                         deferred.resolve(result);
                     },
@@ -216,7 +234,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function getConversationMessages(id) {
             console.log('y el id es', id);
-            var query = 'SELECT * FROM message_history WHERE id_conversation = ' + id + ' ORDER BY created';
+            var query = 'SELECT id as id_message, type, body, is_received, created FROM message_history WHERE id_conversation = ' + id;
+            query += ' UNION SELECT null as id_message, type, body, null as is_received, created FROM pending_message WHERE id_conversation = ' + id + ' ORDER BY created';
             var values = [];
             return execute(query, values);
         }

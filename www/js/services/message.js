@@ -50,20 +50,22 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
             messageData.message.at = moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss");
         }
 
+        var isReceived = false;
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
         if (mum.type == 'email') {
             messageData.about = data.subject;
             messageData.from = data.from;
+
             messageRes.sendEmail(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
-                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation).then(function (resp) {
+                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation, isReceived).then(function (resp) {
                     var toSend = false;
                     deferred.resolve(resp.insertId, toSend);
                 });
             }).catch(function (error) {
                 if (error.code != 500) {
-                    sqliteDatastore.savePendingMessage(messageData, mum, idConversation).then(function (resp) {
+                    sqliteDatastore.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (resp) {
                         var toSend = true;
                         deferred.resolve(resp.insertId, toSend);
                     });
@@ -73,7 +75,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
             messageRes.sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
-                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation).then(function (resp) {
+                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation, isReceived).then(function (resp) {
                     var toSend = false;
                     deferred.resolve(resp.insertId, toSend);
                 });
@@ -130,7 +132,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
                     id: t.id,
                     id_conversation: t.id_conversation,
                     name: t.display_name,
-                    lastText: t.body,
+                    lastText: (t.body)? t.body : t.body2,
                     image: (t.image) ? t.image : 'img/person.png',
                     type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant),
                     receivers: rec,

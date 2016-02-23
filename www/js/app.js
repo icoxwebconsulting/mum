@@ -1,4 +1,4 @@
-angular.module('app', ['ionic', 'app.routes', 'app.services', 'app.userDataStore', 'app.user',
+angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user',
         'app.resources', 'app.messageResource', 'app.device', 'app.deviceDataStore', 'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore'])
     .run(function ($rootScope, $state, $stateParams, $ionicPlatform, Contacts, sqliteDatastore) {
         $rootScope.$state = $state;
