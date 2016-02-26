@@ -88,7 +88,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
                 }
             });
         }
-console.log("MESSAGE DATA",messageData)
+
         return deferred.promise;
     }
 
