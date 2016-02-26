@@ -1,5 +1,5 @@
 angular.module('app.messageResource', [])
-    .factory('messageRes', function ($resource, SERVER_CONF, OAUTH_CONF, userDatastore) {
+    .factory('messageRes', function ($resource, SERVER_CONF) {
 
         return $resource(SERVER_CONF.API_HOST + 'messages', null, {
             sendSms:{
@@ -7,7 +7,7 @@ angular.module('app.messageResource', [])
                 url: SERVER_CONF.API_HOST + 'messages/sms',
                 params: null,
                 headers: {
-                    Authorization: 'Bearer ' + userDatastore.getTokens().accessToken
+                    Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
                 }
             },
             sendEmail:{
@@ -15,7 +15,7 @@ angular.module('app.messageResource', [])
                 url: SERVER_CONF.API_HOST + 'messages/email',
                 params: null,
                 headers: {
-                    Authorization: 'Bearer ' + userDatastore.getTokens().accessToken
+                    Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
                 }
             }
         });

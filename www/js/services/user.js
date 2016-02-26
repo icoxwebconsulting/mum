@@ -30,6 +30,10 @@ angular.module('app.user', [])
                     function () {
                         deferred.reject('No push notification available');
                     });
+
+                push.on('notification', function (data) {
+                    console.log(data);
+                });
             }
 
             return deferred.promise;
