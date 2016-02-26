@@ -59,7 +59,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
             messageRes.sendEmail(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
-                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation, isReceived).then(function (resp) {
+                sqliteDatastore.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (resp) {
                     var toSend = false;
                     deferred.resolve(resp.insertId, toSend);
                 });
@@ -71,11 +71,11 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
                     });
                 }
             });
-        } else {
+        } else if (mum.type == 'sms'){
             messageRes.sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
-                sqliteDatastore.saveMessageHistory(messageData, mum, response.message, idConversation, isReceived).then(function (resp) {
+                sqliteDatastore.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (resp) {
                     var toSend = false;
                     deferred.resolve(resp.insertId, toSend);
                 });
@@ -88,7 +88,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
                 }
             });
         }
-
+console.log("MESSAGE DATA",messageData)
         return deferred.promise;
     }
 

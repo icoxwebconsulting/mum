@@ -162,14 +162,14 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return deferred.promise;
         }
 
-        function saveMessageHistory(data, mum, messageId, idConversation, is_received) {
+        function saveMessageHistory(data, type, messageId, idConversation, is_received) {
             var deferred = $q.defer();
 
             var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, is_received, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?)';
             var values = [
                 messageId,//key obtenida del servidor
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
-                mum.type,
+                type,
                 data.message.body || null,
                 data.message.about || null,
                 is_received,
@@ -197,17 +197,17 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             db.transaction(function (tx) {
                 //original
                 /*
-                var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
-                    'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
-                    'FROM    conversation c INNER JOIN ' +
-                    '(SELECT  id_conversation, ' +
-                    'MAX(created) MaxDate ' +
-                    'FROM    message_history ' +
-                    'GROUP BY id_conversation ' +
-                    ') MaxDates ON c.id = MaxDates.id_conversation INNER JOIN ' +
-                    'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
-                    'AND MaxDates.MaxDate = mh.created ';
-                    */
+                 var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
+                 'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
+                 'FROM    conversation c INNER JOIN ' +
+                 '(SELECT  id_conversation, ' +
+                 'MAX(created) MaxDate ' +
+                 'FROM    message_history ' +
+                 'GROUP BY id_conversation ' +
+                 ') MaxDates ON c.id = MaxDates.id_conversation INNER JOIN ' +
+                 'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
+                 'AND MaxDates.MaxDate = mh.created ';
+                 */
 
                 var query = 'SELECT  c.id, c.id as id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
                     'SUBSTR(mh.body,0,20) as body, SUBSTR(pm.body,0,20)as body2, mh.about, mh.from_address, mh.at ' +
@@ -215,7 +215,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                     '(SELECT  id_conversation, ' +
                     'MAX(created) MaxDate ' +
                     'FROM    message_history UNION SELECT id_conversation, MAX(created) MaxDate FROM pending_message ' +
-                    //'GROUP BY id_conversation ' +
+                        //'GROUP BY id_conversation ' +
                     ') MaxDates ON c.id = MaxDates.id_conversation LEFT JOIN ' +
                     'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
                     'AND MaxDates.MaxDate = mh.created ' +
@@ -272,6 +272,11 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return deferred.promise;
         }
 
+        function getDelayedMessages() {
+            var query = 'SELECT * FROM pending_message';
+            return execute(query, []);
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -281,6 +286,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             saveConversation: saveConversation,
             deleteConversation: deleteConversation,
             getInboxConversations: getInboxConversations,
-            getConversationMessages: getConversationMessages
+            getConversationMessages: getConversationMessages,
+            getDelayedMessages: getDelayedMessages
         };
     });
