@@ -92,6 +92,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
                 'display_name TEXT,' + //nombre para mostrar
                 'image TEXT,' +
+                'is_unread INTEGER DEFAULT 0,' +
                 'created DATETIME,' + //fecha de creacion
                 'updated DATETIME)'; // fecha de actualizacion
             return execute(query);
@@ -245,12 +246,12 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             execute(query, []);
         }
 
-        function deletePendingMessage(id) {
+        function deletePendingMessages(id) {
             var query = 'DELETE FROM pending_message WHERE id_conversation = ' + id;
             execute(query, []);
         }
 
-        function deleteFromConveresation(id) {
+        function deleteFromConversation(id) {
             var query = 'DELETE FROM conversation WHERE id = ' + id;
             execute(query, []);
         }
@@ -259,8 +260,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var deferred = $q.defer();
             $q.all([
                 deleteMessageHistory(id),
-                deletePendingMessage(id),
-                deleteFromConveresation(id)
+                deletePendingMessages(id),
+                deleteFromConversation(id)
             ]).then(function (value) {
                 console.log("VALUE", value);
                 deferred.resolve();
@@ -277,6 +278,11 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query, []);
         }
 
+        function deletePendingMessage(id) {
+            var query = 'DELETE FROM pending_message WHERE id = ' + id;
+            return execute(query, []);
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -287,6 +293,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             deleteConversation: deleteConversation,
             getInboxConversations: getInboxConversations,
             getConversationMessages: getConversationMessages,
-            getDelayedMessages: getDelayedMessages
+            getDelayedMessages: getDelayedMessages,
+            deletePendingMessage: deletePendingMessage
         };
     });

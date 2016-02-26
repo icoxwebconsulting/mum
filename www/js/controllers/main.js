@@ -1,6 +1,8 @@
-angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, user) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageSrv) {
     moment.locale('es');
     $scope.day = moment();
+
+    //delayedMessageSrv.run();
 
     $scope.showMenu = function () {
         // Show the action sheet
