@@ -1,5 +1,5 @@
 angular.module('app.user', [])
-    .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore) {
+    .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore, pushNotification) {
         function register(registrationData) {
             return customer.save(registrationData).$promise
                 .then(function (response) {
@@ -9,38 +9,8 @@ angular.module('app.user', [])
                 });
         }
 
-        function registerPushNotifications() {
-            var deferred = $q.defer();
-
-            if (window.PushNotification) {
-                var PushNotification = window.PushNotification;
-
-                var push = PushNotification.init({
-                    android: {
-                        senderID: "850066050595",
-                        icon: "mum",
-                        iconColor: "lightgrey"
-                    }
-                });
-
-                push.on('registration',
-                    function (data) {
-                        deferred.resolve(data.registrationId);
-                    },
-                    function () {
-                        deferred.reject('No push notification available');
-                    });
-
-                push.on('notification', function (data) {
-                    console.log(data);
-                });
-            }
-
-            return deferred.promise;
-        }
-
         function registerDevice() {
-            return registerPushNotifications()
+            return pushNotification.register()
                 .then(function (deviceToken) {
                     var data = {
                         token: deviceToken,
