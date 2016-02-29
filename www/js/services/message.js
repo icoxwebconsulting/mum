@@ -1,4 +1,4 @@
-angular.module('app').service('messageSrv', function (messageRes, $q, sqliteDatastore) {
+angular.module('app').service('messageSrv', function (messageRes, $q, messageStorage) {
 
     //mum = message
     var mum = {
@@ -59,31 +59,27 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
             messageRes.sendEmail(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
-                sqliteDatastore.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (resp) {
-                    var toSend = false;
-                    deferred.resolve(resp.insertId, toSend);
+                messageStorage.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (params) {
+                    deferred.resolve(params);
                 });
             }).catch(function (error) {
                 if (error.code != 500) {
-                    sqliteDatastore.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (resp) {
-                        var toSend = true;
-                        deferred.resolve(resp.insertId, toSend);
+                    messageStorage.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (params) {
+                        deferred.resolve(params);
                     });
                 }
             });
-        } else if (mum.type == 'sms'){
+        } else if (mum.type == 'sms') {
             messageRes.sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
-                sqliteDatastore.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (resp) {
-                    var toSend = false;
-                    deferred.resolve(resp.insertId, toSend);
+                messageStorage.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (params) {
+                    deferred.resolve(params);
                 });
             }).catch(function (error) {
                 if (error.code != 500) {
-                    sqliteDatastore.savePendingMessage(messageData, mum, idConversation).then(function (resp) {
-                        var toSend = true;
-                        deferred.resolve(resp.insertId, toSend);
+                    messageStorage.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (params) {
+                        deferred.resolve(params);
                     });
                 }
             });
@@ -93,71 +89,19 @@ angular.module('app').service('messageSrv', function (messageRes, $q, sqliteData
     }
 
     function saveConversation(conversation) {
-        var deferred = $q.defer();
-        sqliteDatastore.saveConversation(conversation).then(function (resp) {
-            deferred.resolve(resp.insertId);
-        }).catch(function (error) {
-            console.log("error en el manejo de conversation", error);
-            deferred.reject(error);
-        });
-        return deferred.promise;
+        return messageStorage.saveConversation(conversation);
     }
 
     function getConversationMessages() {
-        var deferred = $q.defer();
-        sqliteDatastore.getConversationMessages(conversation.id).then(function (results) {
-            var messages = [];
-            for (var i = 0; i < results.rows.length; i++) {
-                messages.push(results.rows.item(i));
-            }
-            deferred.resolve(messages);
-        }).catch(function (error) {
-            // Tratar el error
-            console.log(error);
-            deferred.reject(error);
-        });
-        return deferred.promise;
+        return messageStorage.getConversationMessages();
     }
 
     function getInboxMessages() {
-        var deferred = $q.defer();
-        sqliteDatastore.getInboxConversations().then(function (results) {
-            conversations = [];
-            var t = {};
-            var rec = [];
-            for (var i = 0; i < results.rows.length; i++) {
-                t = results.rows.item(i);
-                rec = JSON.parse(t.receivers);
-                conversations.push({
-                    id: t.id,
-                    id_conversation: t.id_conversation,
-                    name: t.display_name,
-                    lastText: (t.body)? t.body : t.body2,
-                    image: (t.image) ? t.image : 'img/person.png',
-                    type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant),
-                    receivers: rec,
-                    created: t.created,
-                    updated: t.updated
-                });
-            }
-            deferred.resolve(conversations);
-        }).catch(function (error) {
-            // Tratar el error
-            console.log("error en consulta en inbox", error);
-            deferred.reject(error);
-        });
-        return deferred.promise;
+        return messageStorage.getInboxMessages();
     }
 
     function deleteConversation(conversation) {
-        var deferred = $q.defer();
-        sqliteDatastore.deleteConversation(conversation.id_conversation).then(function (result) {
-            conversations.splice(conversations.indexOf(conversation), 1);
-            deferred.resolve(conversations);
-        }).catch(function (error) {
-            deferred.reject(error);
-        });
-        return deferred.promise;
+        return messageStorage.deleteConversation(conversation);
     }
 
     return {
