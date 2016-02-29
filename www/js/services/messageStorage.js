@@ -11,9 +11,9 @@ angular.module('app').service('messageStorage', function (messageRes, $q, sqlite
         return deferred.promise;
     }
 
-    function getConversationMessages() {
+    function getConversationMessages(idConversation) {
         var deferred = $q.defer();
-        sqliteDatastore.getConversationMessages(conversation.id).then(function (results) {
+        sqliteDatastore.getConversationMessages(idConversation).then(function (results) {
             var messages = [];
             for (var i = 0; i < results.rows.length; i++) {
                 messages.push(results.rows.item(i));

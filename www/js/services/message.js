@@ -1,4 +1,4 @@
-angular.module('app').service('messageSrv', function (messageRes, $q, messageStorage) {
+angular.module('app').service('messageService', function (messageRes, $q, messageStorage) {
 
     //mum = message
     var mum = {
@@ -93,7 +93,7 @@ angular.module('app').service('messageSrv', function (messageRes, $q, messageSto
     }
 
     function getConversationMessages() {
-        return messageStorage.getConversationMessages();
+        return messageStorage.getConversationMessages(conversation.id);
     }
 
     function getInboxMessages() {

@@ -1,4 +1,4 @@
-angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopup, messageSrv) {
+angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopup, messageService) {
 
     //fechas
     $scope.fecha = moment().add(1, 'hours');
@@ -12,7 +12,7 @@ angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopu
                 template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con una hora o más de retardo.</p>'
             });
         }else{
-            messageSrv.setMum({
+            messageService.setMum({
                 type: type,
                 date: $scope.fecha
             });

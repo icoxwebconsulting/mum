@@ -1,6 +1,6 @@
-angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $ionicLoading, Contacts, messageSrv) {
+angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $ionicLoading, Contacts, messageService) {
 
-    var mum = messageSrv.getMum();
+    var mum = messageService.getMum();
     $scope.contacts = [];
     $scope.contactsType = mum.type;
 
@@ -22,7 +22,7 @@ angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $
     $scope.pickContact = function (contact) {
         mum.email = contact.email;
         mum.displayName = contact.displayName;
-        messageSrv.setMum(mum);
+        messageService.setMum(mum);
 
         $state.go('message');
     }

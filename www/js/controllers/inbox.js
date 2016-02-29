@@ -1,17 +1,14 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPopup, messageSrv) {
+angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPopup, messageService) {
 
     $scope.conversation;
 
-    $scope.$on('$ionicView.enter', function (e) {
-        console.log("en el modulo de inbox");
-        messageSrv.getInboxMessages().then(function (resp) {
-            $scope.chats = resp;
-        });
+    messageService.getInboxMessages().then(function (resp) {
+        $scope.chats = resp;
     });
 
     $scope.open = function (chat) {
         if (chat.type == 'sms') {
-            messageSrv.setConversation({
+            messageService.setConversation({
                 id: chat.id_conversation,
                 image: chat.image,
                 displayName: chat.name,
@@ -25,7 +22,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPo
     };
 
     function toDelete() {
-        messageSrv.deleteConversation($scope.conversation).then(function () {
+        messageService.deleteConversation($scope.conversation).then(function () {
             console.log("conversacion borrada exitosamente")
         }).catch(function (e) {
             console.log("no se borro la conversacion", e)

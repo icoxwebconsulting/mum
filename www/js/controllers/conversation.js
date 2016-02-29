@@ -1,13 +1,13 @@
-angular.module('app').controller('ConversationCtrl', function ($scope, $state, messageSrv) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $state, messageService) {
 
     $scope.conversation = {};
     $scope.messages = [];
     $scope.message;
 
     $scope.$on('$ionicView.enter', function (e) {
-        $scope.conversation = messageSrv.getConversation();
+        $scope.conversation = messageService.getConversation();
         if ($scope.conversation.id) {
-            messageSrv.getConversationMessages().then(function (msjs) {
+            messageService.getConversationMessages().then(function (msjs) {
                 $scope.messages = msjs;
             });
         }
@@ -27,7 +27,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
             displayName: $scope.conversation.displayName
         };
 
-        messageSrv.setMum(mum);
+        messageService.setMum(mum);
 
         $scope.messages.push({
             about: null,
@@ -46,7 +46,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         $scope.message = "";
 
         function sendMessage() {
-            messageSrv.sendMessage({
+            messageService.sendMessage({
                 body: message
             }, $scope.conversation.id).then(function (id, toSend) {
                 //TODO: manejo después del envío
@@ -60,7 +60,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         }
 
         if (!$scope.conversation.id) {
-            messageSrv.saveConversation($scope.conversation).then(function (insertId) {
+            messageService.saveConversation($scope.conversation).then(function (insertId) {
                 $scope.conversation.id = insertId;
                 sendMessage();
             });

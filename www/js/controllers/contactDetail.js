@@ -1,4 +1,4 @@
-angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, messageSrv, Contacts) {
+angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, messageService, Contacts) {
 
     $scope.contact;
 
@@ -9,7 +9,7 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
     $scope.startConversation = function () {
 
-        messageSrv.setMum({
+        messageService.setMum({
             type: "sms",
             date: moment.utc().format("DD-MM-YYYY HH:mm:ss"),
             phoneNumber: $scope.contact.phoneNumber,
@@ -19,7 +19,7 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
         var receivers = [];
         receivers.push($scope.contact.phoneNumber);
-        messageSrv.setConversation({
+        messageService.setConversation({
             id: null,
             image: ($scope.contact.photo == 'img/person.png')? null : $scope.contact.photo,
             displayName: $scope.contact.displayName,

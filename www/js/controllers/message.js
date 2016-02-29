@@ -1,8 +1,8 @@
-angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageSrv) {
+angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageService) {
 
     $scope.$on('$ionicView.enter', function () {
         if ($rootScope.previousState != 'layout.inbox') {
-            $scope.mum = messageSrv.getMum();
+            $scope.mum = messageService.getMum();
         }
     });
 
@@ -15,13 +15,13 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
     $scope.sendMessage = function () {
         $ionicLoading.show();
         var messageData = $scope.message;
-        var mum = messageSrv.getMum();
+        var mum = messageService.getMum();
         messageData.receivers = [];
         messageData.receivers.push((mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]));
         messageData.type = mum.type;
         messageData.displayName = mum.displayName;
-        messageSrv.saveConversation(messageData).then(function (insertId) {
-            messageSrv.sendMessage($scope.message, insertId).then(function () {
+        messageService.saveConversation(messageData).then(function (insertId) {
+            messageService.sendMessage($scope.message, insertId).then(function () {
                 $ionicLoading.hide();
                 $state.go('layout.inbox');
             }).catch(function (error) {
