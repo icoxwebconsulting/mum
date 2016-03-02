@@ -1,4 +1,4 @@
-angular.module('app').service('messageService', function (messageRes, $q, messageStorage) {
+angular.module('app').service('messageService', function (messageRes, $q, messageStorage, messageQueue) {
 
     //mum = message
     var mum = {
@@ -43,46 +43,32 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
             message: {
                 body: data.body,
                 receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email])
-            }
+            },
+            idConversation: idConversation
         };
 
         if (mum.date) {
             messageData.message.at = moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss");
         }
 
-        var isReceived = false;
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
         if (mum.type == 'email') {
+
             messageData.about = data.subject;
             messageData.from = data.from;
+            messageQueue.addEmail(messageData);
+            messageQueue.processEmail();
 
-            messageRes.sendEmail(messageData).$promise.then(function (response) {
-                //TODO handle server side error in data
-                console.log(response);
-                messageStorage.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (params) {
-                    deferred.resolve(params);
-                });
-            }).catch(function (error) {
-                if (error.code != 500) {
-                    messageStorage.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (params) {
-                        deferred.resolve(params);
-                    });
-                }
-            });
         } else if (mum.type == 'sms') {
-            messageRes.sendSms(messageData).$promise.then(function (response) {
-                //TODO handle server side error in data
-                console.log(response);
-                messageStorage.saveMessageHistory(messageData, mum.type, response.message, idConversation, isReceived).then(function (params) {
-                    deferred.resolve(params);
-                });
-            }).catch(function (error) {
-                if (error.code != 500) {
-                    messageStorage.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (params) {
-                        deferred.resolve(params);
-                    });
-                }
-            });
+
+            messageQueue.addSms(messageData);
+            messageQueue.processSms();
+
+        } else if (mum.type == 'mum') {
+
+            messageQueue.addMum(messageData);
+            messageQueue.processMum();
+
         }
 
         return deferred.promise;

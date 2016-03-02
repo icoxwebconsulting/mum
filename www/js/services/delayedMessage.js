@@ -1,18 +1,12 @@
-angular.module('app').service('delayedMessageSrv', function ($q, sqliteDatastore, messageRes) {
-
-    var messages = [];
-    var count = 0;
+angular.module('app').service('delayedMessageService', function ($q, messageStorage, messageQueue) {
 
     function getDelayedMessages() {
-        console.log("la puta ostia")
         var deferred = $q.defer();
-        sqliteDatastore.getDelayedMessages().then(function (results) {
-            console.log("QUE HUEVA")
-            var msgs = [];
+        messageStorage.getDelayedMessages().then(function (results) {
+            var messages = [];
             for (var i = 0; i < results.rows.length; i++) {
-                msgs.push(results.rows.item(i));
+                messages.push(results.rows.item(i));
             }
-            messages = msgs;
             deferred.resolve(messages);
         }).catch(function (error) {
             deferred.reject(error);
@@ -21,73 +15,42 @@ angular.module('app').service('delayedMessageSrv', function ($q, sqliteDatastore
         return deferred.promise;
     }
 
-    function getOneMessage() {
-        console.log(count)
-        if (count < messages.length) {
-            var element = messages[count];
-            count += 1;
-            return element;
-        } else {
-            return null;
-        }
-    }
+    function processDelayedMessage(message) {
 
-    function processDelayedMessages() {
-        var msg = getOneMessage();
-
-        if (msg) {
-            var messageData = {
-                message: {
-                    body: msg.body,
-                    receivers: msg.receivers
-                }
-            };
-            console.log("RECEIVERS", messageData.message.receivers)
-            if (msg.at) {
-                messageData.message.at = msg.at;
+        var messageData = {
+            message: {
+                body: message.body,
+                receivers: message.receivers
             }
+        };
 
-            var isReceived = false;
-
-
-            console.log("voy a procesar el puto mensaje", msg)
-
-            if (msg.type == 'email') {
-                messageRes.sendEmail(messageData).$promise.then(function (response) {
-                    //TODO handle server side error in data
-                    console.log(response);
-                    sqliteDatastore.saveMessageHistory(messageData, msg.type, response.message, msg.id_conversation, isReceived).then(function (resp) {
-                        console.log("EXITO!!!", resp);
-                        sqliteDatastore.deletePendingMessage(msg.id).then(function () {
-                            processDelayedMessages();
-                        });
-                    });
-                }).catch(function (error) {
-                    console.log(error);
-                    processDelayedMessages();
-                });
-            } else if (msg.type == 'sms') {
-                messageRes.sendSms(messageData).$promise.then(function (response) {
-                    sqliteDatastore.saveMessageHistory(messageData, msg.type, response.message, msg.id_conversation, isReceived).then(function (resp) {
-                        console.log("EXITO!!!!!!", resp);
-                        sqliteDatastore.deletePendingMessage(msg.id).then(function () {
-                            processDelayedMessages();
-                        });
-                    });
-                }).catch(function (error) {
-                    console.log(error);
-                    processDelayedMessages();
-                });
-            }
+        if (message.at) {
+            messageData.message.at = message.at;
         }
+        return messageData;
     }
 
     function run() {
-        setTimeout(function () {
-            getDelayedMessages().then(function () {
-                processDelayedMessages();
-            });
-        }, 3000);
+        getDelayedMessages.then(function (messages) {
+            var messageData;
+            var type;
+            for (var i = 0; i < messages.length; i++) {
+                messageData = processDelayedMessage(messages[i]);
+                type = messages[i].type;
+                if (type == 'sms') {
+                    messageQueue.addSms(messageData);
+                } else if (type == 'email') {
+                    messageQueue.addEmail(messageData);
+                } else if (type == 'mum') {
+                    messageQueue.addMum(messageData);
+                }
+            }
+            messageQueue.processSms();
+            messageQueue.processEmail();
+            messageQueue.processMum();
+        }).catch(function (error) {
+            console.log("Error al obtener los mensajes pendientes", error);
+        });
     }
 
     return {

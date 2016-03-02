@@ -25,7 +25,8 @@
     "cordova-plugin-contacts@2.0.0",
     "cordova-plugin-sms",
     "phonegap-plugin-push",
-    "cordova-sqlite-storage"
+    "cordova-sqlite-storage",
+    "cordova-plugin-network-information"
   ],
   "cordovaPlatforms": [
     "ios",

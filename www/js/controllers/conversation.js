@@ -48,10 +48,10 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         function sendMessage() {
             messageService.sendMessage({
                 body: message
-            }, $scope.conversation.id).then(function (id, toSend) {
+            }, $scope.conversation.id).then(function (params) {
                 //TODO: manejo después del envío
-                $scope.messages[lastItem].id = id;
-                $scope.messages[lastItem].to_send = toSend;
+                $scope.messages[lastItem].id = params.id;
+                $scope.messages[lastItem].to_send = params.toSend;
 
             }).catch(function (error) {
                 $scope.message = "";

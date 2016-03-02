@@ -1,4 +1,4 @@
-angular.module('app').service('messageStorage', function (messageRes, $q, sqliteDatastore) {
+angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function saveConversation(conversation) {
         var deferred = $q.defer();
@@ -30,7 +30,7 @@ angular.module('app').service('messageStorage', function (messageRes, $q, sqlite
     function getInboxMessages() {
         var deferred = $q.defer();
         sqliteDatastore.getInboxConversations().then(function (results) {
-            conversations = [];
+            var conversations = [];
             var t = {};
             var rec = [];
             for (var i = 0; i < results.rows.length; i++) {
@@ -81,9 +81,9 @@ angular.module('app').service('messageStorage', function (messageRes, $q, sqlite
         return deferred.promise;
     }
 
-    function savePendingMessage(messageData, mum, idConversation, isReceived) {
+    function savePendingMessage(messageData, type, idConversation, isReceived) {
         var deferred = $q.defer();
-        sqliteDatastore.savePendingMessage(messageData, mum, idConversation, isReceived).then(function (resp) {
+        sqliteDatastore.savePendingMessage(messageData, type, idConversation, isReceived).then(function (resp) {
             deferred.resolve({
                 insertId: resp.insertId,
                 toSend: true

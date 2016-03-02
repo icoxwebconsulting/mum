@@ -1,8 +1,7 @@
-angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageSrv) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService) {
     moment.locale('es');
     $scope.day = moment();
 
-    //delayedMessageSrv.run();
 
     $scope.showMenu = function () {
         // Show the action sheet
@@ -38,5 +37,10 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
         $rootScope.currentState = to.name;
         console.log('Previous state:'+$rootScope.previousState);
         console.log('Current state:'+$rootScope.currentState)
+    });
+
+    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+        console.log("de nuevo en linea");
+        delayedMessageService.run();
     });
 });

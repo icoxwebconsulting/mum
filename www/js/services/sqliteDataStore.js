@@ -92,6 +92,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
                 'display_name TEXT,' + //nombre para mostrar
                 'image TEXT,' +
+                'last_message TEXT,' +
                 'is_unread INTEGER DEFAULT 0,' +
                 'created DATETIME,' + //fecha de creacion
                 'updated DATETIME)'; // fecha de actualizacion
@@ -135,13 +136,13 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return deferred.promise;
         }
 
-        function savePendingMessage(data, mum, idConversation) {
+        function savePendingMessage(data, type, idConversation) {
             var deferred = $q.defer();
 
             var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, created) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
-                mum.type,
+                type,
                 data.message.body || null,
                 data.message.about || null,
                 data.message.from_address || null,
@@ -196,33 +197,9 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var deferred = $q.defer();
 
             db.transaction(function (tx) {
-                //original
-                /*
-                 var query = 'SELECT  c.id, mh.id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
-                 'SUBSTR(mh.body,0,20) as body, mh.about, mh.from_address, mh.at ' +
-                 'FROM    conversation c INNER JOIN ' +
-                 '(SELECT  id_conversation, ' +
-                 'MAX(created) MaxDate ' +
-                 'FROM    message_history ' +
-                 'GROUP BY id_conversation ' +
-                 ') MaxDates ON c.id = MaxDates.id_conversation INNER JOIN ' +
-                 'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
-                 'AND MaxDates.MaxDate = mh.created ';
-                 */
+                var query = 'SELECT  c.id, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, c.last_message ' +
+                    'FROM conversation c';
 
-                var query = 'SELECT  c.id, c.id as id_conversation, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, ' +
-                    'SUBSTR(mh.body,0,20) as body, SUBSTR(pm.body,0,20)as body2, mh.about, mh.from_address, mh.at ' +
-                    'FROM    conversation c INNER JOIN ' +
-                    '(SELECT  id_conversation, ' +
-                    'MAX(created) MaxDate ' +
-                    'FROM    message_history UNION SELECT id_conversation, MAX(created) MaxDate FROM pending_message ' +
-                        //'GROUP BY id_conversation ' +
-                    ') MaxDates ON c.id = MaxDates.id_conversation LEFT JOIN ' +
-                    'message_history mh ON   MaxDates.id_conversation = mh.id_conversation ' +
-                    'AND MaxDates.MaxDate = mh.created ' +
-                    ' LEFT JOIN ' +
-                    'pending_message pm ON   MaxDates.id_conversation = pm.id_conversation ' +
-                    'AND MaxDates.MaxDate = pm.created ';
                 tx.executeSql(query, [], function (tx, result) {
                         deferred.resolve(result);
                     },
