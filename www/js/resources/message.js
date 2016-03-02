@@ -2,7 +2,7 @@ angular.module('app.messageResource', [])
     .factory('messageRes', function ($resource, SERVER_CONF) {
 
         return $resource(SERVER_CONF.API_HOST + 'messages', null, {
-            sendSms:{
+            sendSms: {
                 method: 'POST',
                 url: SERVER_CONF.API_HOST + 'messages/sms',
                 params: null,
@@ -10,7 +10,7 @@ angular.module('app.messageResource', [])
                     Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
                 }
             },
-            sendEmail:{
+            sendEmail: {
                 method: 'POST',
                 url: SERVER_CONF.API_HOST + 'messages/email',
                 params: null,

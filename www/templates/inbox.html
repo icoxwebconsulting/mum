@@ -9,7 +9,8 @@
 
                 <h2>{{conversation.name}}</h2>
 
-                <p ng-class="{'bg-msg-mail': conversation.type == 'email', 'bg-msg-mum': conversation.type == 'mum', 'bg-msg-sms': conversation.type == 'sms'}">{{conversation.lastMessage}}</p>
+                <p ng-class="{'bg-msg-mail': conversation.type == 'email', 'bg-msg-mum': conversation.type == 'mum', 'bg-msg-sms': conversation.type == 'sms'}">
+                    {{conversation.lastMessage}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
                 <ion-option-button class="button-assertive" ng-click="deleteConversation(conversation)">

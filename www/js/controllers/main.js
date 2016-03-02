@@ -32,14 +32,14 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
 
     //$rootScope.previousState;
     //$rootScope.currentState;
-    $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+    $rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
         $rootScope.previousState = from.name;
         $rootScope.currentState = to.name;
-        console.log('Previous state:'+$rootScope.previousState);
-        console.log('Current state:'+$rootScope.currentState)
+        console.log('Previous state:' + $rootScope.previousState);
+        console.log('Current state:' + $rootScope.currentState)
     });
 
-    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+    $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
         console.log("de nuevo en linea");
         delayedMessageService.run();
     });

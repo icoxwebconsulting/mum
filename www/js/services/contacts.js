@@ -1,4 +1,4 @@
-angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope) {
+angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope, contact) {
 
     var contacts = null;
     var loading = false;
@@ -31,6 +31,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
         var loading = true;
         var temContacts = [];
 
+        // TODO: remove this dummy case
         if (!ionic.Platform.isAndroid()) {
             //dummy data
             var dummyName = ['David', 'Jesus', 'Ricardo'];
@@ -132,6 +133,21 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope)
     function getSingleContact() {
         return singleContact;
     }
+
+    function apiSync() {
+        var contactsPhoneNumber = [];
+        for (var i = 0, length = contacts.length; i < length; i++) {
+            if (contacts[i].phoneNumber !== null && contacts[i].phoneNumber !== undefined) {
+                contactsPhoneNumber.push(contacts[i].phoneNumber);
+            }
+        }
+        var data = {contacts: contactsPhoneNumber};
+        return contact.save(data).$promise;
+    }
+
+    $rootScope.$on('notifying-contact-loaded', function () {
+        apiSync();
+    });
 
     return {
         loadContacts: loadContacts,

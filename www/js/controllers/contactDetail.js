@@ -21,7 +21,7 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
         receivers.push($scope.contact.phoneNumber);
         messageService.setConversation({
             id: null,
-            image: ($scope.contact.photo == 'img/person.png')? null : $scope.contact.photo,
+            image: ($scope.contact.photo == 'img/person.png') ? null : $scope.contact.photo,
             displayName: $scope.contact.displayName,
             type: "sms",
             receivers: JSON.stringify(receivers)

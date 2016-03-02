@@ -1,0 +1,11 @@
+version: '2'
+services:
+  app:
+      image: bitgandtter/ionic
+      volumes:
+          - .:/runtime
+          - /opt/android-sdk:/opt/android-sdk
+          - /home/bitgandtter/.gradle:/root/.gradle
+      expose:
+          - 80
+          - 81

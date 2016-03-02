@@ -119,7 +119,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.receivers, // como json en string,
                 data.displayName, //nombre para mostrar
                 data.image || null,
-                data.body.slice(0,20),
+                data.body.slice(0, 20),
                 moment.utc().format("DD-MM-YYYY HH:mm:ss"),
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];

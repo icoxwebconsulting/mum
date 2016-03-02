@@ -6,12 +6,12 @@ angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopu
 
     $scope.newMum = function (type) {
         var now = moment();
-        if($scope.fecha.diff(now, 'seconds') < 3500){
+        if ($scope.fecha.diff(now, 'seconds') < 3500) {
             $ionicPopup.alert({
                 title: 'Fecha inválida',
                 template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con una hora o más de retardo.</p>'
             });
-        }else{
+        } else {
             messageService.setMum({
                 type: type,
                 date: $scope.fecha

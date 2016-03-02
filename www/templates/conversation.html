@@ -9,17 +9,18 @@
                 </div>
                 <div class="flex-xs p-y-xs">
                     <div class="flex flex-middle-xs">
-                        <img class="img-circle m-r-xs" src="{{conversation.image}}" style="border-radius: 50%;" alt="" width="56">
+                        <img class="img-circle m-r-xs" src="{{conversation.image}}" style="border-radius: 50%;" alt=""
+                             width="56">
                         {{conversation.displayName}}
                     </div>
                 </div>
                 <div class="flex-xs-3">
                     <!--<button class="btn clear-btn header-btn" type="button">-->
-                        <!--<span class="icon icon-clock"></span>-->
+                    <!--<span class="icon icon-clock"></span>-->
                     <!--</button>-->
 
                     <!--<button class="btn clear-btn header-btn" type="button">-->
-                        <!--<span class="icon icon-clip"></span>-->
+                    <!--<span class="icon icon-clip"></span>-->
                     <!--</button>-->
                 </div>
             </div>
@@ -30,20 +31,22 @@
             <div class="container">
                 <div class="messages ">
 
-                    <div class="message " ng-class="{'message-out':msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received, 'message-in': msj.is_received}" ng-repeat="msj in messages">
+                    <div class="message "
+                         ng-class="{'message-out':msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received, 'message-in': msj.is_received}"
+                         ng-repeat="msj in messages">
                         <div class="message-body">
                             <p>{{msj.body}}</p>
                         </div>
                     </div>
                     <!--<div class="message message-in">-->
-                        <!--<div class="message-body">-->
-                            <!--<p>Como estas?</p>-->
-                        <!--</div>-->
+                    <!--<div class="message-body">-->
+                    <!--<p>Como estas?</p>-->
+                    <!--</div>-->
                     <!--</div>-->
                     <!--<div class="message message-out">-->
-                        <!--<div class="message-body">-->
-                            <!--<p>Muy bien</p>-->
-                        <!--</div>-->
+                    <!--<div class="message-body">-->
+                    <!--<p>Muy bien</p>-->
+                    <!--</div>-->
                     <!--</div>-->
 
                 </div>
@@ -57,7 +60,8 @@
                 <div class="form-group">
                     <div class="flex flex-middle-xs">
                         <div class="flex-xs">
-                            <input type="text" class="form-control" style="width: 90%" placeholder="Escribir" ng-model="message">
+                            <input type="text" class="form-control" style="width: 90%" placeholder="Escribir"
+                                   ng-model="message">
                         </div>
                         <div class="flex-xs-2">
                             <button class="btn clear-btn btn-block" ng-click="sendMessage()">
