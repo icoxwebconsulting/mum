@@ -37,10 +37,9 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
                 t = results.rows.item(i);
                 rec = JSON.parse(t.receivers);
                 conversations.push({
-                    id: t.id,
-                    id_conversation: t.id_conversation,
+                    id_conversation: t.id,
                     name: t.display_name,
-                    lastText: (t.body) ? t.body : t.body2,
+                    lastMessage: t.last_message,
                     image: (t.image) ? t.image : 'img/person.png',
                     type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant),
                     receivers: rec,
@@ -60,8 +59,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
     function deleteConversation(conversation) {
         var deferred = $q.defer();
         sqliteDatastore.deleteConversation(conversation.id_conversation).then(function (result) {
-            conversations.splice(conversations.indexOf(conversation), 1);
-            deferred.resolve(conversations);
+            deferred.resolve(result);
         }).catch(function (error) {
             deferred.reject(error);
         });

@@ -15,7 +15,7 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         displayName: "",
         type: "",
         receivers: "",
-        lastText: ""
+        lastMessage: ""
     };
 
     var conversations = [];
@@ -58,17 +58,17 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
             messageData.from = data.from;
             messageQueue.addEmail(messageData);
             messageQueue.processEmail();
-
+            deferred.resolve();
         } else if (mum.type == 'sms') {
 
             messageQueue.addSms(messageData);
             messageQueue.processSms();
-
+            deferred.resolve();
         } else if (mum.type == 'mum') {
 
             messageQueue.addMum(messageData);
             messageQueue.processMum();
-
+            deferred.resolve();
         }
 
         return deferred.promise;

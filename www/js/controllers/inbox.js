@@ -3,31 +3,31 @@ angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPo
     $scope.chats;
     $scope.conversation;
 
-    messageService.getInboxMessages().then(function (chats) {
-        $scope.chats = chats;
+    messageService.getInboxMessages().then(function (conversations) {
+        $scope.conversations = conversations;
     });
 
-    $scope.open = function (chat) {
+    $scope.open = function (conv) {
 
         messageService.setConversation({
-            id: chat.id,
-            image: chat.image,
-            displayName: chat.name,
-            type: chat.type,
-            receivers: chat.receivers,
-            lastText: chat.last_text
+            id: conv.id,
+            image: conv.image,
+            displayName: conv.name,
+            type: conv.type,
+            receivers: conv.receivers,
+            lastMessage: conv.lastMessage
         });
         $state.go('conversation');
 
     };
 
     function toDelete() {
-        console.log($scope.conversation, "la conversacion")
-        //messageService.deleteConversation($scope.conversation).then(function () {
-        //    console.log("conversacion borrada exitosamente")
-        //}).catch(function (e) {
-        //    console.log("no se borro la conversacion", e)
-        //})
+        console.log($scope.conversation, "la conversacion");
+        messageService.deleteConversation($scope.conversation).then(function () {
+            $scope.conversations.splice($scope.conversations.indexOf($scope.conversation), 1);
+        }).catch(function (e) {
+            console.log("no se borro la conversacion", e)
+        })
     }
 
     $scope.deleteConversation = function (c) {

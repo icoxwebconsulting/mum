@@ -118,6 +118,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             var idConversation = messageData.idConversation;
             delete messageData.idConversation;
 
+            //TODO: Implementación de envío por MUM
         } else {
             isRunMum = false;
         }

@@ -23,6 +23,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         messageService.saveConversation(messageData).then(function (insertId) {
             messageService.sendMessage($scope.message, insertId).then(function () {
                 $ionicLoading.hide();
+                $scope.message = "";
                 $state.go('layout.inbox');
             }).catch(function (error) {
                 console.log('hay un error', error);

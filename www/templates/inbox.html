@@ -1,23 +1,23 @@
 <ion-view>
     <ion-content class="top-margin">
         <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats"
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="conversation in conversations"
                       type="item-text-wrap"
-                      ng-click="open(chat)"
-                      on-hold="deleteConversation(chat)">
-                <img ng-src="{{chat.image}}">
+                      ng-click="open(conversation)"
+                      on-hold="deleteConversation(conversation)">
+                <img ng-src="{{conversation.image}}">
 
-                <h2>{{chat.name}}</h2>
+                <h2>{{conversation.name}}</h2>
 
-                <p ng-class="{'bg-msg-mail': chat.type == 'email', 'bg-msg-mum': chat.type == 'mum', 'bg-msg-sms': chat.type == 'sms'}">{{chat.lastText}}</p>
+                <p ng-class="{'bg-msg-mail': conversation.type == 'email', 'bg-msg-mum': conversation.type == 'mum', 'bg-msg-sms': conversation.type == 'sms'}">{{conversation.lastMessage}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
-                <ion-option-button class="button-assertive" ng-click="deleteConversation(chat)">
+                <ion-option-button class="button-assertive" ng-click="deleteConversation(conversation)">
                     Borrar
                 </ion-option-button>
             </ion-item>
 
         </ion-list>
-        <h3 ng-show="!chats.length">Aquí verá las conversaciones.</h3>
+        <h3 ng-show="!conversations.length">Aquí verá las conversaciones.</h3>
     </ion-content>
 </ion-view>

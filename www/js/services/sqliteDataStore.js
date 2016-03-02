@@ -113,12 +113,13 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function saveConversation(data) {
             var deferred = $q.defer();
 
-            var query = 'INSERT INTO conversation (type, receivers, display_name, image, created, updated) VALUES(?,?,?,?,?,?)';
+            var query = 'INSERT INTO conversation (type, receivers, display_name, image, last_message, created, updated) VALUES(?,?,?,?,?,?,?)';
             var values = [
                 data.type,
                 data.receivers, // como json en string,
                 data.displayName, //nombre para mostrar
                 data.image || null,
+                data.body.slice(0,20),
                 moment.utc().format("DD-MM-YYYY HH:mm:ss"),
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];
