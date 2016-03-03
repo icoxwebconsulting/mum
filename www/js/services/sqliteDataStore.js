@@ -261,6 +261,11 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query, []);
         }
 
+        function findConversation(type, receivers){
+            var query = "SELECT * FROM conversation WHERE type = '" + type + "' AND receivers = '" + JSON.stringify(receivers) + "'";
+            return execute(query, []);
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -272,6 +277,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             getInboxConversations: getInboxConversations,
             getConversationMessages: getConversationMessages,
             getDelayedMessages: getDelayedMessages,
-            deletePendingMessage: deletePendingMessage
+            deletePendingMessage: deletePendingMessage,
+            findConversation: findConversation
         };
     });

@@ -5,9 +5,9 @@
                       type="item-text-wrap"
                       ng-click="open(conversation)"
                       on-hold="deleteConversation(conversation)">
-                <img ng-src="{{conversation.image}}">
+                <img ng-src="{{conversation.image ? conversation.image : 'img/person.png'}}">
 
-                <h2>{{conversation.name}}</h2>
+                <h2>{{conversation.displayName}}</h2>
 
                 <p ng-class="{'bg-msg-mail': conversation.type == 'email', 'bg-msg-mum': conversation.type == 'mum', 'bg-msg-sms': conversation.type == 'sms'}">
                     {{conversation.lastMessage}}</p>

@@ -7,26 +7,17 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         $rootScope.conversations = conversations;
     });
 
-    $scope.open = function (conv) {
-
-        messageService.setConversation({
-            id: conv.id,
-            image: conv.image,
-            displayName: conv.name,
-            type: conv.type,
-            receivers: conv.receivers,
-            lastMessage: conv.lastMessage
-        });
+    $scope.open = function (conversation) {
+        messageService.setConversation(conversation);
         $state.go('conversation');
 
     };
 
     function toDelete() {
-        console.log($scope.conversation, "la conversacion");
         messageService.deleteConversation($scope.conversation).then(function () {
             $rootScope.conversations.splice($rootScope.conversations.indexOf($scope.conversation), 1);
-        }).catch(function (e) {
-            console.log("no se borro la conversacion", e)
+        }).catch(function (error) {
+            console.log("Error al borrar conversacion", error);
         })
     }
 

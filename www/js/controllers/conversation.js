@@ -13,8 +13,13 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         }
     });
 
+    $scope.$on('$ionicView.leave', function (e) {
+        $scope.messages = [];
+    });
+
     $scope.sendMessage = function () {
         var type = $scope.conversation.type;
+        var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
         var mum = {
             type: type,
             date: null,
@@ -29,17 +34,18 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             about: null,
             at: null,
             from_address: null,
-            id: null,
-            id_conversation: $scope.conversation.id,
+            id: $scope.conversation.id,
             body: $scope.message,
             to_send: true,
-            created: moment.utc().format("DD-MM-YYYY HH:mm:ss")
+            created: date
         });
 
         var lastItem = $scope.messages.length - 1;
 
         var message = $scope.message;
-        $scope.conversation.message = message;
+        $scope.conversation.lastMessage = message;
+        $scope.conversation.created = date;
+        $scope.conversation.updated = date;
         $scope.message = "";
 
         function sendMessage() {
@@ -54,11 +60,25 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         }
 
         if (!$scope.conversation.id) {
-            messageService.saveConversation($scope.conversation).then(function (insertId) {
-                $scope.conversation.id = insertId;
-                console.log($scope.conversation);
-                $rootScope.conversations.unshift($scope.conversation);
-                sendMessage();
+            messageService.findConversation(type, $scope.conversation.receivers).then(function (response) {
+                if (response) {
+                    $scope.conversation = {
+                        id: response.id,
+                        displayName: response.display_name,
+                        image: response.image,
+                        lastMessage: response.last_message,
+                        receivers: JSON.parse(response.receivers),
+                        type: response.type,
+                        updated: response.updated,
+                        created: response.created
+                    }
+                } else {
+                    messageService.saveConversation($scope.conversation).then(function (insertId) {
+                        $scope.conversation.id = insertId;
+                        $rootScope.conversations.unshift($scope.conversation);
+                        sendMessage();
+                    });
+                }
             });
         } else {
             sendMessage();

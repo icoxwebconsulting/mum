@@ -93,6 +93,10 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         return messageStorage.deleteConversation(conversation);
     }
 
+    function findConversation(type, receivers){
+        return messageStorage.findConversation(type, receivers);
+    }
+
     return {
         setMum: setMum,
         getMum: getMum,
@@ -102,7 +106,8 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         sendMessage: sendMessage,
         getConversationMessages: getConversationMessages,
         getInboxMessages: getInboxMessages,
-        deleteConversation: deleteConversation
+        deleteConversation: deleteConversation,
+        findConversation: findConversation
     };
 
 });

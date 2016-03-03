@@ -9,8 +9,9 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
     $scope.startConversation = function () {
 
+        var type = "sms";
         messageService.setMum({
-            type: "sms",
+            type: type,
             date: moment.utc().format("DD-MM-YYYY HH:mm:ss"),
             phoneNumber: $scope.contact.phoneNumber,
             email: $scope.contact.email,
@@ -19,14 +20,33 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
         var receivers = [];
         receivers.push($scope.contact.phoneNumber);
-        messageService.setConversation({
-            id: null,
-            image: ($scope.contact.photo == 'img/person.png') ? null : $scope.contact.photo,
-            displayName: $scope.contact.displayName,
-            type: "sms",
-            receivers: JSON.stringify(receivers)
-        });
 
-        $state.go('conversation');
+        messageService.findConversation(type, receivers).then(function (response) {
+            var conversation;
+
+            if (response) {
+                conversation = {
+                    id: response.id,
+                    displayName: response.display_name,
+                    image: response.image,
+                    lastMessage: response.last_message,
+                    receivers: JSON.parse(response.receivers),
+                    type: response.type,
+                    updated: response.updated,
+                    created: response.created
+                };
+            } else {
+                conversation = {
+                    id: null,
+                    image: ($scope.contact.photo == 'img/person.png') ? null : $scope.contact.photo,
+                    displayName: $scope.contact.displayName,
+                    type: "sms",
+                    receivers: JSON.stringify(receivers)
+                }
+            }
+
+            messageService.setConversation(conversation);
+            $state.go('conversation');
+        });
     }
 });

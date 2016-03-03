@@ -2,6 +2,7 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
     moment.locale('es');
     $scope.day = moment();
 
+    $rootScope.conversations = [];
 
     $scope.showMenu = function () {
         // Show the action sheet

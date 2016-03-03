@@ -37,8 +37,8 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
                 t = results.rows.item(i);
                 rec = JSON.parse(t.receivers);
                 conversations.push({
-                    id_conversation: t.id,
-                    name: t.display_name,
+                    id: t.id,
+                    displayName: t.display_name,
                     lastMessage: t.last_message,
                     image: (t.image) ? t.image : 'img/person.png',
                     type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant),
@@ -58,7 +58,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function deleteConversation(conversation) {
         var deferred = $q.defer();
-        sqliteDatastore.deleteConversation(conversation.id_conversation).then(function (result) {
+        sqliteDatastore.deleteConversation(conversation.id).then(function (result) {
             deferred.resolve(result);
         }).catch(function (error) {
             deferred.reject(error);
@@ -92,12 +92,28 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
+    function findConversation(type, receivers) {
+        var deferred = $q.defer();
+        sqliteDatastore.findConversation(type, receivers).then(function (result) {
+            if (result.rows.length > 0) {
+                var item = result.rows.item(0);
+                deferred.resolve(item);
+            }else{
+                deferred.resolve(null);
+            }
+        }).catch(function (error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
     return {
         saveConversation: saveConversation,
         getConversationMessages: getConversationMessages,
         getInboxMessages: getInboxMessages,
         deleteConversation: deleteConversation,
         saveMessageHistory: saveMessageHistory,
-        savePendingMessage: savePendingMessage
+        savePendingMessage: savePendingMessage,
+        findConversation: findConversation
     }
 });
