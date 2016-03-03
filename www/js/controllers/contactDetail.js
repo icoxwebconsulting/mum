@@ -7,9 +7,8 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
         console.log($scope.contact);
     });
 
-    $scope.startConversation = function () {
+    $scope.startConversation = function (type) {
 
-        var type = "sms";
         messageService.setMum({
             type: type,
             date: moment.utc().format("DD-MM-YYYY HH:mm:ss"),
@@ -40,8 +39,8 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
                     id: null,
                     image: ($scope.contact.photo == 'img/person.png') ? null : $scope.contact.photo,
                     displayName: $scope.contact.displayName,
-                    type: "sms",
-                    receivers: JSON.stringify(receivers)
+                    type: type,
+                    receivers: receivers
                 }
             }
 

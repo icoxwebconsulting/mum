@@ -28,6 +28,11 @@ angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopu
                     $state.go('sms_contacts');
                     break;
                 }
+                case 'mum':
+                {
+                    $state.go('mum_contacts');
+                    break;
+                }
             }
         }
     };

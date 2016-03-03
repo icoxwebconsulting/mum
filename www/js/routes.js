@@ -70,6 +70,12 @@ angular.module('app.routes', [])
                 controller: 'SMSContactCtrl'
             })
 
+            .state('mum_contacts', {
+                url: '/pick/mum/contact',
+                templateUrl: 'templates/pick-contacts.html',
+                controller: 'MumContactCtrl'
+            })
+
             //pantalla de crear mum
             .state('layout.mum', {
                 url: '/mum',

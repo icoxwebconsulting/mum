@@ -8,20 +8,20 @@
             </div>
 
             <div class="item item-body">
-                <!--<p ng-if="contact.phoneNumber">-->
-                <!--<button class="button button-outline button-assertive">-->
-                <!--Mum a: {{contact.phoneNumber}}-->
-                <!--</button>-->
-                <!--</p>-->
+                <p ng-if="contact.phoneNumber">
+                    <button class="button button-outline button-assertive" ng-click="startConversation('mum')">
+                        Mum a: {{contact.phoneNumber}}
+                    </button>
+                </p>
 
-                <!--<p ng-if="contact.email">-->
-                <!--<button class="button button-outline button-assertive">-->
-                <!--Correo a: {{contact.email}}-->
-                <!--</button>-->
-                <!--</p>-->
+                <p ng-if="contact.email">
+                    <button class="button button-outline button-assertive" ng-click="startConversation('email')">
+                        Correo a: {{contact.email}}
+                    </button>
+                </p>
 
                 <p ng-if="contact.phoneNumber">
-                    <button class="button button-outline button-assertive" ng-click="startConversation()">
+                    <button class="button button-outline button-assertive" ng-click="startConversation('sms')">
                         Sms a: {{contact.phoneNumber}}
                     </button>
                 </p>

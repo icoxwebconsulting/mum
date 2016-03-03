@@ -16,7 +16,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         $ionicLoading.show();
         var conversation = {};
         var mum = messageService.getMum();
-        conversation.message = $scope.message.body;
+
         conversation.receivers = [];
         conversation.receivers.push((mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]));
         conversation.type = mum.type;
