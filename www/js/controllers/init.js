@@ -19,7 +19,8 @@ angular.module('app')
                 });
 
                 var customerData = {
-                    username: $scope.data.cc + $scope.data.phone
+                    countryCode: $scope.data.cc,
+                    phoneNumber: $scope.data.phone
                 };
 
                 user.register(customerData)

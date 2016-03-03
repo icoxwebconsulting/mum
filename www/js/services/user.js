@@ -3,7 +3,6 @@ angular.module('app.user', [])
         function register(registrationData) {
             return customer.save(registrationData).$promise
                 .then(function (response) {
-                    userDatastore.setNumber(registrationData.username);
                     userDatastore.setVerified(1);
                     userDatastore.setCustomerId(response.customer);
                 });
@@ -31,6 +30,7 @@ angular.module('app.user', [])
             return customer.confirm(confirmationData).$promise
                 .then(function (response) {
                     userDatastore.setVerified(2);
+                    userDatastore.setNumber(response.username);
                     userDatastore.setPassword(response.password);
                     requestAccessToken()
                         .then(function () {
