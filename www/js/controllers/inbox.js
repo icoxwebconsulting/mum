@@ -1,10 +1,10 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPopup, messageService) {
+angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, messageService) {
 
     $scope.chats;
     $scope.conversation;
 
     messageService.getInboxMessages().then(function (conversations) {
-        $scope.conversations = conversations;
+        $rootScope.conversations = conversations;
     });
 
     $scope.open = function (conv) {
@@ -24,7 +24,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $state, $ionicPo
     function toDelete() {
         console.log($scope.conversation, "la conversacion");
         messageService.deleteConversation($scope.conversation).then(function () {
-            $scope.conversations.splice($scope.conversations.indexOf($scope.conversation), 1);
+            $rootScope.conversations.splice($rootScope.conversations.indexOf($scope.conversation), 1);
         }).catch(function (e) {
             console.log("no se borro la conversacion", e)
         })

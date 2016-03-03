@@ -56,6 +56,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                 });
             }).catch(function (error) {
                 if (error.code != 500) {
+                    var isReceived = false;
                     messageStorage.savePendingMessage(messageData, 'sms', idConversation, isReceived).then(function (params) {
                         //deferred.resolve(params);
                         smsQueue.shift();
