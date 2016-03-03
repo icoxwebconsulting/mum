@@ -14,13 +14,18 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
 
     $scope.sendMessage = function () {
         $ionicLoading.show();
-        var messageData = $scope.message;
+        var conversation = {};
         var mum = messageService.getMum();
-        messageData.receivers = [];
-        messageData.receivers.push((mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]));
-        messageData.type = mum.type;
-        messageData.displayName = mum.displayName;
-        messageService.saveConversation(messageData).then(function (insertId) {
+        conversation.message = $scope.message.body;
+        conversation.receivers = [];
+        conversation.receivers.push((mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]));
+        conversation.type = mum.type;
+        conversation.displayName = mum.displayName;
+        conversation.lastMessage = $scope.message.body;
+
+        messageService.saveConversation(conversation).then(function (insertId) {
+            conversation.id = insertId;
+            $rootScope.conversations.unshift(conversation);
             messageService.sendMessage($scope.message, insertId).then(function () {
                 $ionicLoading.hide();
                 $scope.message = "";

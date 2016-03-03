@@ -59,16 +59,19 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
             messageQueue.addEmail(messageData);
             messageQueue.processEmail();
             deferred.resolve();
+
         } else if (mum.type == 'sms') {
 
             messageQueue.addSms(messageData);
             messageQueue.processSms();
             deferred.resolve();
+
         } else if (mum.type == 'mum') {
 
             messageQueue.addMum(messageData);
             messageQueue.processMum();
             deferred.resolve();
+
         }
 
         return deferred.promise;

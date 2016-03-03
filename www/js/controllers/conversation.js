@@ -1,4 +1,4 @@
-angular.module('app').controller('ConversationCtrl', function ($scope, $state, messageService) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, messageService) {
 
     $scope.conversation = {};
     $scope.messages = [];
@@ -12,10 +12,6 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
             });
         }
     });
-
-    $scope.remove = function (chat) {
-        Chats.remove(chat);
-    };
 
     $scope.sendMessage = function () {
         var type = $scope.conversation.type;
@@ -43,18 +39,16 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         var lastItem = $scope.messages.length - 1;
 
         var message = $scope.message;
+        $scope.conversation.message = message;
         $scope.message = "";
 
         function sendMessage() {
+
             messageService.sendMessage({
                 body: message
-            }, $scope.conversation.id).then(function (params) {
-                //TODO: manejo después del envío
-                $scope.messages[lastItem].id = params.id;
-                $scope.messages[lastItem].to_send = params.toSend;
-
+            }, $scope.conversation.id).then(function () {
+                //TODO:
             }).catch(function (error) {
-                $scope.message = "";
                 console.log("error", error);
             });
         }
@@ -62,6 +56,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $state, m
         if (!$scope.conversation.id) {
             messageService.saveConversation($scope.conversation).then(function (insertId) {
                 $scope.conversation.id = insertId;
+                console.log($scope.conversation);
+                $rootScope.conversations.unshift($scope.conversation);
                 sendMessage();
             });
         } else {
