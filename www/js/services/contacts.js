@@ -1,4 +1,4 @@
-angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope, contact) {
+angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope, contact, userDatastore) {
 
     var contacts = null;
     var loading = false;
@@ -142,7 +142,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope,
             }
         }
         var data = {contacts: contactsPhoneNumber};
-        return contact.save(data).$promise;
+        return contact(userDatastore.getTokens().accessToken).save(data).$promise;
     }
 
     $rootScope.$on('notifying-contact-loaded', function () {

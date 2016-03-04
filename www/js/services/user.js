@@ -1,7 +1,7 @@
 angular.module('app.user', [])
     .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore, pushNotification) {
         function register(registrationData) {
-            return customer.save(registrationData).$promise
+            return customer().save(registrationData).$promise
                 .then(function (response) {
                     userDatastore.setVerified(1);
                     userDatastore.setCustomerId(response.customer);
@@ -27,7 +27,7 @@ angular.module('app.user', [])
                 customer: userDatastore.getCustomerId(),
                 confirmationCode: code
             };
-            return customer.confirm(confirmationData).$promise
+            return customer().confirm(confirmationData).$promise
                 .then(function (response) {
                     userDatastore.setVerified(2);
                     userDatastore.setNumber(response.username);
@@ -46,7 +46,7 @@ angular.module('app.user', [])
                 grant_type: 'password',
                 redirect_uri: 'www.mum.com'
             };
-            return customer.requestAccessToken(authData).$promise
+            return customer(userDatastore.getNumber(), userDatastore.getPassword()).requestAccessToken(authData).$promise
                 .then(function (response) {
                     userDatastore.setTokens(response.access_token, response.refresh_token);
                 });
@@ -65,7 +65,7 @@ angular.module('app.user', [])
                     redirect_uri: 'www.mum.com',
                     refresh_token: userDatastore.getTokens().refreshToken
                 };
-                return customer.refreshAccessToken(authData).$promise
+                return customer(userDatastore.getNumber(), userDatastore.getPassword()).refreshAccessToken(authData).$promise
                     .then(function (response) {
                         userDatastore.setTokens(response.access_token, response.refresh_token);
                         userDatastore.setRefreshingAccessToken(0);

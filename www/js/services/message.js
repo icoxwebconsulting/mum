@@ -1,4 +1,4 @@
-angular.module('app').service('messageService', function (messageRes, $q, messageStorage, messageQueue) {
+angular.module('app').service('messageService', function ($q, messageStorage, messageQueue) {
 
     //mum = message
     var mum = {

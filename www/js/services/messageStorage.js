@@ -98,7 +98,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
             if (result.rows.length > 0) {
                 var item = result.rows.item(0);
                 deferred.resolve(item);
-            }else{
+            } else {
                 deferred.resolve(null);
             }
         }).catch(function (error) {

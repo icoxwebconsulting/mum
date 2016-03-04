@@ -45,7 +45,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             var idConversation = messageData.idConversation;
             delete messageData.idConversation;
 
-            messageRes.sendSms(messageData).$promise.then(function (response) {
+            messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
                 var isReceived = false;
@@ -84,7 +84,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             var idConversation = messageData.idConversation;
             delete messageData.idConversation;
 
-            messageRes.sendEmail(messageData).$promise.then(function (response) {
+            messageRes(userDatastore.getTokens().accessToken).sendEmail(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
                 var isReceived = false;
@@ -123,7 +123,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             var idConversation = messageData.idConversation;
             delete messageData.idConversation;
 
-            messageRes.sendInstant(messageData).$promise.then(function (response) {
+            messageRes(userDatastore.getTokens().accessToken).sendInstant(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 console.log(response);
                 var isReceived = false;
