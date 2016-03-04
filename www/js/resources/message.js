@@ -17,6 +17,14 @@ angular.module('app.messageResource', [])
                 headers: {
                     Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
                 }
+            },
+            sendInstant: {
+                method: 'POST',
+                url: SERVER_CONF.API_HOST + 'messages/instant',
+                params: null,
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                }
             }
         });
 

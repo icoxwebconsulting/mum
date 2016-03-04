@@ -62,6 +62,8 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                         smsQueue.shift();
                         processSms();
                     });
+                } else {
+                    console.log("Error en respuesta del servidor", error);
                 }
             });
         } else {
@@ -99,6 +101,8 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                         emailQueue.shift();
                         processEmail();
                     });
+                } else {
+                    console.log("Error en respuesta del servidor", error);
                 }
             });
         } else {
@@ -119,7 +123,27 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             var idConversation = messageData.idConversation;
             delete messageData.idConversation;
 
-            //TODO: Implementación de envío por MUM
+            messageRes.sendInstant(messageData).$promise.then(function (response) {
+                //TODO handle server side error in data
+                console.log(response);
+                var isReceived = false;
+                messageStorage.saveMessageHistory(messageData, 'mum', response.message, idConversation, isReceived).then(function (params) {
+                    //deferred.resolve(params);
+                    mumQueue.shift();
+                    processMum();
+                });
+            }).catch(function (error) {
+                if (error.code != 500) {
+                    var isReceived = false;
+                    messageStorage.savePendingMessage(messageData, 'mum', idConversation, isReceived).then(function (params) {
+                        //deferred.resolve(params);
+                        mumQueue.shift();
+                        processMum();
+                    });
+                } else {
+                    console.log("Error en respuesta del servidor", error);
+                }
+            });
         } else {
             isRunMum = false;
         }

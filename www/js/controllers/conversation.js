@@ -23,7 +23,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         var mum = {
             type: type,
             date: null,
-            phoneNumber: (type == 'sms') ? $scope.conversation.receivers : null,
+            phoneNumber: (type == 'sms' || type == 'mum') ? $scope.conversation.receivers : null,
             email: (type == 'email') ? $scope.conversation.receivers : null,
             displayName: $scope.conversation.displayName
         };
@@ -39,8 +39,6 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             to_send: true,
             created: date
         });
-
-        var lastItem = $scope.messages.length - 1;
 
         var message = $scope.message;
         $scope.conversation.lastMessage = message;

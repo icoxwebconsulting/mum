@@ -43,7 +43,7 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         var messageData = {
             message: {
                 body: message.body,
-                receivers: conversation.receivers
+                receivers: JSON.stringify(conversation.receivers)
             },
             idConversation: idConversation
         };

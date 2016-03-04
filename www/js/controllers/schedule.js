@@ -12,7 +12,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
                 template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con una hora o más de retardo.</p>'
             });
         } else {
-            messageService.setMessage({
+            messageService.setMum({
                 subject: "",
                 body: "",
                 from: "",

@@ -1,15 +1,14 @@
 angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageService) {
 
     $scope.$on('$ionicView.enter', function () {
-        if ($rootScope.previousState != 'layout.inbox') {
-            $scope.mum = messageService.getMum();
-        }
+
     });
 
     $scope.message = {
         subject: "",
         body: "",
-        from: ""
+        from: "",
+        date: ""
     };
 
     $scope.sendMessage = function () {
@@ -23,19 +22,35 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         conversation.displayName = mum.displayName;
         conversation.lastMessage = $scope.message.body;
 
-        messageService.saveConversation(conversation).then(function (insertId) {
-            conversation.id = insertId;
-            $rootScope.conversations.unshift(conversation);
-            messageService.sendMessage($scope.message, insertId).then(function () {
+        function processSend(message, idConversation) {
+            messageService.sendMessage(message, idConversation).then(function () {
                 $ionicLoading.hide();
-                $scope.message = "";
+                $scope.message = {
+                    subject: "",
+                    body: "",
+                    from: "",
+                    date: ""
+                };
                 $state.go('layout.inbox');
             }).catch(function (error) {
                 console.log('hay un error', error);
                 $ionicLoading.hide();
             });
-        });
+        }
 
+        messageService.findConversation(mum.type, conversation.receivers).then(function (response) {
+            console.log(response);
+            if (response) {
+                conversation.id = response.id;
+                processSend($scope.message, conversation.id);
+            } else {
+                messageService.saveConversation(conversation).then(function (insertId) {
+                    conversation.id = insertId;
+                    $rootScope.conversations.unshift(conversation);
+                    processSend($scope.message, conversation.id);
+                });
+            }
+        });
     };
 
 });
