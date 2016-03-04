@@ -116,7 +116,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             var query = 'INSERT INTO conversation (type, receivers, display_name, image, last_message, created, updated) VALUES(?,?,?,?,?,?,?)';
             var values = [
                 data.type,
-                data.receivers, // como json en string,
+                JSON.stringify(data.receivers), // como json en string,
                 data.displayName, //nombre para mostrar
                 data.image || null,
                 data.lastMessage.slice(0, 20),
@@ -261,7 +261,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query, []);
         }
 
-        function findConversation(type, receivers){
+        function findConversation(type, receivers) {
             var query = "SELECT * FROM conversation WHERE type = '" + type + "' AND receivers = '" + JSON.stringify(receivers) + "'";
             return execute(query, []);
         }

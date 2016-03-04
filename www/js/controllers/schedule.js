@@ -1,10 +1,10 @@
-angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopup, messageService) {
+angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService) {
 
     //fechas
     $scope.fecha = moment().add(1, 'hours');
     $scope.selectedTime = $scope.fecha.format('hh:mm a');
 
-    $scope.newMum = function (type) {
+    $scope.newSchedule = function (type) {
         var now = moment();
         if ($scope.fecha.diff(now, 'seconds') < 3500) {
             $ionicPopup.alert({
@@ -12,7 +12,10 @@ angular.module('app').controller('MumCtrl', function ($scope, $state, $ionicPopu
                 template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con una hora o más de retardo.</p>'
             });
         } else {
-            messageService.setMum({
+            messageService.setMessage({
+                subject: "",
+                body: "",
+                from: "",
                 type: type,
                 date: $scope.fecha
             });

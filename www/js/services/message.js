@@ -14,11 +14,11 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         image: "",
         displayName: "",
         type: "",
-        receivers: "",
-        lastMessage: ""
+        receivers: [],
+        lastMessage: "",
+        created: "",
+        updated: ""
     };
-
-    var conversations = [];
 
     var setMum = function (obj) {
         mum = obj;
@@ -36,37 +36,39 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         return conversation;
     };
 
-    function sendMessage(data, idConversation) {
+    function sendMessage(message, idConversation) {
         var deferred = $q.defer();
+        console.log("DENTRO DE SRV DE MSJ", conversation);
 
         var messageData = {
             message: {
-                body: data.body,
-                receivers: (mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email])
+                body: message.body,
+                receivers: conversation.receivers
             },
             idConversation: idConversation
         };
+        console.log(messageData);
 
-        if (mum.date) {
-            messageData.message.at = moment.utc(mum.date).format("DD-MM-YYYY HH:mm:ss");
+        if (message.date) {
+            messageData.message.at = moment.utc(message.date).format("DD-MM-YYYY HH:mm:ss");
         }
 
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
-        if (mum.type == 'email') {
+        if (conversation.type == 'email') {
 
-            messageData.about = data.subject;
-            messageData.from = data.from;
+            messageData.about = message.subject;
+            messageData.from = message.from;
             messageQueue.addEmail(messageData);
             messageQueue.processEmail();
             deferred.resolve();
 
-        } else if (mum.type == 'sms') {
+        } else if (conversation.type == 'sms') {
 
             messageQueue.addSms(messageData);
             messageQueue.processSms();
             deferred.resolve();
 
-        } else if (mum.type == 'mum') {
+        } else if (conversation.type == 'mum') {
 
             messageQueue.addMum(messageData);
             messageQueue.processMum();
@@ -93,7 +95,7 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         return messageStorage.deleteConversation(conversation);
     }
 
-    function findConversation(type, receivers){
+    function findConversation(type, receivers) {
         return messageStorage.findConversation(type, receivers);
     }
 

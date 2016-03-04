@@ -48,7 +48,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $scope.conversation.updated = date;
         $scope.message = "";
 
-        function sendMessage() {
+        function processSend() {
 
             messageService.sendMessage({
                 body: message
@@ -76,12 +76,12 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                     messageService.saveConversation($scope.conversation).then(function (insertId) {
                         $scope.conversation.id = insertId;
                         $rootScope.conversations.unshift($scope.conversation);
-                        sendMessage();
+                        processSend();
                     });
                 }
             });
         } else {
-            sendMessage();
+            processSend();
         }
     };
 });

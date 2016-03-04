@@ -76,11 +76,10 @@ angular.module('app.routes', [])
                 controller: 'MumContactCtrl'
             })
 
-            //pantalla de crear mum
-            .state('layout.mum', {
-                url: '/mum',
-                templateUrl: 'templates/mum.html',
-                controller: 'MumCtrl'
+            .state('layout.schedule', {
+                url: '/schedule',
+                templateUrl: 'templates/schedule.html',
+                controller: 'ScheduleCtrl'
             })
 
             .state('message', {
