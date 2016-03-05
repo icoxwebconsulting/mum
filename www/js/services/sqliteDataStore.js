@@ -1,59 +1,33 @@
 angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
-    .factory('sqliteDatastore', function ($cordovaSQLite, $q, deviceDatastore) {
+    .factory('sqliteDatastore', function ($cordovaSQLite, $q, APP_STORE_CONF) {
 
         var db;
 
+        function getDbExist() {
+            return window.localStorage.getItem('db_exist') || null;
+        }
+
+        function setDbExist(dbExist) {
+            window.localStorage.setItem('db_exist', dbExist);
+        }
+
         function openDatabase() {
             try {
-                if (ionic.Platform.isAndroid()) {
+                if (!APP_STORE_CONF.webStore) {
                     db = window.sqlitePlugin.openDatabase({name: "mum", location: 1}, function () {
                         //success
-                        console.log('success open phone database');
                         return true;
                     }, function (e) {
                         //error
-                        console.log('error open phone  database', e);
                         return false
                     });
                 } else {
-                    console.log('iniciando la bd en windows');
                     db = window.openDatabase('mum', '1.0', 'mum database', 2 * 1024 * 1024);
                     return true;
                 }
             } catch (e) {
-                console.log(e);
                 return false;
             }
-        }
-
-        function createTables() {
-            $q.all([
-                createTableMessageHistory(),
-                createTablePendingMessage(),
-                createTableConversation()
-            ]).then(function (value) {
-                console.log("creadas las tablas");
-            }, function (reason) {
-                // Error callback where reason is the value of the first rejected promise
-                console.log("error en la creacion de tablas", reason);
-            });
-        }
-
-        function execute(query, values) {
-            if (!values) {
-                values = [];
-            }
-            var deferred = $q.defer();
-
-            db.transaction(function (tx) {
-                tx.executeSql(query, values, function (tx, result) {
-                        deferred.resolve(result);
-                    },
-                    function (transaction, error) {
-                        deferred.reject(error);
-                    });
-            });
-            return deferred.promise;
         }
 
         function createTableMessageHistory() {
@@ -99,14 +73,51 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query);
         }
 
+        function createTableContacts() {
+            var query = 'CREATE TABLE IF NOT EXISTS contacts (' +
+                'phone_number TEXT PRIMARY KEY,' +
+                'display_name TEXT,' +
+                'photo TEXT,' +
+                'email TEXT,' +
+                'mum_id TEXT' +
+                ')';
+            return execute(query);
+        }
+
+        function createTables() {
+            $q.all([
+                createTableMessageHistory(),
+                createTablePendingMessage(),
+                createTableConversation(),
+                createTableContacts()
+            ]).then(function (value) {
+            }, function (reason) {
+                // Error callback where reason is the value of the first rejected promise
+            });
+        }
+
+        function execute(query, values) {
+            if (!values) {
+                values = [];
+            }
+            var deferred = $q.defer();
+
+            db.transaction(function (tx) {
+                tx.executeSql(query, values, function (tx, result) {
+                        deferred.resolve(result);
+                    },
+                    function (transaction, error) {
+                        deferred.reject(error);
+                    });
+            });
+            return deferred.promise;
+        }
+
         function initDb() {
-            console.log("antes de iniciar bd");
             openDatabase();
-            if (!deviceDatastore.getDbExist()) {
-                console.log("va a crear");
+            if (!getDbExist()) {
                 createTables();
             } else {
-                console.log("NO va a crear");
             }
         }
 
@@ -212,7 +223,6 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         }
 
         function getConversationMessages(id) {
-            console.log('y el id es', id);
             var query = 'SELECT id as id_message, type, body, is_received, created FROM message_history WHERE id_conversation = ' + id;
             query += ' UNION SELECT null as id_message, type, body, null as is_received, created FROM pending_message WHERE id_conversation = ' + id + ' ORDER BY created';
             var values = [];
@@ -241,10 +251,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 deletePendingMessages(id),
                 deleteFromConversation(id)
             ]).then(function (value) {
-                console.log("VALUE", value);
                 deferred.resolve();
             }, function (reason) {
-                console.log(reason);
                 deferred.reject();
             });
 

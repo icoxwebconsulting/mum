@@ -47,13 +47,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $scope.message = "";
 
         function processSend() {
-
             messageService.sendMessage({
                 body: message
             }, $scope.conversation.id).then(function () {
                 //TODO:
             }).catch(function (error) {
-                console.log("error", error);
             });
         }
 

@@ -38,7 +38,6 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
 
     function sendMessage(message, idConversation) {
         var deferred = $q.defer();
-        console.log("DENTRO DE SRV DE MSJ", conversation);
 
         var messageData = {
             message: {
@@ -47,7 +46,6 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
             },
             idConversation: idConversation
         };
-        console.log(messageData);
 
         if (message.date) {
             messageData.message.at = moment.utc(message.date).format("DD-MM-YYYY HH:mm:ss");

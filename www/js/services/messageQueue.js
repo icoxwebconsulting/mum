@@ -47,7 +47,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
 
             messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
-                console.log(response);
                 var isReceived = false;
                 messageStorage.saveMessageHistory(messageData, 'sms', response.message, idConversation, isReceived).then(function (params) {
                     //deferred.resolve(params);
@@ -63,7 +62,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                         processSms();
                     });
                 } else {
-                    console.log("Error en respuesta del servidor", error);
                 }
             });
         } else {
@@ -86,7 +84,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
 
             messageRes(userDatastore.getTokens().accessToken).sendEmail(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
-                console.log(response);
                 var isReceived = false;
                 messageStorage.saveMessageHistory(messageData, 'email', response.message, idConversation, isReceived).then(function (params) {
                     //deferred.resolve(params);
@@ -102,7 +99,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                         processEmail();
                     });
                 } else {
-                    console.log("Error en respuesta del servidor", error);
                 }
             });
         } else {
@@ -125,7 +121,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
 
             messageRes(userDatastore.getTokens().accessToken).sendInstant(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
-                console.log(response);
                 var isReceived = false;
                 messageStorage.saveMessageHistory(messageData, 'mum', response.message, idConversation, isReceived).then(function (params) {
                     //deferred.resolve(params);
@@ -141,7 +136,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                         processMum();
                     });
                 } else {
-                    console.log("Error en respuesta del servidor", error);
                 }
             });
         } else {

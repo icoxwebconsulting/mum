@@ -33,13 +33,11 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
                 };
                 $state.go('layout.inbox');
             }).catch(function (error) {
-                console.log('hay un error', error);
                 $ionicLoading.hide();
             });
         }
 
         messageService.findConversation(mum.type, conversation.receivers).then(function (response) {
-            console.log(response);
             if (response) {
                 conversation.id = response.id;
                 processSend($scope.message, conversation.id);

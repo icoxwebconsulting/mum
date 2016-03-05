@@ -49,7 +49,6 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
             messageQueue.processEmail();
             messageQueue.processMum();
         }).catch(function (error) {
-            console.log("Error al obtener los mensajes pendientes", error);
         });
     }
 

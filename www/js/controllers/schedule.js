@@ -82,10 +82,8 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     function timePickerCallback(val) {
         if (typeof (val) === 'undefined') {
-            console.log('Time not selected');
         } else {
             var selectedTime = new Date(val * 1000);
-            console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
             $scope.fecha.hour(selectedTime.getUTCHours());
             $scope.fecha.minute(selectedTime.getUTCMinutes());
             $scope.selectedTime = $scope.fecha.format('hh:mm a');

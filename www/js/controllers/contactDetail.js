@@ -4,7 +4,6 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
     $scope.$on('$ionicView.enter', function (e) {
         $scope.contact = Contacts.getSingleContact();
-        console.log($scope.contact);
     });
 
     $scope.startConversation = function (type) {
