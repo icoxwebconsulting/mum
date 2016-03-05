@@ -1,10 +1,11 @@
 angular.module('app.user', [])
-    .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore, pushNotification) {
+    .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore, pushNotification, Contacts) {
         function register(registrationData) {
             return customer().save(registrationData).$promise
                 .then(function (response) {
                     userDatastore.setVerified(1);
                     userDatastore.setCustomerId(response.customer);
+                    userDatastore.setCountryCode(registrationData.countryCode)
                 });
         }
 
@@ -34,6 +35,7 @@ angular.module('app.user', [])
                     userDatastore.setPassword(response.password);
                     requestAccessToken()
                         .then(function () {
+                            Contacts.loadContacts();
                             return registerDevice();
                         });
                 });
@@ -53,6 +55,8 @@ angular.module('app.user', [])
         }
 
         function refreshAccessToken() {
+            var deferred = $q.defer();
+
             // refresh access_token every minute
             setInterval(refreshAccessToken, OAUTH_CONF.REFRESH_INTERVAL);
 
@@ -77,11 +81,12 @@ angular.module('app.user', [])
                             userDatastore.setRefreshingAccessToken(0);
                         });
                     });
+            } else {
+                deferred.resolve(true);
             }
-        }
 
-        // refresh access_token at start
-        refreshAccessToken();
+            return deferred.promise;
+        }
 
         function setProfile(displayName, avatarData, avatarMimeType) {
             var params = {
@@ -116,6 +121,7 @@ angular.module('app.user', [])
         return {
             getVerified: userDatastore.getVerified,
             isVerified: userDatastore.isVerified,
+            refreshAccessToken: refreshAccessToken,
             setProfile: setProfile,
             verifyCode: verifyCode,
             register: register,

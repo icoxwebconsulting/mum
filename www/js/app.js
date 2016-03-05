@@ -19,6 +19,10 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
             }
 
             sqliteDatastore.initDb();
+            user.refreshAccessToken()
+                .then(function () {
+                    Contacts.loadContacts();
+                });
         });
 
         //TODO: remove me just an example on how to receive notifications

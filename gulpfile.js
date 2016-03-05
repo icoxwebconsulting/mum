@@ -7,11 +7,10 @@ var uglify = require('gulp-uglify');
 var merge = require('merge-stream');
 
 var paths = {
-    sass: [
-        './scss/**/*.scss'
-    ],
     css: [
-        './www/css/**/*.css'
+        './www/lib/ionic/css/ionic.css',
+        './www/css/main.css',
+        './www/css/style.css'
     ],
     js: [
         './www/lib/angular/angular.min.js',
@@ -32,13 +31,9 @@ var paths = {
 gulp.task('default', ['css', 'uglify']);
 
 gulp.task('css', function (done) {
-    var sassStream = gulp.src(paths.sass)
-        .pipe(sass())
-        .on('error', sass.logError);
-
     var cssStream = gulp.src(paths.css);
 
-    merge(sassStream, cssStream)
+    merge(cssStream)
         .pipe(minifyCss({
             keepSpecialComments: 0
         }))

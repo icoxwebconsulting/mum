@@ -13,6 +13,14 @@ angular.module('app.userDataStore', [])
             window.localStorage.setItem('verified', status);
         }
 
+        function setCountryCode(countryCode) {
+            window.localStorage.setItem('countryCode', countryCode);
+        }
+
+        function getCountryCode() {
+            return window.localStorage.getItem('countryCode');
+        }
+
         function setNumber(number) {
             window.localStorage.setItem('number', number);
         }
@@ -73,6 +81,8 @@ angular.module('app.userDataStore', [])
             getVerified: getVerified,
             isVerified: isVerified,
             setVerified: setVerified,
+            setCountryCode: setCountryCode,
+            getCountryCode: getCountryCode,
             setNumber: setNumber,
             getNumber: getNumber,
             setPassword: setPassword,
