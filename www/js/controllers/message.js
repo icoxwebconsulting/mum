@@ -1,7 +1,9 @@
 angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageService) {
 
     $scope.$on('$ionicView.enter', function () {
-
+        if ($rootScope.previousState != 'layout.inbox') {
+            $scope.mum = messageService.getMum();
+        }
     });
 
     $scope.message = {
@@ -14,12 +16,11 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
     $scope.sendMessage = function () {
         $ionicLoading.show();
         var conversation = {};
-        var mum = messageService.getMum();
 
         conversation.receivers = [];
-        conversation.receivers.push((mum.type == 'sms') ? JSON.stringify([mum.phoneNumber]) : JSON.stringify([mum.email]));
-        conversation.type = mum.type;
-        conversation.displayName = mum.displayName;
+        conversation.receivers.push(($scope.mum.type == 'sms') ? $scope.mum.phoneNumber : $scope.mum.email);
+        conversation.type = $scope.mum.type;
+        conversation.displayName = $scope.mum.displayName;
         conversation.lastMessage = $scope.message.body;
 
         function processSend(message, idConversation) {
@@ -38,7 +39,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
             });
         }
 
-        messageService.findConversation(mum.type, conversation.receivers).then(function (response) {
+        messageService.findConversation($scope.mum.type, conversation.receivers).then(function (response) {
             console.log(response);
             if (response) {
                 conversation.id = response.id;

@@ -18,7 +18,11 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
         });
 
         var receivers = [];
-        receivers.push($scope.contact.phoneNumber);
+        if (type == 'email') {
+            receivers.push($scope.contact.email);
+        } else {
+            receivers.push($scope.contact.phoneNumber);
+        }
 
         messageService.findConversation(type, receivers).then(function (response) {
             var conversation;

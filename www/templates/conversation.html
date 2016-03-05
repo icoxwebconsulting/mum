@@ -9,7 +9,9 @@
                 </div>
                 <div class="flex-xs p-y-xs">
                     <div class="flex flex-middle-xs">
-                        <img class="img-circle m-r-xs" src="{{conversation.image ? conversation.image : 'img/person.png'}}" style="border-radius: 50%;" alt=""
+                        <img class="img-circle m-r-xs"
+                             src="{{conversation.image ? conversation.image : 'img/person.png'}}"
+                             style="border-radius: 50%;" alt=""
                              width="56">
                         {{conversation.displayName}}
                     </div>
@@ -24,6 +26,20 @@
                     <!--</button>-->
                 </div>
             </div>
+            <form class="form-paper" ng-show="conversation.type == 'email'">
+                <div class="form-group flex flex-middle-xs">
+                    <label>Asunto:</label>
+                    <div class="flex-xs">
+                        <input type="text" class="form-control" style="width: 90%;" ng-model="message.subject">
+                    </div>
+                </div>
+                <div class="form-group flex flex-middle-xs">
+                    <label>De:</label>
+                    <div class="flex-xs">
+                        <input type="email" class="form-control" style="width: 90%;" ng-model="message.from">
+                    </div>
+                </div>
+            </form>
         </div>
     </ion-header-bar>
     <ion-content class="bg-main" style="margin-top: 65px">
@@ -61,7 +77,7 @@
                     <div class="flex flex-middle-xs">
                         <div class="flex-xs">
                             <input type="text" class="form-control" style="width: 90%" placeholder="Escribir"
-                                   ng-model="message">
+                                   ng-model="message.body">
                         </div>
                         <div class="flex-xs-2">
                             <button class="btn clear-btn btn-block" ng-click="sendMessage()">

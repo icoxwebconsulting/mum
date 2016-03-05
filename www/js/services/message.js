@@ -1,4 +1,4 @@
-angular.module('app').service('messageService', function (messageRes, $q, messageStorage, messageQueue) {
+angular.module('app').service('messageService', function (messageRes, $q, messageStorage, messageQueue, pushNotification) {
 
     //mum = message
     var mum = {
@@ -38,12 +38,12 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
 
     function sendMessage(message, idConversation) {
         var deferred = $q.defer();
-        console.log("DENTRO DE SRV DE MSJ", conversation);
+        var receivers = (conversation.type == 'email')? JSON.stringify(mum.email) : JSON.stringify(mum.phoneNumber);
 
         var messageData = {
             message: {
                 body: message.body,
-                receivers: JSON.stringify(conversation.receivers)
+                receivers: receivers
             },
             idConversation: idConversation
         };

@@ -2,7 +2,12 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $scope.conversation = {};
     $scope.messages = [];
-    $scope.message;
+    $scope.message = {
+        subject: null,
+        body: "",
+        from: null,
+        date: null
+    };
 
     $scope.$on('$ionicView.enter', function (e) {
         $scope.conversation = messageService.getConversation();
@@ -23,7 +28,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         var mum = {
             type: type,
             date: null,
-            phoneNumber: (type == 'sms' || type == 'mum') ? $scope.conversation.receivers : null,
+            phoneNumber: (type != 'email') ? $scope.conversation.receivers : null,
             email: (type == 'email') ? $scope.conversation.receivers : null,
             displayName: $scope.conversation.displayName
         };
@@ -31,26 +36,24 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         messageService.setMum(mum);
 
         $scope.messages.push({
-            about: null,
+            about: $scope.message.subject,
             at: null,
-            from_address: null,
+            from_address: $scope.message.from,
             id: $scope.conversation.id,
-            body: $scope.message,
+            body: $scope.message.body,
             to_send: true,
             created: date
         });
 
-        var message = $scope.message;
-        $scope.conversation.lastMessage = message;
+        $scope.conversation.lastMessage = $scope.message.body;
         $scope.conversation.created = date;
         $scope.conversation.updated = date;
-        $scope.message = "";
+        $scope.message.body = "";
 
         function processSend() {
-
-            messageService.sendMessage({
-                body: message
-            }, $scope.conversation.id).then(function () {
+            var message = $scope.message;
+            message.body = $scope.conversation.lastMessage;
+            messageService.sendMessage(message, $scope.conversation.id).then(function () {
                 //TODO:
             }).catch(function (error) {
                 console.log("error", error);

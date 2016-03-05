@@ -36,7 +36,7 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope,
             //dummy data
             var dummyName = ['David', 'Jesus', 'Ricardo'];
             var dummyEmail = ['davidjdr@gmail.com', 'davidjdr+1@gmail.com', 'davidjdr+2@gmail.com'];
-            var dummyPhone = ['+584123600295', '+584123600295', '+584123600295'];
+            var dummyPhone = ['+584123600295', '+584149027932', '+584123600295'];
             for (var i = 0, length = 3; i < length; i++) {
                 // create new contact
                 var contact = new Contact(dummyName[i], 'img/person.png');
