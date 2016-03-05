@@ -8,12 +8,10 @@ var merge = require('merge-stream');
 
 var paths = {
     css: [
-        './www/lib/ionic/css/ionic.css',
         './www/css/main.css',
         './www/css/style.css'
     ],
     js: [
-        './www/lib/angular/angular.min.js',
         './www/lib/angular-animate/angular-animate.min.js',
         './www/lib/angular-resource/angular-resource.min.js',
         './www/lib/angular-sanitize/angular-sanitize.min.js',

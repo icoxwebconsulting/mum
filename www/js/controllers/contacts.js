@@ -1,15 +1,15 @@
-angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, Contacts) {
+angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ionicLoading, Contacts) {
     $scope.contacts = [];
 
-    function showContacts(contacts) {
-        $scope.contacts = contacts;
-        $ionicLoading.hide();
-    }
-
     $ionicLoading.show();
-    Contacts.getContacts().then(function (contacts) {
-        showContacts(contacts);
-    });
+    Contacts.getContacts()
+        .then(function (dbContacts) {
+            $scope.contacts = [];
+            for (var i = 0, length = dbContacts.length; i < length; i++) {
+                $scope.contacts.push(dbContacts[i]);
+            }
+            $ionicLoading.hide();
+        });
 
     $scope.contactDetail = function (contact) {
         Contacts.setSingleContact(contact);

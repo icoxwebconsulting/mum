@@ -65,7 +65,7 @@ angular.module('app.routes', [])
             })
 
             .state('sms_contacts', {
-                url: '/pick/email/contact',
+                url: '/pick/sms/contact',
                 templateUrl: 'templates/pick-contacts.html',
                 controller: 'SMSContactCtrl'
             })

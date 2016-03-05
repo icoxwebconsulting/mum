@@ -291,7 +291,6 @@ angular.module('app.contacts', [])
             var data = {contacts: contactsPhoneNumber};
             return contact(userDatastore.getTokens().accessToken).save(data).$promise
                 .then(function (response) {
-                    console.log('loading contacts sync with api done');
                     updateContacts(response);
                 });
         }
@@ -304,30 +303,38 @@ angular.module('app.contacts', [])
          */
         function loadContacts() {
             if (window.localStorage.getItem('verified') == 2) {
-                console.log('loading contacts');
                 return loadFromAddressBook()
                     .then(function (contacts) {
-                        console.log('loading contacts from address book done');
                         return saveContacts(contacts);
                     })
                     .then(function (contacts) {
-                        console.log('loading contacts save on db done');
                         return apiSync(contacts);
                     });
             }
         }
 
         function getContacts() {
-            var deferred = $q.defer();
+            var query = 'SELECT * FROM contacts';
 
-            // read from table
+            return sqliteDatastore.execute(query)
+                .then(function (response) {
+                    return response.rows;
+                });
+        }
 
-            return deferred.promise;
+        function getMUMContacts() {
+            var query = 'SELECT * FROM contacts WHERE mum_id IS NOT NULL';
+
+            return sqliteDatastore.execute(query)
+                .then(function (response) {
+                    return response.rows;
+                });
         }
 
         return {
             loadContacts: loadContacts,
             getContacts: getContacts,
+            getMUMContacts: getMUMContacts,
             setSingleContact: setSingleContact,
             getSingleContact: getSingleContact
         };

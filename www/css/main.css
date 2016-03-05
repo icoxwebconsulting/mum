@@ -1,38 +1,19 @@
 @font-face {
-    font-family: 'bentosans_300';
-    src: url('../fonts/bentosans_300.eot');
-    src: url('../fonts/bentosans_300.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/bentosans_300.woff2') format('woff2'),
-    url('../fonts/bentosans_300.woff') format('woff'),
-    url('../fonts/bentosans_300.ttf') format('truetype'),
-    url('../fonts/bentosans_300.svg#bentosans_300') format('svg');
+    font-family: 'bentonsans_400';
+    src: url('../fonts/bentonsans_400.eot');
+    src: url('../fonts/bentonsans_400.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/bentonsans_400.woff2') format('woff2'),
+    url('../fonts/bentonsans_400.woff') format('woff'),
+    url('../fonts/bentonsans_400.ttf') format('truetype'),
+    url('../fonts/bentonsans_400.svg#bentonsans_400') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     @font-face {
-        font-family: 'bentosans_300';
-        src: url('../fonts/bentosans_300.svg') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'bentosans_400';
-    src: url('../fonts/bentosans_400.eot');
-    src: url('../fonts/bentosans_400.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/bentosans_400.woff2') format('woff2'),
-    url('../fonts/bentosans_400.woff') format('woff'),
-    url('../fonts/bentosans_400.ttf') format('truetype'),
-    url('../fonts/bentosans_400.svg#bentosans_400') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'bentosans_400';
-        src: url('../fonts/bentosans_400.svg') format('svg');
+        font-family: 'bentonsans_400';
+        src: url('../fonts/bentonsans_400.svg') format('svg');
     }
 }
 
@@ -345,7 +326,7 @@ body {
 }
 
 .btn {
-    font-family: 'bentosans_400', sans-serif;
+    font-family: 'bentonsans_400', sans-serif;
     box-shadow: none;
 }
 
@@ -1140,7 +1121,7 @@ body {
     font-size: 16px;
     margin-bottom: 0;
     margin-top: 0;
-    font-family: 'bentosans_400', sans-serif;
+    font-family: 'bentonsans_400', sans-serif;
     color: #ffffff;
     color: #ffffff;
 }
