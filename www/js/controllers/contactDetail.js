@@ -14,8 +14,8 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
             date: null,//TODO: se colocaba antes, no colocado, verificar
             from: null,
             subject: null,
-            phoneNumber: (type != 'email')? $scope.contact.phoneNumber : null,
-            email: (type == 'email')? $scope.contact.email : null,
+            phoneNumber: (type != 'email') ? $scope.contact.phoneNumber : null,
+            email: (type == 'email') ? $scope.contact.email : null,
             displayName: $scope.contact.displayName,
             created: null,
         });
