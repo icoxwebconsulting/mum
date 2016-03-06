@@ -1,7 +1,7 @@
 angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', 'app.pushNotification',
         'app.resources', 'app.messageResource', 'app.device', 'app.contactRes', 'app.deviceDataStore',
         'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore'])
-    .run(function ($rootScope, $state, $stateParams, $ionicPlatform, Contacts, sqliteDatastore, user, pushNotification) {
+    .run(function ($rootScope, $state, $stateParams, $ionicPlatform, user, Contacts, sqliteDatastore, pushNotification) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -18,10 +18,11 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
                 StatusBar.styleDefault();
             }
 
-            if (ionic.Platform.isAndroid() && window.localStorage.getItem('verified')) {
-                Contacts.loadContacts();
-            }
             sqliteDatastore.initDb();
+            user.refreshAccessToken()
+                .then(function () {
+                    Contacts.loadContacts();
+                });
         });
 
         //TODO: remove me just an example on how to receive notifications

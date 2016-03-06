@@ -5,7 +5,6 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         sqliteDatastore.saveConversation(conversation).then(function (resp) {
             deferred.resolve(resp.insertId);
         }).catch(function (error) {
-            console.log("error en el manejo de conversation", error);
             deferred.reject(error);
         });
         return deferred.promise;
@@ -21,7 +20,6 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
             deferred.resolve(messages);
         }).catch(function (error) {
             // Tratar el error
-            console.log(error);
             deferred.reject(error);
         });
         return deferred.promise;
@@ -50,7 +48,6 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
             deferred.resolve(conversations);
         }).catch(function (error) {
             // Tratar el error
-            console.log("error en consulta en inbox", error);
             deferred.reject(error);
         });
         return deferred.promise;

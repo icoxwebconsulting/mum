@@ -1,57 +1,97 @@
-angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope, contact, userDatastore) {
+angular.module('app.contacts', [])
+    .factory('Contacts', function ($q, $rootScope, contact, userDatastore, sqliteDatastore) {
+        // TODO: move it to dedicated services
+        var singleContact = null;
 
-    var contacts = null;
-    var loading = false;
-    var singleContact;
-
-    var Contact = function (displayNameArg, photoArg, emailArg, phoneNumberArg, mumIdArg) {
-        var displayName = displayNameArg;
-        var photo = photoArg;
-        var email = emailArg || null;
-        var phoneNumber = phoneNumberArg || null;
-        var mumId = mumIdArg || null;
-
-        function toString() {
-            return displayName;
+        // TODO: move it to dedicated services
+        function setSingleContact(contact) {
+            singleContact = contact;
         }
 
-        return {
-            displayName: displayName,
-            photo: photo,
-            email: email,
-            phoneNumber: phoneNumber,
-            mumId: mumId,
-            toString: toString
+        // TODO: move it to dedicated services
+        function getSingleContact() {
+            return singleContact;
         }
-    };
 
-    function loadContacts() {
-        var deferred = $q.defer();
+        /**
+         * Contact class
+         *
+         * @param displayNameArg
+         * @param photoArg
+         * @param emailArg
+         * @param phoneNumberArg
+         * @param mumIdArg
+         * @returns {{displayName: *, photo: *, email: (*|null), phoneNumber: (*|null), mumId: (*|null), toString: toString}}
+         * @constructor
+         */
+        var Contact = function (displayNameArg, photoArg, emailArg, phoneNumberArg, mumIdArg) {
+            var displayName = displayNameArg;
+            var photo = photoArg;
+            var email = emailArg || null;
+            var phoneNumber = phoneNumberArg || null;
+            var mumId = mumIdArg || null;
 
-        var loading = true;
-        var temContacts = [];
-
-        // TODO: remove this dummy case
-        if (!ionic.Platform.isAndroid()) {
-            //dummy data
-            var dummyName = ['David', 'Jesus', 'Ricardo'];
-            var dummyEmail = ['davidjdr@gmail.com', 'davidjdr+1@gmail.com', 'davidjdr+2@gmail.com'];
-            var dummyPhone = ['+584123600295', '+584149027932', '+584123600295'];
-            for (var i = 0, length = 3; i < length; i++) {
-                // create new contact
-                var contact = new Contact(dummyName[i], 'img/person.png');
-                contact.email = dummyEmail[i];
-                contact.phoneNumber = dummyPhone[i];
-                temContacts.push(contact);
+            function toString() {
+                return displayName;
             }
 
-            temContacts.sort();
-            contacts = temContacts;
-            loading = false;
-            $rootScope.$emit('notifying-contact-loaded');
-            deferred.resolve(contacts);
+            return {
+                displayName: displayName,
+                photo: photo,
+                email: email,
+                phoneNumber: phoneNumber,
+                mumId: mumId,
+                toString: toString
+            }
+        };
 
-        } else {
+        /**
+         * Format phone numbers to prepare for db match
+         *
+         * @param contact
+         * @returns {*}
+         */
+        function sanitizeContact(contact) {
+            var chars = [' ', '-', '+', '(', ')'];
+
+            // if the phone number don't starts with (+) or (00) elsewhere is international
+            if (contact.substring(0, 1) !== '+' && contact.substring(0, 2) !== '00') {
+                // if ti has (0) as first digit remove it
+                if (contact.substring(0, 1) === '0') {
+                    contact = contact.substring(1);
+                }
+
+                // add customer international code to it
+                contact = userDatastore.getCountryCode() + contact;
+            } else {
+                // if ti has (+) as first digit remove it
+                if (contact.substring(0, 1) === '+') {
+                    contact = contact.substring(1);
+                }
+
+                // if ti has (00) as first digit remove it
+                if (contact.substring(0, 2) === '00') {
+                    contact = contact.substring(2);
+                }
+            }
+
+            for (var j = 0, charsLength = chars.length; j < charsLength; j++) {
+                var char = chars[j];
+                contact = contact.replace(char, '');
+            }
+
+            return contact;
+        }
+
+        /**
+         * Load from User Phone Address Book
+         *
+         * @returns {*|promise}
+         */
+        function loadFromAddressBook() {
+            var deferred = $q.defer();
+
+            var contacts = [];
 
             var fields = [
                 navigator.contacts.fieldType.displayName,
@@ -69,8 +109,8 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope,
                 function onSuccess(loadedContacts) {
                     for (var i = 0, length = loadedContacts.length; i < length; i++) {
                         var loadedContact = loadedContacts[i];
-                        // only those hwo has display name
-                        if (loadedContact.displayName) {
+                        // only those hwo has display name and phone number
+                        if (loadedContact.displayName && loadedContact.phoneNumbers) {
                             // create new contact
                             var contact = new Contact(loadedContact.displayName,
                                 (loadedContact.photos) ? loadedContact.photos[0].value : 'img/person.png');
@@ -82,77 +122,213 @@ angular.module('app.contacts', []).factory('Contacts', function ($q, $rootScope,
                             }
 
                             if (loadedContact.phoneNumbers) {
-                                contact.phoneNumber = loadedContact.phoneNumbers[0].value;
+                                contact.phoneNumber = sanitizeContact(loadedContact.phoneNumbers[0].value);
                             } else {
                                 contact.phoneNumber = null;
                             }
 
-                            temContacts.push(contact);
+                            contacts.push(contact);
                         }
                     }
-                    temContacts.sort();
-                    contacts = temContacts;
-                    loading = false;
-                    $rootScope.$emit('notifying-contact-loaded');
+                    contacts.sort();
                     deferred.resolve(contacts);
                 }, function onError(error) {
                     deferred.reject(error);
                 }, options);
 
+            return deferred.promise;
         }
 
-        return deferred.promise;
-    }
+        /**
+         * Insert new contact
+         *
+         * @param data
+         * @returns {*}
+         */
+        function insertContact(data) {
+            var query = 'INSERT OR IGNORE INTO contacts (phone_number, display_name, photo, email, mum_id) ' +
+                'VALUES(?, ?, ?, ?, ?)';
 
-    function getContacts() {
-        var deferred = $q.defer();
-
-        if (!ionic.Platform.isAndroid() && !ionic.Platform.isIOS()) {
-            return loadContacts();
-        } else {
-
-            if (contacts !== null && loading === false) {
-                deferred.resolve(contacts);
-            } else if (contacts === false && loading === false) {
-                return loadContacts();
-            } else {
-                $rootScope.$on('notifying-contact-loaded', function () {
-                    deferred.resolve(contacts);
+            return sqliteDatastore.execute(query, data)
+                .then(function (response) {
+                    return response;
                 });
-            }
+        }
+
+        /**
+         * Update a contact on database
+         *
+         * @param key
+         * @param mumId
+         * @returns {*}
+         */
+        function updateContact(key, mumId) {
+            var query = 'UPDATE contacts SET mum_id = ? WHERE phone_number = ?';
+
+            var data = [mumId, key];
+
+            return sqliteDatastore.execute(query, data)
+                .then(function (response) {
+                    return response;
+                });
+        }
+
+        /**
+         * Delete a contact from database
+         *
+         * @param key
+         * @returns {*}
+         */
+        function deleteMUMContact(key) {
+            var query = 'UPDATE contacts SET mum_id = NULL WHERE phone_number = ?';
+
+            var data = [key];
+
+            return sqliteDatastore.execute(query, data)
+                .then(function (response) {
+                    return response;
+                });
+        }
+
+        /**
+         * Save a list of contacts to database
+         *
+         * @param contacts
+         * @returns {*|promise}
+         */
+        function saveContacts(contacts) {
+            var deferred = $q.defer();
+
+            var contactObjects = [];
+
+            async.each(contacts, function (contact, callback) {
+                var values = [
+                    contact.phoneNumber,
+                    contact.displayName,
+                    contact.photo,
+                    contact.email,
+                    null
+                ];
+
+                insertContact(values)
+                    .then(function () {
+                        contactObjects.push(contact);
+                        callback();
+                    })
+            }, function (error) {
+                if (!error) {
+                    deferred.resolve(contactObjects);
+                } else {
+                    deferred.reject(error);
+                }
+            });
 
             return deferred.promise;
-
         }
-    }
 
-    function setSingleContact(contact) {
-        singleContact = contact;
-    }
+        /**
+         * Update contacts on database
+         *
+         * @param contacts
+         * @returns {*|promise}
+         */
+        function updateContacts(contacts) {
+            var deferred = $q.defer();
 
-    function getSingleContact() {
-        return singleContact;
-    }
+            async.waterfall([
+                    function (callback) {
+                        async.each(contacts.created, function (contact, eachCallback) {
+                            updateContact(contact.username, contact.id)
+                                .then(function () {
+                                    eachCallback();
+                                })
+                        }, function (error) {
+                            if (!error) {
+                                callback();
+                            } else {
+                                deferred.reject(error);
+                            }
+                        });
+                    },
+                    function (callback) {
+                        async.each(contacts.deleted, function (contact, eachCallback) {
+                            deleteMUMContact(contact.username)
+                                .then(function () {
+                                    eachCallback();
+                                })
+                        }, function (error) {
+                            if (!error) {
+                                callback();
+                            } else {
+                                deferred.reject(error);
+                            }
+                        });
+                    }],
+                function (error) {
+                    if (!error) {
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                });
 
-    function apiSync() {
-        var contactsPhoneNumber = [];
-        for (var i = 0, length = contacts.length; i < length; i++) {
-            if (contacts[i].phoneNumber !== null && contacts[i].phoneNumber !== undefined) {
-                contactsPhoneNumber.push(contacts[i].phoneNumber);
+            return deferred.promise;
+        }
+
+        /**
+         * Sync contacts with api database
+         *
+         * @param contacts
+         * @returns {*|Function}
+         */
+        function apiSync(contacts) {
+            var contactsPhoneNumber = [];
+            for (var i = 0, length = contacts.length; i < length; i++) {
+                if (contacts[i].phoneNumber !== null && contacts[i].phoneNumber !== undefined) {
+                    contactsPhoneNumber.push(contacts[i].phoneNumber);
+                }
+            }
+            var data = {contacts: contactsPhoneNumber};
+            return contact(userDatastore.getTokens().accessToken).save(data).$promise
+                .then(function (response) {
+                    console.log('loading contacts sync with api done');
+                    updateContacts(response);
+                });
+        }
+
+        /**
+         * Load the contacts from the local address book save them to mum database
+         * and sync them with the mum api
+         *
+         * @returns {*}
+         */
+        function loadContacts() {
+            if (window.localStorage.getItem('verified') == 2) {
+                console.log('loading contacts');
+                return loadFromAddressBook()
+                    .then(function (contacts) {
+                        console.log('loading contacts from address book done');
+                        return saveContacts(contacts);
+                    })
+                    .then(function (contacts) {
+                        console.log('loading contacts save on db done');
+                        return apiSync(contacts);
+                    });
             }
         }
-        var data = {contacts: contactsPhoneNumber};
-        return contact(userDatastore.getTokens().accessToken).save(data).$promise;
-    }
 
-    $rootScope.$on('notifying-contact-loaded', function () {
-        apiSync();
+        function getContacts() {
+            var deferred = $q.defer();
+
+            // read from table
+
+            return deferred.promise;
+        }
+
+        return {
+            loadContacts: loadContacts,
+            getContacts: getContacts,
+            setSingleContact: setSingleContact,
+            getSingleContact: getSingleContact
+        };
     });
-
-    return {
-        loadContacts: loadContacts,
-        getContacts: getContacts,
-        setSingleContact: setSingleContact,
-        getSingleContact: getSingleContact
-    };
-});

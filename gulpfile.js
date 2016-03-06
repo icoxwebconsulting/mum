@@ -1,42 +1,62 @@
 var gulp = require('gulp');
-var gutil = require('gulp-util');
-var bower = require('bower');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+var merge = require('merge-stream');
 
 var paths = {
-  sass: ['./scss/**/*.scss'],
-  js: ['./www/js/**/*.js']
+    css: [
+        './www/lib/ionic/css/ionic.css',
+        './www/css/main.css',
+        './www/css/style.css'
+    ],
+    js: [
+        './www/lib/angular/angular.min.js',
+        './www/lib/angular-animate/angular-animate.min.js',
+        './www/lib/angular-resource/angular-resource.min.js',
+        './www/lib/angular-sanitize/angular-sanitize.min.js',
+        './www/lib/angular-ui-router/release/angular-ui-router.min.js',
+        './www/lib/async/dist/async.min.js',
+        './www/lib/ionic-timepicker/dist/ionic-timepicker.bundle.min.js',
+        './www/lib/moment/min/moment.min.js',
+        './www/lib/moment/locale/es.js',
+        './www/lib/moment-timezone/moment-timezone.min.js',
+        './www/lib/underscore/underscore-min.js',
+        './www/js/**/*.js'
+    ]
 };
 
-gulp.task('default', ['concatjs']);
+gulp.task('default', ['css', 'uglify']);
 
-//gulp.task('sass', function(done) {
-//  gulp.src('./scss/ionic.app.scss')
-//    .pipe(sass())
-//    .on('error', sass.logError)
-//    .pipe(gulp.dest('./www/css/'))
-//    .pipe(minifyCss({
-//      keepSpecialComments: 0
-//    }))
-//    .pipe(rename({ extname: '.min.css' }))
-//    .pipe(gulp.dest('./www/css/'))
-//    .on('end', done);
-//});
+gulp.task('css', function (done) {
+    var cssStream = gulp.src(paths.css);
 
-gulp.task('concatjs', function (done) {
-  gulp.src(paths.js)
-    .pipe(concat('main.js'))
-    .on('error', function (error) {
-      console.log(error);
-    })
-    .pipe(gulp.dest('www/res/'))
-    .on('end', done);
+    merge(cssStream)
+        .pipe(minifyCss({
+            keepSpecialComments: 0
+        }))
+        .pipe(concat('main.css'))
+        .pipe(rename({extname: '.min.css'}))
+        .pipe(gulp.dest('./www/res/'))
+        .on('end', done);
 });
 
-gulp.task('watch', function() {
-  //gulp.watch(paths.sass, ['sass']);
-  gulp.watch(paths.js, ['concatjs']);
+gulp.task('uglify', function (done) {
+    gulp.src(paths.js)
+        .pipe(concat('main.js'))
+        .pipe(uglify({mangle: false}))
+        .on('error', function (error) {
+            console.log(error);
+        })
+        .pipe(rename({extname: '.min.js'}))
+        .pipe(gulp.dest('www/res/'))
+        .on('end', done);
+});
+
+gulp.task('watch', function () {
+    gulp.watch(paths.sass, ['css']);
+    gulp.watch(paths.css, ['css']);
+    gulp.watch(paths.js, ['uglify']);
 });
