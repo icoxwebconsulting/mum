@@ -1,31 +1,34 @@
-angular.module('app').service('messageService', function (messageRes, $q, messageStorage, messageQueue, pushNotification) {
+angular.module('app').service('messageService', function ($q, messageStorage, messageQueue) {
 
-    //mum = message
-    var mum = {
+    var message = {
         type: "",
-        date: "",
-        phoneNumber: "",
-        email: "",
-        displayName: ""
+        body: "",
+        date: null,
+        from: null,
+        subject: null,
+        phoneNumber: null,
+        email: null,
+        displayName: "",
+        created: null,
     };
 
     var conversation = {
-        id: "",
-        image: "",
+        id: null,
+        image: null,
         displayName: "",
         type: "",
         receivers: [],
         lastMessage: "",
-        created: "",
-        updated: ""
+        created: null,
+        updated: null
     };
 
-    var setMum = function (obj) {
-        mum = obj;
+    var setMessage = function (obj) {
+        message = obj;
     };
 
-    var getMum = function () {
-        return mum;
+    var getMessage = function () {
+        return message;
     };
 
     var setConversation = function (c) {
@@ -36,39 +39,44 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         return conversation;
     };
 
-    function sendMessage(message, idConversation) {
+    function sendMessage(message, conversation) {
+
         var deferred = $q.defer();
-        var receivers = (conversation.type == 'email')? JSON.stringify(mum.email) : JSON.stringify(mum.phoneNumber);
 
         var messageData = {
             message: {
                 body: message.body,
-                receivers: receivers
+                receivers: JSON.stringify(conversation.receivers)
             },
-            idConversation: idConversation
+            idConversation: conversation.id
         };
-        console.log(messageData);
 
         if (message.date) {
             messageData.message.at = moment.utc(message.date).format("DD-MM-YYYY HH:mm:ss");
         }
 
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)
-        if (conversation.type == 'email') {
-
+        if (message.type == 'email') {
             messageData.about = message.subject;
             messageData.from = message.from;
+
+            console.log("QUEUE MESSAGE DATA EMAIL", messageData);
+
             messageQueue.addEmail(messageData);
             messageQueue.processEmail();
             deferred.resolve();
 
-        } else if (conversation.type == 'sms') {
+        } else if (message.type == 'sms') {
+
+            console.log("QUEUE  MESSAGE DATA SMS", messageData);
 
             messageQueue.addSms(messageData);
             messageQueue.processSms();
             deferred.resolve();
 
-        } else if (conversation.type == 'mum') {
+        } else if (message.type == 'mum') {
+
+            console.log("QUEUE MESSAGE DATA MUM", messageData);
 
             messageQueue.addMum(messageData);
             messageQueue.processMum();
@@ -83,8 +91,8 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
         return messageStorage.saveConversation(conversation);
     }
 
-    function getConversationMessages() {
-        return messageStorage.getConversationMessages(conversation.id);
+    function getConversationMessages(idConversation) {
+        return messageStorage.getConversationMessages(idConversation);
     }
 
     function getInboxMessages() {
@@ -100,8 +108,8 @@ angular.module('app').service('messageService', function (messageRes, $q, messag
     }
 
     return {
-        setMum: setMum,
-        getMum: getMum,
+        setMessage: setMessage,
+        getMessage: getMessage,
         setConversation: setConversation,
         getConversation: getConversation,
         saveConversation: saveConversation,

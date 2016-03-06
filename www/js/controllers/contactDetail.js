@@ -9,12 +9,16 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
     $scope.startConversation = function (type) {
 
-        messageService.setMum({
+        messageService.setMessage({
             type: type,
-            date: moment.utc().format("DD-MM-YYYY HH:mm:ss"),
-            phoneNumber: $scope.contact.phoneNumber,
-            email: $scope.contact.email,
-            displayName: $scope.contact.displayName
+            body: "",
+            date: null,//TODO: se colocaba antes, no colocado, verificar
+            from: null,
+            subject: null,
+            phoneNumber: (type != 'email')? $scope.contact.phoneNumber : null,
+            email: (type == 'email')? $scope.contact.email : null,
+            displayName: $scope.contact.displayName,
+            created: null,
         });
 
         var receivers = [];
@@ -30,13 +34,13 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
             if (response) {
                 conversation = {
                     id: response.id,
-                    displayName: response.display_name,
                     image: response.image,
-                    lastMessage: response.last_message,
-                    receivers: JSON.parse(response.receivers),
+                    displayName: response.display_name,
                     type: response.type,
-                    updated: response.updated,
-                    created: response.created
+                    receivers: JSON.parse(response.receivers),
+                    lastMessage: response.last_message,
+                    created: response.created,
+                    updated: response.updated
                 };
             } else {
                 conversation = {
@@ -44,7 +48,10 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
                     image: ($scope.contact.photo == 'img/person.png') ? null : $scope.contact.photo,
                     displayName: $scope.contact.displayName,
                     type: type,
-                    receivers: receivers
+                    receivers: receivers,
+                    lastMessage: "",
+                    created: null,
+                    updated: null
                 }
             }
 

@@ -1,54 +1,62 @@
 angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageService) {
 
     $scope.$on('$ionicView.enter', function () {
-        if ($rootScope.previousState != 'layout.inbox') {
-            $scope.mum = messageService.getMum();
-        }
+        $scope.message = messageService.getMessage();
     });
 
     $scope.message = {
-        subject: "",
+        id: "",
+        type: "",
         body: "",
-        from: "",
-        date: ""
+        date: null,
+        from: null,
+        subject: null,
+        phoneNumber: null,
+        email: null,
+        displayName: "",
+        created: null,
+    };
+
+    $scope.conversation = {
+        id: null,
+        image: null,
+        displayName: "",
+        type: "",
+        receivers: [],
+        lastMessage: "",
+        created: null,
+        updated: null
     };
 
     $scope.sendMessage = function () {
-        $ionicLoading.show();
-        var conversation = {};
+        //$ionicLoading.show();
 
-        conversation.receivers = [];
-        conversation.receivers.push(($scope.mum.type == 'sms') ? $scope.mum.phoneNumber : $scope.mum.email);
-        conversation.type = $scope.mum.type;
-        conversation.displayName = $scope.mum.displayName;
-        conversation.lastMessage = $scope.message.body;
+        $scope.conversation.receivers.push(($scope.message.type == 'email') ? $scope.message.email : $scope.message.phoneNumber);
+        $scope.conversation.type = $scope.message.type;
+        $scope.conversation.displayName = $scope.message.displayName;
+        $scope.conversation.lastMessage = $scope.message.body;
 
-        function processSend(message, idConversation) {
-            messageService.sendMessage(message, idConversation).then(function () {
-                $ionicLoading.hide();
-                $scope.message = {
-                    subject: "",
-                    body: "",
-                    from: "",
-                    date: ""
-                };
+        function processSend() {
+            messageService.sendMessage($scope.message, $scope.conversation).then(function () {
+                //$ionicLoading.hide();
                 $state.go('layout.inbox');
             }).catch(function (error) {
                 console.log('hay un error', error);
-                $ionicLoading.hide();
+                //$ionicLoading.hide();
             });
         }
 
-        messageService.findConversation($scope.mum.type, conversation.receivers).then(function (response) {
-            console.log(response);
+        messageService.findConversation($scope.message.type, $scope.conversation.receivers).then(function (response) {
             if (response) {
-                conversation.id = response.id;
-                processSend($scope.message, conversation.id);
+                $scope.conversation.id = response.id;
+                messageService.setConversation($scope.conversation);
+                processSend();
             } else {
-                messageService.saveConversation(conversation).then(function (insertId) {
-                    conversation.id = insertId;
-                    $rootScope.conversations.unshift(conversation);
-                    processSend($scope.message, conversation.id);
+                messageService.saveConversation($scope.conversation).then(function (insertId) {
+                    $scope.conversation.id = insertId;
+                    messageService.setConversation($scope.conversation);
+                    $rootScope.conversations.unshift($scope.conversation);
+                    processSend();
                 });
             }
         });

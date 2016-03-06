@@ -1,8 +1,9 @@
 angular.module('app').controller('MumContactCtrl', function ($scope, $state, $ionicLoading, Contacts, messageService) {
 
-    var mum = messageService.getMum();
+    var message = messageService.getMessage();
+
     $scope.contacts = [];
-    $scope.contactsType = mum.type;
+    $scope.contactsType = message.type;
 
     function showContacts(contacts) {
         $scope.contacts = contacts;
@@ -20,9 +21,10 @@ angular.module('app').controller('MumContactCtrl', function ($scope, $state, $io
     };
 
     $scope.pickContact = function (contact) {
-        mum.phoneNumber = contact.phoneNumber;
-        mum.displayName = contact.displayName;
-        messageService.setMum(mum);
+        message.phoneNumber = contact.phoneNumber;
+        message.displayName = contact.displayName;
+
+        messageService.setMessage(message);
 
         $state.go('message');
     }
