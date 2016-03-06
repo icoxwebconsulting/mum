@@ -1,16 +1,38 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, messageService) {
 
-    $scope.conversation = {};
     $scope.messages = [];
-    $scope.message;
+
+    $scope.message = {
+        type: "",
+        body: "",
+        date: null,
+        from: null,
+        subject: null,
+        phoneNumber: null,
+        email: null,
+        displayName: "",
+        created: null
+    };
+
+    $scope.conversation = {
+        id: null,
+        image: null,
+        displayName: "",
+        type: "",
+        receivers: [],
+        lastMessage: "",
+        created: null,
+        updated: null
+    };
 
     $scope.$on('$ionicView.enter', function (e) {
         $scope.conversation = messageService.getConversation();
         if ($scope.conversation.id) {
-            messageService.getConversationMessages().then(function (msjs) {
+            messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {
                 $scope.messages = msjs;
             });
         }
+        $scope.message = messageService.getMessage();
     });
 
     $scope.$on('$ionicView.leave', function (e) {
@@ -20,38 +42,32 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.sendMessage = function () {
         var type = $scope.conversation.type;
         var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
-        var mum = {
-            type: type,
-            date: null,
-            phoneNumber: (type == 'sms' || type == 'mum') ? $scope.conversation.receivers : null,
-            email: (type == 'email') ? $scope.conversation.receivers : null,
-            displayName: $scope.conversation.displayName
-        };
-
-        messageService.setMum(mum);
 
         $scope.messages.push({
-            about: null,
+            about: $scope.message.subject,
             at: null,
-            from_address: null,
+            from_address: $scope.message.from,
             id: $scope.conversation.id,
-            body: $scope.message,
+            body: $scope.message.body,
             to_send: true,
+            is_received: false,
             created: date
         });
 
-        var message = $scope.message;
-        $scope.conversation.lastMessage = message;
+        $scope.conversation.lastMessage = $scope.message.body;
         $scope.conversation.created = date;
         $scope.conversation.updated = date;
-        $scope.message = "";
+        $scope.message.body = "";
 
         function processSend() {
-            messageService.sendMessage({
-                body: message
-            }, $scope.conversation.id).then(function () {
+            var message = $scope.message;
+            message.body = $scope.conversation.lastMessage;
+            console.log("Antes de procesar envio", message, $scope.conversation)
+            messageService.sendMessage(message, $scope.conversation).then(function () {
                 //TODO:
+                console.log("mensaje encolado");
             }).catch(function (error) {
+                console.log("error", error);
             });
         }
 
@@ -60,14 +76,15 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 if (response) {
                     $scope.conversation = {
                         id: response.id,
-                        displayName: response.display_name,
                         image: response.image,
-                        lastMessage: response.last_message,
-                        receivers: JSON.parse(response.receivers),
+                        displayName: response.display_name,
                         type: response.type,
-                        updated: response.updated,
-                        created: response.created
-                    }
+                        receivers: JSON.parse(response.receivers),
+                        lastMessage: response.last_message,
+                        created: response.created,
+                        updated: response.updated
+                    };
+                    processSend();
                 } else {
                     messageService.saveConversation($scope.conversation).then(function (insertId) {
                         $scope.conversation.id = insertId;

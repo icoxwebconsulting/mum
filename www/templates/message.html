@@ -3,33 +3,33 @@
         <div class="header header-bd">
             <div class="flex flex-middle-xs">
                 <div class="flex-xs-2">
-                    <a href="#/content/mum" class="button button-icon ion-chevron-left"></a>
+                    <a href="#/content/home" class="button button-icon ion-chevron-left"></a>
                 </div>
                 <div class="flex-xs p-y-xs">
                     <div class="flex flex-middle-xs">
                         <img class="img-circle m-r-xs" src="img/person.png" style="border-radius: 50%;" alt=""
                              width="56">
-                        {{mum.displayName}}
+                        {{message.displayName}}
                     </div>
                 </div>
             </div>
         </div>
     </ion-header-bar>
     <ion-content style="margin-top: 75px;">
-        <p class="text-primary">Enviar {{mum.date.format("LLLL")}}</p>
-        <p class="text-primary">Destinatario {{mum.displayName}}
-            <span ng-show="mum.type == 'sms' && mum.number">({{mum.number}})</span>
-            <span ng-show="mum.type == 'email' && mum.email">({{mum.email}})</span>
+        <p class="text-primary">Enviar {{message.date.format("LLLL")}}</p>
+        <p class="text-primary">Destinatario {{message.displayName}}
+            <span ng-show="message.type == 'sms' && message.number">({{message.number}})</span>
+            <span ng-show="message.type == 'email' && message.email">({{message.email}})</span>
         </p>
 
         <form class="form-paper">
-            <div class="form-group flex flex-middle-xs" ng-show="mum.type == 'email'">
+            <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
                 <label>Asunto:</label>
                 <div class="flex-xs">
                     <input type="text" class="form-control" style="width:90%;" ng-model="message.subject"/>
                 </div>
             </div>
-            <div class="form-group flex flex-middle-xs" ng-show="mum.type == 'email'">
+            <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
                 <label>De:</label>
                 <div class="flex-xs">
                     <input type="email" class="form-control" style="width:90%;" ng-model="message.from"/>

@@ -1,4 +1,4 @@
-angular.module('app').service('messageQueue', function (messageRes, $q, messageStorage) {
+angular.module('app').service('messageQueue', function (messageRes, $q, messageStorage, userDatastore) {
 
     var smsQueue = [];
     var emailQueue = [];

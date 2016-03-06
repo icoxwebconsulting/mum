@@ -1,7 +1,15 @@
 angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, messageService) {
 
-    $scope.chats;
-    $scope.conversation;
+    //$scope.conversation = {
+    //    id: null,
+    //    image: null,
+    //    displayName: "",
+    //    type: "",
+    //    receivers: [],
+    //    lastMessage: "",
+    //    created: null,
+    //    updated: null
+    //};
 
     messageService.getInboxMessages().then(function (conversations) {
         $rootScope.conversations = conversations;
@@ -9,8 +17,18 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $scope.open = function (conversation) {
         messageService.setConversation(conversation);
+        messageService.setMessage({
+            type: conversation.type,
+            body: "",
+            date: null,
+            from: null,
+            subject: null,
+            phoneNumber: null,
+            email: null,
+            displayName: conversation.displayName,
+            created: null,
+        });
         $state.go('conversation');
-
     };
 
     function toDelete() {
@@ -20,8 +38,8 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         })
     }
 
-    $scope.deleteConversation = function (c) {
-        $scope.conversation = c;
+    $scope.deleteConversation = function (conversation) {
+        $scope.conversation = conversation;
         $ionicPopup.alert({
             title: 'Eliminar conversación',
             subTitle: '¿Desea eliminar la conversación?',
