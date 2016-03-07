@@ -107,10 +107,9 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
     function getDelayedMessages() {
         var deferred = $q.defer();
         sqliteDatastore.getDelayedMessages().then(function (results) {
-            console.log(results);
             var items = [];
             for (var i = 0; i < results.rows.length; i++) {
-                items.push(result.rows.item(i));
+                items.push(results.rows.item(i));
             }
             deferred.resolve(items);
         }).catch(function (error) {
@@ -138,6 +137,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         deleteConversation: deleteConversation,
         saveMessageHistory: saveMessageHistory,
         savePendingMessage: savePendingMessage,
-        findConversation: findConversation
+        findConversation: findConversation,
+        updateConversation: updateConversation
     }
 });
