@@ -4,13 +4,13 @@
 
             <div class="item item-avatar">
                 <img src="{{contact.photo}}">
-                <h2>{{contact.displayName}}</h2>
+                <h2>{{contact.display_name}}</h2>
             </div>
 
             <div class="item item-body">
-                <p ng-if="contact.phoneNumber">
+                <p ng-if="contact.phone_number && contact.mum_id">
                     <button class="button button-outline button-assertive" ng-click="startConversation('mum')">
-                        Mum a: {{contact.phoneNumber}}
+                        Mum a: {{contact.phone_number}}
                     </button>
                 </p>
 
@@ -20,9 +20,9 @@
                     </button>
                 </p>
 
-                <p ng-if="contact.phoneNumber">
+                <p ng-if="contact.phone_number">
                     <button class="button button-outline button-assertive" ng-click="startConversation('sms')">
-                        Sms a: {{contact.phoneNumber}}
+                        Sms a: {{contact.phone_number}}
                     </button>
                 </p>
 

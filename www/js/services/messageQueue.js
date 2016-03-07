@@ -1,4 +1,4 @@
-angular.module('app').service('messageQueue', function (messageRes, $q, messageStorage, userDatastore) {
+angular.module('app').service('messageQueue', function ($rootScope, messageRes, $q, messageStorage, userDatastore) {
 
     var smsQueue = [];
     var emailQueue = [];
@@ -43,26 +43,32 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             isRunSms = true;
             var messageData = smsQueue[0];
             var idConversation = messageData.idConversation;
+            var toUpdate = messageData.toUpdate;
             delete messageData.idConversation;
+            delete messageData.toUpdate;
 
             messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 var isReceived = false;
                 messageStorage.saveMessageHistory(messageData, 'sms', response.message, idConversation, isReceived).then(function (params) {
                     //deferred.resolve(params);
+                    if (toUpdate) {
+                        $rootScope.$emit('sentMessage', {
+                            idConversation: idConversation,
+                            index: toUpdate,
+                            idMessage: response.message
+                        });
+                    }
                     smsQueue.shift();
                     processSms();
                 });
             }).catch(function (error) {
-                if (error.code != 500) {
-                    var isReceived = false;
-                    messageStorage.savePendingMessage(messageData, 'sms', idConversation, isReceived).then(function (params) {
-                        //deferred.resolve(params);
-                        smsQueue.shift();
-                        processSms();
-                    });
-                } else {
-                }
+                var isReceived = false;
+                messageStorage.savePendingMessage(messageData, 'sms', idConversation, isReceived).then(function (params) {
+                    //deferred.resolve(params);
+                    smsQueue.shift();
+                    processSms();
+                });
             });
         } else {
             isRunSms = false;
@@ -91,15 +97,12 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                     processEmail();
                 });
             }).catch(function (error) {
-                if (error.code != 500) {
-                    var isReceived = false;
-                    messageStorage.savePendingMessage(messageData, 'email', idConversation, isReceived).then(function (params) {
-                        //deferred.resolve(params);
-                        emailQueue.shift();
-                        processEmail();
-                    });
-                } else {
-                }
+                var isReceived = false;
+                messageStorage.savePendingMessage(messageData, 'email', idConversation, isReceived).then(function (params) {
+                    //deferred.resolve(params);
+                    emailQueue.shift();
+                    processEmail();
+                });
             });
         } else {
             isRunSms = false;
@@ -128,15 +131,12 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
                     processMum();
                 });
             }).catch(function (error) {
-                if (error.code != 500) {
-                    var isReceived = false;
-                    messageStorage.savePendingMessage(messageData, 'mum', idConversation, isReceived).then(function (params) {
-                        //deferred.resolve(params);
-                        mumQueue.shift();
-                        processMum();
-                    });
-                } else {
-                }
+                var isReceived = false;
+                messageStorage.savePendingMessage(messageData, 'mum', idConversation, isReceived).then(function (params) {
+                    //deferred.resolve(params);
+                    mumQueue.shift();
+                    processMum();
+                });
             });
         } else {
             isRunMum = false;

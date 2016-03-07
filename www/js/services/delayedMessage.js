@@ -31,7 +31,7 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
     }
 
     function run() {
-        getDelayedMessages.then(function (messages) {
+        getDelayedMessages().then(function (messages) {
             var messageData;
             var type;
             for (var i = 0; i < messages.length; i++) {

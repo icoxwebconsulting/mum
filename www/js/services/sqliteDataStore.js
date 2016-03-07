@@ -159,7 +159,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.message.about || null,
                 data.message.from_address || null,
                 data.message.at || null,
-                data.message.receivers || null,
+                data.message.receivers,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];
 
@@ -274,6 +274,32 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query, []);
         }
 
+        function updateConversation(conversation) {
+            var deferred = $q.defer();
+
+            var query = "UPDATE conversation  SET display_name = '?', image = '?', last_message = '?', updated = '?' WHERE id = ?";
+
+            var values = [
+                conversation.displayName,
+                conversation.image,
+                conversation.lastMessage.slice(0, 20),
+                conversation.updated,
+                conversation.id
+            ];
+
+            db.transaction(function (tx) {
+                tx.executeSql(query, values,
+                    function (tx, result) {
+                        deferred.resolve(result);
+                    },
+                    function (transaction, error) {
+                        deferred.reject(error);
+                    });
+            });
+
+            return deferred.promise;
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -286,6 +312,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             getConversationMessages: getConversationMessages,
             getDelayedMessages: getDelayedMessages,
             deletePendingMessage: deletePendingMessage,
-            findConversation: findConversation
+            findConversation: findConversation,
+            updateConversation: updateConversation
         };
     });
