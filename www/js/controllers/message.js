@@ -1,5 +1,7 @@
 angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $state, $ionicLoading, $ionicPopup, messageService) {
 
+    //maneja el envío de mensajes desde el formulario de envios programados
+
     $scope.$on('$ionicView.enter', function () {
         $scope.message = messageService.getMessage();
     });
@@ -39,6 +41,30 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         function processSend() {
             messageService.sendMessage($scope.message, $scope.conversation).then(function () {
                 //$ionicLoading.hide();
+                $scope.message = {
+                    id: "",
+                    type: "",
+                    body: "",
+                    date: null,
+                    from: null,
+                    subject: null,
+                    phoneNumber: null,
+                    email: null,
+                    displayName: "",
+                    created: null,
+                };
+
+                $scope.conversation = {
+                    id: null,
+                    image: null,
+                    displayName: "",
+                    type: "",
+                    receivers: [],
+                    lastMessage: "",
+                    created: null,
+                    updated: null
+                };
+
                 $state.go('layout.inbox');
             }).catch(function (error) {
                 console.log('hay un error', error);

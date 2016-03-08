@@ -20,8 +20,8 @@ angular.module('app').controller('MumContactCtrl', function ($scope, $state, $io
     };
 
     $scope.pickContact = function (contact) {
-        message.phoneNumber = contact.phoneNumber;
-        message.displayName = contact.displayName;
+        message.phoneNumber = contact.phone_number;
+        message.displayName = contact.display_name;
 
         messageService.setMessage(message);
 

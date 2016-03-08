@@ -156,8 +156,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
                 type,
                 data.message.body || null,
-                data.message.about || null,
-                data.message.from_address || null,
+                data.about || null,
+                data.from || null,
                 data.message.at || null,
                 data.message.receivers,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
@@ -185,9 +185,9 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
                 type,
                 data.message.body || null,
-                data.message.about || null,
+                data.about || null,
                 is_received,
-                data.message.from_address || null,
+                data.from,
                 data.message.at || null,
                 moment.utc().format("DD-MM-YYYY HH:mm:ss")
             ];
