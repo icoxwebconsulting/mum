@@ -19,7 +19,7 @@
                         </div>
                     </div>
 
-                    <ion-scroll zooming="false" direction="x" style="width: 100%;">
+                    <ion-scroll zooming="false" direction="x" class="wide-as-needed">
                         <div class="calendar-days flex flex-middle-xs" style="width: 1700px;">
                             <button class="calendar-day clear-btn flex-xs" type="button"
                                     ng-repeat="day in getMaxDay() track by $index"
@@ -31,7 +31,7 @@
                         </div>
                     </ion-scroll>
                 </div>
-                {{fecha.format("dddd, D")}}
+                <!--{{fecha.format("dddd, D")}}-->
                 <div class="timer">
                     <button type="button" class="btn clear-btn" ng-click="timeUp()">
                         <span class="icon icon-pointer-up"></span>
@@ -57,7 +57,7 @@
                         <a ng-click="newSchedule('email')"><img src="img/nuevo-mail.png"/></a>
                     </div>
                 </div>
-                Programado para: <br/> {{fecha.format("dddd, D MMMM YYYY, h:mm a")}}
+                <div>Programado para: {{fecha.format("dddd, D MMMM YYYY, h:mm a")}}</div>
             </div>
         </div>
     </ion-content>

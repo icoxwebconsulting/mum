@@ -48,7 +48,8 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                 body: message.body,
                 receivers: JSON.stringify(conversation.receivers)
             },
-            idConversation: conversation.id
+            idConversation: conversation.id,
+            toUpdate: (message.hasOwnProperty('toUpdate')) ? message.toUpdate : null
         };
 
         if (message.date) {
@@ -84,6 +85,29 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
 
         }
 
+        message = {
+            type: "",
+            body: "",
+            date: null,
+            from: null,
+            subject: null,
+            phoneNumber: null,
+            email: null,
+            displayName: "",
+            created: null,
+        };
+
+        conversation = {
+            id: null,
+            image: null,
+            displayName: "",
+            type: "",
+            receivers: [],
+            lastMessage: "",
+            created: null,
+            updated: null
+        };
+
         return deferred.promise;
     }
 
@@ -107,6 +131,10 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         return messageStorage.findConversation(type, receivers);
     }
 
+    function updateConversation(conversation){
+        return messageStorage.updateConversation(conversation);
+    }
+
     return {
         setMessage: setMessage,
         getMessage: getMessage,
@@ -117,7 +145,8 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         getConversationMessages: getConversationMessages,
         getInboxMessages: getInboxMessages,
         deleteConversation: deleteConversation,
-        findConversation: findConversation
+        findConversation: findConversation,
+        updateConversation: updateConversation
     };
 
 });

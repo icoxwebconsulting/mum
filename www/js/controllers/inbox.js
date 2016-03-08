@@ -35,6 +35,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         messageService.deleteConversation($scope.conversation).then(function () {
             $rootScope.conversations.splice($rootScope.conversations.indexOf($scope.conversation), 1);
         }).catch(function (error) {
+            console.log("Error al borrar conversacion", error);
         })
     }
 

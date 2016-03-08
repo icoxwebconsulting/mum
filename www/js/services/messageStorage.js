@@ -104,6 +104,31 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
+    function getDelayedMessages() {
+        var deferred = $q.defer();
+        sqliteDatastore.getDelayedMessages().then(function (results) {
+            var items = [];
+            for (var i = 0; i < results.rows.length; i++) {
+                items.push(results.rows.item(i));
+            }
+            deferred.resolve(items);
+        }).catch(function (error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    function updateConversation(conversation) {
+        var deferred = $q.defer();
+        sqliteDatastore.updateConversation(conversation).then(function (result) {
+            console.log(result);
+            deferred.resolve();
+        }).catch(function (error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
     function getScheduledMessagesCountByRange(start, end) {
         var deferred = $q.defer();
 
@@ -128,10 +153,12 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         saveConversation: saveConversation,
         getConversationMessages: getConversationMessages,
         getInboxMessages: getInboxMessages,
+        getDelayedMessages: getDelayedMessages,
         deleteConversation: deleteConversation,
         saveMessageHistory: saveMessageHistory,
         savePendingMessage: savePendingMessage,
         findConversation: findConversation,
+        updateConversation: updateConversation,
         getScheduledMessagesCountByRange: getScheduledMessagesCountByRange
     }
 });

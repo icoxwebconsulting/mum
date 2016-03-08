@@ -1,20 +1,5 @@
 angular.module('app').service('delayedMessageService', function ($q, messageStorage, messageQueue) {
 
-    function getDelayedMessages() {
-        var deferred = $q.defer();
-        messageStorage.getDelayedMessages().then(function (results) {
-            var messages = [];
-            for (var i = 0; i < results.rows.length; i++) {
-                messages.push(results.rows.item(i));
-            }
-            deferred.resolve(messages);
-        }).catch(function (error) {
-            deferred.reject(error);
-        });
-
-        return deferred.promise;
-    }
-
     function processDelayedMessage(message) {
 
         var messageData = {
@@ -31,7 +16,7 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
     }
 
     function run() {
-        getDelayedMessages.then(function (messages) {
+        messageStorage.getDelayedMessages().then(function (messages) {
             var messageData;
             var type;
             for (var i = 0; i < messages.length; i++) {
@@ -49,6 +34,7 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
             messageQueue.processEmail();
             messageQueue.processMum();
         }).catch(function (error) {
+            console.log("Error al obtener los mensajes pendientes", error);
         });
     }
 

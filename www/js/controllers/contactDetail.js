@@ -11,12 +11,12 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
         messageService.setMessage({
             type: type,
             body: "",
-            date: null,//TODO: se colocaba antes, no colocado, verificar
+            date: null,
             from: null,
             subject: null,
-            phoneNumber: (type != 'email') ? $scope.contact.phoneNumber : null,
+            phoneNumber: (type != 'email') ? $scope.contact.phone_number : null,
             email: (type == 'email') ? $scope.contact.email : null,
-            displayName: $scope.contact.displayName,
+            displayName: $scope.contact.display_name,
             created: null,
         });
 
@@ -24,7 +24,7 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
         if (type == 'email') {
             receivers.push($scope.contact.email);
         } else {
-            receivers.push($scope.contact.phoneNumber);
+            receivers.push($scope.contact.phone_number);
         }
 
         messageService.findConversation(type, receivers).then(function (response) {
@@ -45,7 +45,7 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
                 conversation = {
                     id: null,
                     image: ($scope.contact.photo == 'img/person.png') ? null : $scope.contact.photo,
-                    displayName: $scope.contact.displayName,
+                    displayName: $scope.contact.display_name,
                     type: type,
                     receivers: receivers,
                     lastMessage: "",

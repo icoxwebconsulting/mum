@@ -36,7 +36,15 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $scope.$on('$ionicView.leave', function (e) {
-        $scope.messages = [];
+        messageService.updateConversation($scope.conversation).then(function () {
+            $scope.messages = [];
+        });
+    });
+
+    $rootScope.$on('sentMessage', function (e, toUpdate) {
+        if (toUpdate.idConversation = $scope.conversation.id) {
+            $scope.messages[toUpdate.index].id_message = toUpdate.idMessage;
+        }
     });
 
     $scope.sendMessage = function () {
@@ -54,14 +62,16 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             created: date
         });
 
+        var lastItem = $scope.messages.length - 1;
+
         $scope.conversation.lastMessage = $scope.message.body;
-        $scope.conversation.created = date;
         $scope.conversation.updated = date;
         $scope.message.body = "";
 
         function processSend() {
             var message = $scope.message;
             message.body = $scope.conversation.lastMessage;
+            message.toUpdate = lastItem;
             console.log("Antes de procesar envio", message, $scope.conversation)
             messageService.sendMessage(message, $scope.conversation).then(function () {
                 //TODO:
@@ -86,6 +96,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                     };
                     processSend();
                 } else {
+                    $scope.conversation.created = date;
                     messageService.saveConversation($scope.conversation).then(function (insertId) {
                         $scope.conversation.id = insertId;
                         $rootScope.conversations.unshift($scope.conversation);
