@@ -132,11 +132,14 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
     function getScheduledMessagesCountByRange(start, end) {
         var deferred = $q.defer();
 
-        var query = "SELECT COUNT(*)" +
-            " FROM message_history" +
-            " WHERE at BETWEEN ? AND ?" +
-            " GROUP BY at";
-        var values = [start, end];
+        var query = "SELECT COUNT(*) AS count, at " +
+            "FROM message_history " +
+            "WHERE at BETWEEN ? AND ? " +
+            "GROUP BY at";
+
+        var dateFormat = "DD-MM-Y";
+        var values = [start.format(dateFormat), end.format(dateFormat)];
+        console.log(values);
 
         sqliteDatastore.execute(query, values)
             .then(function (result) {

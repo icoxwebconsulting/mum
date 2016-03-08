@@ -40,7 +40,7 @@ angular.module('app').directive("calendar", function (messageStorage) {
     }
 
     function _buildMonth(scope, start, month) {
-        messageStorage.getScheduledMessagesCountByRange(start.clone(), start.clone().add(1, "month"))
+        messageStorage.getScheduledMessagesCountByRange(start.clone(), start.clone().add(1, "day").add(1, "month"))
             .then(function (data) {
                 console.log(data);
 

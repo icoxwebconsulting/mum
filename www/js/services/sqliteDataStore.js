@@ -3,6 +3,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         var db;
 
+        var sqlDateTimeFormat = "YYYY-MM-DDTHH:MM:SS";
+
         function getDbExist() {
             return window.localStorage.getItem('db_exist') || null;
         }
@@ -42,7 +44,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'body TEXT,' + // -- de todos
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
-                'at TEXT,' + //--solo para mensajes programados
+                'at DATETIME,' + //--solo para mensajes programados
                 'is_received INTEGER,' + //especifica si es un mensaje recibido
                 'status INTEGER,' + //0 - to send, 1 sent, 2 delivered ??? 3 read?
                 'created DATETIME)';
@@ -57,7 +59,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'body TEXT,' + // -- de todos
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
-                'at TEXT,' + //--solo para mensajes programados
+                'at DATETIME,' + //--solo para mensajes programados
                 'receivers TEXT,' + //guarda arreglo con los destinatarios, solo en esta tabla, una vez enviado se crea conversation
                 'created DATETIME)';
             return execute(query);
@@ -147,8 +149,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.displayName, //nombre para mostrar
                 data.image || null,
                 data.lastMessage.slice(0, 20),
-                moment.utc().format("DD-MM-YYYY HH:mm:ss"),
-                moment.utc().format("DD-MM-YYYY HH:mm:ss")
+                moment().format(sqlDateTimeFormat),
+                moment().format(sqlDateTimeFormat)
             ];
 
             db.transaction(function (tx) {
@@ -174,9 +176,9 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.message.body || null,
                 data.about || null,
                 data.from || null,
-                data.message.at || null,
+                data.message.at.format(sqlDateTimeFormat) || null,
                 data.message.receivers,
-                moment.utc().format("DD-MM-YYYY HH:mm:ss")
+                moment().format(sqlDateTimeFormat)
             ];
 
             db.transaction(function (tx) {
@@ -204,8 +206,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.about || null,
                 is_received,
                 data.from,
-                data.message.at || null,
-                moment.utc().format("DD-MM-YYYY HH:mm:ss")
+                data.message.at.format(sqlDateTimeFormat) || null,
+                moment.utc().format(sqlDateTimeFormat)
             ];
 
             db.transaction(function (tx) {
