@@ -12,22 +12,26 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         }
 
         function openDatabase() {
+            var deferred = $q.defer();
+
             try {
                 if (!APP_STORE_CONF.webStore) {
                     db = window.sqlitePlugin.openDatabase({name: "mum", location: 1}, function () {
                         //success
-                        return true;
+                        deferred.resolve(true);
                     }, function (e) {
                         //error
-                        return false
+                        deferred.reject(e);
                     });
                 } else {
                     db = window.openDatabase('mum', '1.0', 'mum database', 2 * 1024 * 1024);
-                    return true;
+                    deferred.resolve(true);
                 }
             } catch (e) {
-                return false;
+                deferred.reject(e);
             }
+
+            return deferred.promise;
         }
 
         function createTableMessageHistory() {
@@ -102,14 +106,26 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             }
             var deferred = $q.defer();
 
-            db.transaction(function (tx) {
-                tx.executeSql(query, values, function (tx, result) {
-                        deferred.resolve(result);
-                    },
-                    function (transaction, error) {
-                        deferred.reject(error);
+            function exec() {
+                db.transaction(function (tx) {
+                    tx.executeSql(query, values, function (tx, result) {
+                            deferred.resolve(result);
+                        },
+                        function (transaction, error) {
+                            deferred.reject(error);
+                        });
+                });
+            }
+
+            if (!db) {
+                openDatabase()
+                    .then(function () {
+                        exec();
                     });
-            });
+            } else {
+                exec();
+            }
+
             return deferred.promise;
         }
 

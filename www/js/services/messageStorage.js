@@ -104,6 +104,26 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
+    function getScheduledMessagesCountByRange(start, end) {
+        var deferred = $q.defer();
+
+        var query = "SELECT COUNT(*)" +
+            " FROM message_history" +
+            " WHERE at BETWEEN ? AND ?" +
+            " GROUP BY at";
+        var values = [start, end];
+
+        sqliteDatastore.execute(query, values)
+            .then(function (result) {
+                deferred.resolve(result.rows);
+            })
+            .catch(function (error) {
+                deferred.reject(error);
+            });
+
+        return deferred.promise;
+    }
+
     return {
         saveConversation: saveConversation,
         getConversationMessages: getConversationMessages,
@@ -111,6 +131,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         deleteConversation: deleteConversation,
         saveMessageHistory: saveMessageHistory,
         savePendingMessage: savePendingMessage,
-        findConversation: findConversation
+        findConversation: findConversation,
+        getScheduledMessagesCountByRange: getScheduledMessagesCountByRange
     }
 });

@@ -1,4 +1,4 @@
-angular.module('app').directive("calendar", function () {
+angular.module('app').directive("calendar", function (messageStorage) {
     return {
         restrict: "E",
         templateUrl: "templates/calendar.html",
@@ -40,26 +40,33 @@ angular.module('app').directive("calendar", function () {
     }
 
     function _buildMonth(scope, start, month) {
-        scope.weeks = [];
-        var done = false, date = start.clone(), monthIndex = date.month(), count = 0;
-        while (!done) {
-            scope.weeks.push({days: _buildWeek(date.clone(), month)});
-            date.add(1, "w");
-            done = count++ > 2 && monthIndex !== date.month();
-            monthIndex = date.month();
-        }
+        messageStorage.getScheduledMessagesCountByRange(start.clone(), start.clone().add(1, "month"))
+            .then(function (data) {
+                console.log(data);
+
+                scope.weeks = [];
+                var done = false, date = start.clone(), monthIndex = date.month(), count = 0;
+                while (!done) {
+                    scope.weeks.push({days: _buildWeek(date.clone(), month)});
+                    date.add(1, "w");
+                    done = count++ > 2 && monthIndex !== date.month();
+                    monthIndex = date.month();
+                }
+            });
     }
 
     function _buildWeek(date, month) {
         var days = [];
         for (var i = 0; i < 7; i++) {
-            days.push({
+            var day = {
                 name: date.format("dd").substring(0, 1),
                 number: date.date(),
                 isCurrentMonth: date.month() === month.month(),
                 isToday: date.isSame(new Date(), "day"),
-                date: date
-            });
+                date: date,
+                hasEvents: false
+            };
+            days.push(day);
             date = date.clone();
             date.add(1, "d");
         }

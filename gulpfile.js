@@ -9,7 +9,8 @@ var merge = require('merge-stream');
 var paths = {
     css: [
         './www/css/main.css',
-        './www/css/style.css'
+        './www/css/style.css',
+        './www/css/calendar.css'
     ],
     js: [
         './www/lib/angular-animate/angular-animate.min.js',

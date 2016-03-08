@@ -37,7 +37,8 @@ angular.module('app.routes', [])
 
             .state('layout.home', {
                 url: '/home',
-                templateUrl: 'templates/home.html'
+                templateUrl: 'templates/home.html',
+                controller: 'HomeCtrl'
             })
 
             .state('layout.inbox', {
