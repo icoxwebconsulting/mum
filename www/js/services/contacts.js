@@ -251,6 +251,20 @@ angular.module('app.contacts', [])
                         });
                     },
                     function (callback) {
+                        async.each(contacts.unmodified, function (contact, eachCallback) {
+                            updateContact(contact.username, contact.id)
+                                .then(function () {
+                                    eachCallback();
+                                })
+                        }, function (error) {
+                            if (!error) {
+                                callback();
+                            } else {
+                                deferred.reject(error);
+                            }
+                        });
+                    },
+                    function (callback) {
                         async.each(contacts.deleted, function (contact, eachCallback) {
                             deleteMUMContact(contact.username)
                                 .then(function () {
