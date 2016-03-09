@@ -65,8 +65,6 @@ angular.module('app').directive("calendar", function (messageStorage) {
                 }
             }
 
-            console.log(date.format('YYYY-MM-DD'), hasEvents);
-
             var day = {
                 name: date.format("dd").substring(0, 1),
                 number: date.date(),
