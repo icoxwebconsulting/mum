@@ -1,4 +1,4 @@
-angular.module('app').service('messageService', function ($q, messageStorage, messageQueue) {
+angular.module('app').service('messageService', function ($q, messageStorage, messageQueue, DATETIME_FORMAT_CONF) {
 
     var message = {
         type: "",
@@ -53,7 +53,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         };
 
         if (message.date) {
-            messageData.message.at = moment.utc(message.date).format("DD-MM-YYYY HH:mm:ss");
+            messageData.message.at = moment.utc(message.date).format(DATETIME_FORMAT_CONF.dateTimeFormat);
         }
 
         //--tipo de mensaje ((1)sms, (2)email, (3)instant)

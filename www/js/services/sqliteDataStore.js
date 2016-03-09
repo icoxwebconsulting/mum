@@ -1,9 +1,9 @@
 angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
-    .factory('sqliteDatastore', function ($cordovaSQLite, $q, APP_STORE_CONF) {
+    .factory('sqliteDatastore', function ($cordovaSQLite, $q, APP_STORE_CONF, DATETIME_FORMAT_CONF) {
 
         var db;
 
-        var sqlDateTimeFormat = "YYYY-MM-DDTHH:MM:SS";
+        var sqlDateTimeFormat = DATETIME_FORMAT_CONF.dateTimeFormat;
 
         function getDbExist() {
             return window.localStorage.getItem('db_exist') || null;
@@ -176,7 +176,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.message.body || null,
                 data.about || null,
                 data.from || null,
-                data.message.at.format(sqlDateTimeFormat) || null,
+                data.message.at || null,
                 data.message.receivers,
                 moment().format(sqlDateTimeFormat)
             ];
@@ -205,8 +205,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.message.body || null,
                 data.about || null,
                 is_received,
-                data.from,
-                data.message.at.format(sqlDateTimeFormat) || null,
+                data.from || null,
+                data.message.at || null,
                 moment.utc().format(sqlDateTimeFormat)
             ];
 
@@ -318,6 +318,18 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return deferred.promise;
         }
 
+        function getScheduledMessagesCountByRange(start, end) {
+            var dateFormat = "YYYY-MM-DD";
+            var values = [start.format(dateFormat), end.format(dateFormat)];
+
+            var query = "SELECT COUNT(*) AS count, at " +
+                "FROM message_history " +
+                "WHERE strftime('%Y-%m-%d', at) BETWEEN strftime('%Y-%m-%d', '?') AND strftime('%Y-%m-%d', '?') " +
+                "GROUP BY at";
+
+            return execute(query, values);
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -331,6 +343,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             getDelayedMessages: getDelayedMessages,
             deletePendingMessage: deletePendingMessage,
             findConversation: findConversation,
-            updateConversation: updateConversation
+            updateConversation: updateConversation,
+            getScheduledMessagesCountByRange: getScheduledMessagesCountByRange
         };
     });

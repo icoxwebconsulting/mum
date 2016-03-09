@@ -2,6 +2,9 @@ angular.module('app')
     .constant("APP_STORE_CONF", {
         webStore: false
     })
+    .constant("DATETIME_FORMAT_CONF", {
+        dateTimeFormat : "YYYY-MM-DD HH:MM:SS"
+    })
     .constant("SERVER_CONF", {
         HOST: "http://192.168.1.104/app_dev.php/",
         API_HOST: "http://192.168.1.104/app_dev.php/api/v1/"
