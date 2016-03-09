@@ -40,14 +40,12 @@ angular.module('app').directive("calendar", function (messageStorage) {
     }
 
     function _buildMonth(scope, start, month) {
-        messageStorage.getScheduledMessagesCountByRange(start.clone(), start.clone().add(1, "day").add(1, "month"))
-            .then(function (data) {
-                console.log(data);
-
+        messageStorage.getScheduledMessagesCountByRange(start.clone().subtract(1, "week"), start.clone().add(2, "month"))
+            .then(function (scheduledMessages) {
                 scope.weeks = [];
                 var done = false, date = start.clone(), monthIndex = date.month(), count = 0;
                 while (!done) {
-                    scope.weeks.push({days: _buildWeek(date.clone(), month)});
+                    scope.weeks.push({days: _buildWeek(date.clone(), month, scheduledMessages)});
                     date.add(1, "w");
                     done = count++ > 2 && monthIndex !== date.month();
                     monthIndex = date.month();
@@ -55,16 +53,27 @@ angular.module('app').directive("calendar", function (messageStorage) {
             });
     }
 
-    function _buildWeek(date, month) {
+    function _buildWeek(date, month, scheduledMessages) {
         var days = [];
         for (var i = 0; i < 7; i++) {
+            var hasEvents = false;
+
+            for (var j = 0, length = scheduledMessages.length; j < length; j++) {
+                if (scheduledMessages[j].at.substring(0, 10) == date.format('YYYY-MM-DD')) {
+                    hasEvents = true;
+                    break;
+                }
+            }
+
+            console.log(date.format('YYYY-MM-DD'), hasEvents);
+
             var day = {
                 name: date.format("dd").substring(0, 1),
                 number: date.date(),
                 isCurrentMonth: date.month() === month.month(),
                 isToday: date.isSame(new Date(), "day"),
                 date: date,
-                hasEvents: false
+                hasEvents: hasEvents
             };
             days.push(day);
             date = date.clone();

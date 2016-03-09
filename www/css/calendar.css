@@ -115,8 +115,9 @@ calendar > div.week > span.day.today {
 }
 
 calendar > div.week > span.day.events {
-    color: indianred;
-    font-weight: bold;
+    color: indianred !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
 }
 
 calendar > div.week > span.day.different-month {
@@ -124,8 +125,8 @@ calendar > div.week > span.day.different-month {
 }
 
 calendar > div.week > span.day.selected {
-    background: indianred;
-    color: white;
+    background: indianred !important;
+    color: white !important;
 }
 
 div.week.names > span {

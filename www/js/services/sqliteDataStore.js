@@ -97,6 +97,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 createTableConversation(),
                 createTableContacts()
             ]).then(function (value) {
+                setDbExist();
             }, function (reason) {
                 // Error callback where reason is the value of the first rejected promise
             });
@@ -319,12 +320,11 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         }
 
         function getScheduledMessagesCountByRange(start, end) {
-            var dateFormat = "YYYY-MM-DD";
-            var values = [start.format(dateFormat), end.format(dateFormat)];
+            var values = [start.format(sqlDateTimeFormat), end.format(sqlDateTimeFormat)];
 
             var query = "SELECT COUNT(*) AS count, at " +
                 "FROM message_history " +
-                "WHERE strftime('%Y-%m-%d', at) BETWEEN strftime('%Y-%m-%d', '?') AND strftime('%Y-%m-%d', '?') " +
+                "WHERE at BETWEEN ? AND ? " +
                 "GROUP BY at";
 
             return execute(query, values);
@@ -333,7 +333,6 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         return {
             execute: execute,
             initDb: initDb,
-            //saveSendMessage: saveSendMessage,
             savePendingMessage: savePendingMessage,
             saveMessageHistory: saveMessageHistory,
             saveConversation: saveConversation,

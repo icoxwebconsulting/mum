@@ -131,7 +131,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         return messageStorage.findConversation(type, receivers);
     }
 
-    function updateConversation(conversation){
+    function updateConversation(conversation) {
         return messageStorage.updateConversation(conversation);
     }
 
