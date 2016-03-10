@@ -26,7 +26,7 @@
                     <!--</button>-->
                 </div>
             </div>
-            <form class="form-paper" ng-show="conversation.type == 'email'">
+            <form class="form-paper hide-on-keyboard-open" ng-show="conversation.type == 'email'">
                 <div class="form-group flex flex-middle-xs">
                     <label>Asunto:</label>
                     <div class="flex-xs">
@@ -42,7 +42,7 @@
             </form>
         </div>
     </ion-header-bar>
-    <ion-content class="bg-main" style="margin-top: 65px">
+    <ion-content class="bg-main" ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}">
         <div class="text-left">
             <div class="container">
                 <div class="messages ">
