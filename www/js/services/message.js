@@ -1,8 +1,8 @@
 angular.module('app').service('messageService', function ($q, messageStorage, messageQueue, DATETIME_FORMAT_CONF) {
 
-    function factory(){
-        function messageFactory(){
-            this.createMessage = function(){
+    function factory() {
+        function messageFactory() {
+            this.createMessage = function () {
                 var message = {
                     type: "",
                     body: "",
@@ -18,7 +18,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                 return message;
             };
 
-            this.createConversation = function(){
+            this.createConversation = function () {
                 var conversation = {
                     id: null,
                     image: null,
@@ -33,6 +33,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                 return conversation;
             }
         }
+
         var factory = new messageFactory();
         return factory;
     }

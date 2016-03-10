@@ -34,7 +34,7 @@ angular.module('app.pushNotification', [])
 
         function listenNotification() {
             if (push !== null) {
-                push.on('notification', function(data){
+                push.on('notification', function (data) {
                     messageReceived.processReceivedMessage(data);
                 });
             }

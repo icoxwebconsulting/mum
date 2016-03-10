@@ -6,7 +6,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
         var isReceived = true;
         var messageData;
         var type, message;
-        messageStorage.saveMessageHistory(messageData, type, message, idConversation, isReceived).then(function(resp){
+        messageStorage.saveMessageHistory(messageData, type, message, idConversation, isReceived).then(function (resp) {
             //resp.insertId //id del mensaje en bd
 
             //notificar al inbox para que muestre el mensaje recibido
