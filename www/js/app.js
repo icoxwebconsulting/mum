@@ -26,9 +26,7 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
         });
 
         //TODO: remove me just an example on how to receive notifications
-        pushNotification.listenNotification(function (data) {
-            console.log('new service', data)
-        });
+        pushNotification.listenNotification();
 
         $rootScope.$on("$stateChangeStart", function (event, toState) {
 

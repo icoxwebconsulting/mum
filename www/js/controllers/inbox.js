@@ -1,15 +1,6 @@
 angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, messageService) {
 
-    //$scope.conversation = {
-    //    id: null,
-    //    image: null,
-    //    displayName: "",
-    //    type: "",
-    //    receivers: [],
-    //    lastMessage: "",
-    //    created: null,
-    //    updated: null
-    //};
+    $scope.conversation = messageService.factory().createConversation();
 
     messageService.getInboxMessages().then(function (conversations) {
         $rootScope.conversations = conversations;
@@ -17,17 +8,10 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $scope.open = function (conversation) {
         messageService.setConversation(conversation);
-        messageService.setMessage({
-            type: conversation.type,
-            body: "",
-            date: null,
-            from: null,
-            subject: null,
-            phoneNumber: null,
-            email: null,
-            displayName: conversation.displayName,
-            created: null,
-        });
+        var message = messageService.factory().createMessage();
+        message.type = conversation.type;
+        message.displayName = conversation.displayName;
+        messageService.setMessage(message);
         $state.go('conversation');
     };
 
@@ -57,4 +41,9 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
             ]
         });
     };
+
+    $rootScope.$on('receivedMessage', function (e, data) {
+        var conversation = messageService.factory().createConversation();
+        //TODO
+    });
 });

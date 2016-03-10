@@ -6,7 +6,7 @@ platforms/
 plugins/
 
 .idea/
-/www/res/main.js
+/www/res/*
 /www/lib/
 /hooks/
 /www/js/constants.js

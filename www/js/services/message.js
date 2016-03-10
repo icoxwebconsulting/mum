@@ -1,27 +1,45 @@
 angular.module('app').service('messageService', function ($q, messageStorage, messageQueue, DATETIME_FORMAT_CONF) {
 
-    var message = {
-        type: "",
-        body: "",
-        date: null,
-        from: null,
-        subject: null,
-        phoneNumber: null,
-        email: null,
-        displayName: "",
-        created: null,
-    };
+    function factory(){
+        function messageFactory(){
+            this.createMessage = function(){
+                var message = {
+                    type: "",
+                    body: "",
+                    date: null,
+                    from: null,
+                    subject: null,
+                    phoneNumber: null,
+                    email: null,
+                    displayName: "",
+                    created: null
+                };
 
-    var conversation = {
-        id: null,
-        image: null,
-        displayName: "",
-        type: "",
-        receivers: [],
-        lastMessage: "",
-        created: null,
-        updated: null
-    };
+                return message;
+            };
+
+            this.createConversation = function(){
+                var conversation = {
+                    id: null,
+                    image: null,
+                    displayName: "",
+                    type: "",
+                    receivers: [],
+                    lastMessage: "",
+                    created: null,
+                    updated: null
+                };
+
+                return conversation;
+            }
+        }
+        var factory = new messageFactory();
+        return factory;
+    }
+
+    var message;
+
+    var conversation;
 
     var setMessage = function (obj) {
         message = obj;
@@ -136,6 +154,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
     }
 
     return {
+        factory: factory,
         setMessage: setMessage,
         getMessage: getMessage,
         setConversation: setConversation,
