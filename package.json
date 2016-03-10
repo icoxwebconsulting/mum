@@ -22,16 +22,26 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-contacts@2.0.0",
     "cordova-plugin-sms",
-    "phonegap-plugin-push",
     "cordova-sqlite-storage",
-    "cordova-plugin-network-information"
+    "cordova-plugin-network-information",
+    {
+      "variables": {
+        "SENDER_ID": "850066050595"
+      },
+      "locator": "phonegap-plugin-push",
+      "id": "phonegap-plugin-push"
+    }
   ],
   "cordovaPlatforms": [
-    "ios",
     {
       "platform": "android",
       "version": "5.0.0",
       "locator": "android@5.0.0"
+    },
+    {
+      "platform": "ios",
+      "version": "4.0.0",
+      "locator": "ios@4.0.0"
     }
   ]
 }

@@ -10,8 +10,10 @@ angular.module('app.user', [])
         }
 
         function registerDevice() {
+            console.log('registering device');
             return pushNotification.register()
                 .then(function (deviceToken) {
+                    console.log('got token', deviceToken);
                     var data = {
                         token: deviceToken,
                         os: 'Android'
@@ -19,6 +21,7 @@ angular.module('app.user', [])
                     return device(userDatastore.getTokens().accessToken).save(data).$promise;
                 })
                 .then(function (response) {
+                    console.log('device registered');
                     deviceDatastore.setDeviceId(response.device);
                 });
         }

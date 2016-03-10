@@ -97,7 +97,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 createTableConversation(),
                 createTableContacts()
             ]).then(function (value) {
-                setDbExist();
+                setDbExist(true);
             }, function (reason) {
                 // Error callback where reason is the value of the first rejected promise
             });

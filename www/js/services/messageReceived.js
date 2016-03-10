@@ -16,6 +16,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
     }
 
     function processReceivedMessage(data) {
+        console.log(data);
         //verificar que si existe ya una conversación asociada
         //TODO: extraer esta info del mensaje que viene en data
         var type, receivers;
@@ -31,6 +32,8 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
             }
         })
     }
+
+    pushNotification.listenNotification(processReceivedMessage);
 
     return {
         processReceivedMessage: processReceivedMessage
