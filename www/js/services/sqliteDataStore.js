@@ -296,7 +296,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function updateConversation(conversation) {
             var deferred = $q.defer();
 
-            var query = "UPDATE conversation  SET display_name = '?', image = '?', last_message = '?', updated = '?' WHERE id = ?";
+            var query = "UPDATE conversation  SET display_name = ?, image = ?, last_message = ?, updated = ? WHERE id = ?";
 
             var values = [
                 conversation.displayName,

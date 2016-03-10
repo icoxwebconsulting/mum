@@ -121,7 +121,6 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
     function updateConversation(conversation) {
         var deferred = $q.defer();
         sqliteDatastore.updateConversation(conversation).then(function (result) {
-            console.log(result);
             deferred.resolve();
         }).catch(function (error) {
             deferred.reject(error);
