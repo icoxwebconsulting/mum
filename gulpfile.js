@@ -45,10 +45,10 @@ gulp.task('css', function (done) {
 gulp.task('uglify', function (done) {
     gulp.src(paths.js)
         .pipe(concat('main.js'))
-        .pipe(uglify({mangle: false}))
-        .on('error', function (error) {
-            console.log(error);
-        })
+        //.pipe(uglify({mangle: false}))
+        //.on('error', function (error) {
+        //    console.log(error);
+        //})
         .pipe(rename({extname: '.min.js'}))
         .pipe(gulp.dest('www/res/'))
         .on('end', done);

@@ -76,9 +76,9 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
-    function savePendingMessage(messageData, type, idConversation, isReceived) {
+    function savePendingMessage(messageData, type, idConversation) {
         var deferred = $q.defer();
-        sqliteDatastore.savePendingMessage(messageData, type, idConversation, isReceived).then(function (resp) {
+        sqliteDatastore.savePendingMessage(messageData, type, idConversation).then(function (resp) {
             deferred.resolve({
                 insertId: resp.insertId,
                 toSend: true

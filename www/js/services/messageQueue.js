@@ -1,4 +1,4 @@
-angular.module('app').service('messageQueue', function ($rootScope, messageRes, $q, messageStorage, userDatastore) {
+angular.module('app').service('messageQueue', function (messageRes, $q, messageStorage, userDatastore, messageNotification) {
 
     var smsQueue = [];
     var emailQueue = [];
@@ -43,17 +43,11 @@ angular.module('app').service('messageQueue', function ($rootScope, messageRes, 
             messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 messageStorage.saveMessageHistory(messageData, 'sms', response.message, idConversation, isReceived).then(function (params) {
-                    if (toUpdate) {
-                        $rootScope.$emit('sentMessage', {
-                            idConversation: idConversation,
-                            index: toUpdate,
-                            idMessage: response.message
-                        });
-                    }
+                    messageNotification.notifySendMessage(idConversation, toUpdate, response.message);
                     processSms();
                 });
             }).catch(function (error) {
-                messageStorage.savePendingMessage(messageData, 'sms', idConversation, isReceived).then(function (params) {
+                messageStorage.savePendingMessage(messageData, 'sms', idConversation).then(function (params) {
                     processSms();
                 });
             });
@@ -68,15 +62,18 @@ angular.module('app').service('messageQueue', function ($rootScope, messageRes, 
         if (emailQueue.length > 0) {
             var messageData = emailQueue.shift();
             var idConversation = messageData.idConversation;
+            var toUpdate = messageData.toUpdate;
             delete messageData.idConversation;
+            delete messageData.toUpdate;
             var isReceived = false;
             messageRes(userDatastore.getTokens().accessToken).sendEmail(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 messageStorage.saveMessageHistory(messageData, 'email', response.message, idConversation, isReceived).then(function (params) {
+                    messageNotification.notifySendMessage(idConversation, toUpdate, response.message);
                     processEmail();
                 });
             }).catch(function (error) {
-                messageStorage.savePendingMessage(messageData, 'email', idConversation, isReceived).then(function (params) {
+                messageStorage.savePendingMessage(messageData, 'email', idConversation).then(function (params) {
                     processEmail();
                 });
             });
@@ -91,15 +88,18 @@ angular.module('app').service('messageQueue', function ($rootScope, messageRes, 
         if (mumQueue.length > 0) {
             var messageData = mumQueue.shift();
             var idConversation = messageData.idConversation;
+            var toUpdate = messageData.toUpdate;
             delete messageData.idConversation;
+            delete messageData.toUpdate;
             var isReceived = false;
             messageRes(userDatastore.getTokens().accessToken).sendInstant(messageData).$promise.then(function (response) {
                 //TODO handle server side error in data
                 messageStorage.saveMessageHistory(messageData, 'mum', response.message, idConversation, isReceived).then(function (params) {
+                    messageNotification.notifySendMessage(idConversation, toUpdate, response.message);
                     processMum();
                 });
             }).catch(function (error) {
-                messageStorage.savePendingMessage(messageData, 'mum', idConversation, isReceived).then(function (params) {
+                messageStorage.savePendingMessage(messageData, 'mum', idConversation).then(function (params) {
                     processMum();
                 });
             });

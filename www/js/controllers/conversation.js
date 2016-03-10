@@ -2,28 +2,9 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $scope.messages = [];
 
-    $scope.message = {
-        type: "",
-        body: "",
-        date: null,
-        from: null,
-        subject: null,
-        phoneNumber: null,
-        email: null,
-        displayName: "",
-        created: null
-    };
+    $scope.message = messageService.factory().createMessage();
 
-    $scope.conversation = {
-        id: null,
-        image: null,
-        displayName: "",
-        type: "",
-        receivers: [],
-        lastMessage: "",
-        created: null,
-        updated: null
-    };
+    $scope.conversation = messageService.factory().createConversation();
 
     $scope.$on('$ionicView.enter', function (e) {
         $scope.conversation = messageService.getConversation();
@@ -45,6 +26,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         if (toUpdate.idConversation = $scope.conversation.id) {
             $scope.messages[toUpdate.index].id_message = toUpdate.idMessage;
         }
+    });
+
+    $rootScope.$on('receivedMessage', function (e, data) {
+        //TODO
+        var message = message = messageService.factory().createMessage();
     });
 
     $scope.sendMessage = function () {
@@ -84,16 +70,15 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         if (!$scope.conversation.id) {
             messageService.findConversation(type, $scope.conversation.receivers).then(function (response) {
                 if (response) {
-                    $scope.conversation = {
-                        id: response.id,
-                        image: response.image,
-                        displayName: response.display_name,
-                        type: response.type,
-                        receivers: JSON.parse(response.receivers),
-                        lastMessage: response.last_message,
-                        created: response.created,
-                        updated: response.updated
-                    };
+                    $scope.conversation.id = response.id;
+                    $scope.conversation.image = response.image;
+                    $scope.conversation.displayName = response.display_name;
+                    $scope.conversation.type = response.type;
+                    $scope.conversation.receivers = JSON.parse(response.receivers);
+                    $scope.conversation.lastMessage = response.last_message;
+                    $scope.conversation.created = response.created;
+                    $scope.conversation.updated = response.updated;
+
                     processSend();
                 } else {
                     $scope.conversation.created = date;

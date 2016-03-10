@@ -1,5 +1,5 @@
 angular.module('app.pushNotification', [])
-    .factory('pushNotification', function ($q) {
+    .factory('pushNotification', function ($q, messageReceived) {
         var push = null;
 
         if (window.PushNotification) {
@@ -32,10 +32,13 @@ angular.module('app.pushNotification', [])
             return deferred.promise;
         }
 
-        function listenNotification(callback) {
+        function listenNotification() {
             if (push !== null) {
-                push.on('notification', callback);
+                push.on('notification', function(data){
+                    messageReceived.processReceivedMessage(data);
+                });
             }
+
         }
 
         return {
