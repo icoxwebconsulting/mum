@@ -1,24 +1,27 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, messageService) {
 
+    var message;
+
     $scope.messages = [];
-
-    $scope.message = messageService.factory().createMessage();
-
-    $scope.conversation = messageService.factory().createConversation();
+    $scope.conversation;
+    $scope.body = "";
+    $scope.subject = "";
+    $scope.from = null;
 
     $scope.$on('$ionicView.enter', function (e) {
         $scope.conversation = messageService.getConversation();
+        message = messageService.getMessage();
         if ($scope.conversation.id) {
             messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {
                 $scope.messages = msjs;
             });
         }
-        $scope.message = messageService.getMessage();
     });
 
     $scope.$on('$ionicView.leave', function (e) {
+        $scope.messages = [];
         messageService.updateConversation($scope.conversation).then(function () {
-            $scope.messages = [];
+            console.log("actualizado");
         });
     });
 
@@ -30,19 +33,21 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $rootScope.$on('receivedMessage', function (e, data) {
         //TODO
-        var message = message = messageService.factory().createMessage();
+        var message = messageService.factory().createMessage();
     });
 
     $scope.sendMessage = function () {
         var type = $scope.conversation.type;
         var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
-
+        message.created = date;
+        $scope.conversation.lastMessage = $scope.body;
+        $scope.conversation.updated = date;
         $scope.messages.push({
-            about: $scope.message.subject,
+            about: (type = 'email') ? $scope.subject : null,
             at: null,
-            from_address: $scope.message.from,
+            from_address: (type = 'email') ? $scope.from : null,
             id: $scope.conversation.id,
-            body: $scope.message.body,
+            body: $scope.body,
             to_send: true,
             is_received: false,
             created: date
@@ -50,15 +55,14 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
         var lastItem = $scope.messages.length - 1;
 
-        $scope.conversation.lastMessage = $scope.message.body;
-        $scope.conversation.updated = date;
-        $scope.message.body = "";
-
         function processSend() {
-            var message = $scope.message;
-            message.body = $scope.conversation.lastMessage;
+            message.body = $scope.body;
             message.toUpdate = lastItem;
-            console.log("Antes de procesar envio", message, $scope.conversation)
+            if (type == 'email') {
+                message.from = $scope.from;
+                message.subject = $scope.subject;
+            }
+            $scope.body = "";
             messageService.sendMessage(message, $scope.conversation).then(function () {
                 //TODO:
                 console.log("mensaje encolado");

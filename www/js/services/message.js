@@ -104,29 +104,6 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
 
         }
 
-        message = {
-            type: "",
-            body: "",
-            date: null,
-            from: null,
-            subject: null,
-            phoneNumber: null,
-            email: null,
-            displayName: "",
-            created: null,
-        };
-
-        conversation = {
-            id: null,
-            image: null,
-            displayName: "",
-            type: "",
-            receivers: [],
-            lastMessage: "",
-            created: null,
-            updated: null
-        };
-
         return deferred.promise;
     }
 

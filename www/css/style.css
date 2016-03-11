@@ -43,6 +43,14 @@ and (orientation: landscape) {
     margin-top: 105px;
 }
 
+.top-margin-s {
+    margin-top: 65px;
+}
+
+.top-margin-l {
+    margin-top: 165px;
+}
+
 .h1-splash {
     color: rgb(115, 123, 130);
     font-family: Roboto sans-serif;
