@@ -30,7 +30,8 @@
       },
       "locator": "phonegap-plugin-push",
       "id": "phonegap-plugin-push"
-    }
+    },
+    "cordova.plugins.diagnostic"
   ],
   "cordovaPlatforms": [
     {

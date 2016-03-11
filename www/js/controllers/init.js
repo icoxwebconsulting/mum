@@ -1,5 +1,5 @@
 angular.module('app')
-    .controller('InitCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, user) {
+    .controller('InitCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, user, MUMSMS) {
         $scope.data = {};
 
         $scope.toVerify = user.getVerified();
@@ -33,29 +33,18 @@ angular.module('app')
 
                         $scope.toVerify = user.getVerified();
 
-                        if (SMS) {
-                            SMS.startWatch(function () {
-                                document.addEventListener('onSMSArrive', function (e) {
-                                    try {
-                                        var code = e.data.body.match(/Your confirmation number is \d+/)[0].match(/\d+/);
-
-                                        if (code) {
-                                            $scope.data.code = code;
-                                            verify();
-                                        }
-                                    } catch (e) {
-
-                                    }
-                                });
-                            });
-                        }
+                        return MUMSMS.watchIncome();
                     })
-                    .catch(function () {
-                        $ionicLoading.hide();
+                    .then(function (message) {
+                        try {
+                            var code = message.data.body.match(/Your confirmation number is \d+/)[0].match(/\d+/);
 
-                        $ionicPopup.alert({
-                            title: 'No verificado, intente nuevamente.'
-                        });
+                            if (code) {
+                                $scope.data.code = code;
+                                verify();
+                            }
+                        } catch (error) {
+                        }
                     });
             }
         };
@@ -63,9 +52,6 @@ angular.module('app')
         function verify() {
             user.verifyCode($scope.data.code)
                 .then(function () {
-                    $ionicPopup.alert({
-                        title: 'Se ha validado correctamente su teléfono.'
-                    });
                     $ionicHistory.nextViewOptions({
                         disableAnimate: true,
                         disableBack: true,

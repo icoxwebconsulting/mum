@@ -1,8 +1,8 @@
 angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', 'app.pushNotification',
         'app.resources', 'app.messageResource', 'app.device', 'app.contactRes', 'app.deviceDataStore',
-        'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore'])
+        'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore', 'app.MUMSMS'])
     .run(function ($rootScope, $state, $stateParams, $ionicPlatform, user, Contacts, sqliteDatastore, userDatastore,
-                   pushNotification, messageReceived) {
+                   pushNotification, messageReceived, MUMSMS) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -31,9 +31,12 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
             pushNotification.init();
             pushNotification.listenNotification(messageReceived.processReceivedMessage);
             userDatastore.setRefreshingAccessToken(0);
+            if (SMS) {
+                MUMSMS.init();
+            }
             user.refreshAccessToken()
                 .then(function () {
                     Contacts.loadContacts();
                 });
-        };
+        }
     });

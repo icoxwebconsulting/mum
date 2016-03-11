@@ -22,6 +22,10 @@ angular.module('app.user', [])
                     .then(function (response) {
                         deviceDatastore.setDeviceId(response.device);
                         return true;
+                    })
+                    .catch(function () {
+                        deviceDatastore.setDeviceId(token);
+                        return true;
                     });
             }
 
