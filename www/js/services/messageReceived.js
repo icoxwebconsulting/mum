@@ -33,8 +33,6 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
         })
     }
 
-    pushNotification.listenNotification(processReceivedMessage);
-
     return {
         processReceivedMessage: processReceivedMessage
     };

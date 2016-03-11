@@ -1,6 +1,11 @@
 angular.module('app.pushNotification', [])
-    .factory('pushNotification', function ($q) {
+    .factory('pushNotification', function ($rootScope) {
         var push = null;
+        var registrationId = null;
+
+        function getRegistrationId() {
+            return registrationId;
+        }
 
         function init() {
             if (window.PushNotification) {
@@ -13,28 +18,15 @@ angular.module('app.pushNotification', [])
                         iconColor: "lightgrey"
                     }
                 });
-            }
-        }
 
-        function register() {
-            var deferred = $q.defer();
+                if (push !== null) {
+                    push.on('registration', function (data) {
+                        registrationId = data.registrationId;
 
-            if (push !== null) {
-                console.log('push available');
-                push.on('registration',
-                    function (data) {
-                        console.log('push registered', data);
-                        deferred.resolve(data.registrationId);
-                    },
-                    function () {
-                        console.log('error registering push');
-                        deferred.reject('No push notification available');
+                        $rootScope.$emit('pushRegistrationId', registrationId);
                     });
-            } else {
-                deferred.reject('No push notification available');
+                }
             }
-
-            return deferred.promise;
         }
 
         function listenNotification(callback) {
@@ -45,7 +37,7 @@ angular.module('app.pushNotification', [])
 
         return {
             init: init,
-            register: register,
+            getRegistrationId: getRegistrationId,
             listenNotification: listenNotification
         };
     });

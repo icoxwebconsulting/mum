@@ -1,5 +1,6 @@
 angular.module('app.user', [])
-    .factory('user', function ($q, OAUTH_CONF, customer, userDatastore, device, deviceDatastore, pushNotification, Contacts) {
+    .factory('user', function ($q, $rootScope, OAUTH_CONF, customer, userDatastore, device, deviceDatastore,
+                               pushNotification, Contacts) {
         function register(registrationData) {
             return customer().save(registrationData).$promise
                 .then(function (response) {
@@ -10,20 +11,34 @@ angular.module('app.user', [])
         }
 
         function registerDevice() {
-            console.log('registering device');
-            return pushNotification.register()
-                .then(function (deviceToken) {
-                    console.log('got token', deviceToken);
-                    var data = {
-                        token: deviceToken,
-                        os: 'Android'
-                    };
-                    return device(userDatastore.getTokens().accessToken).save(data).$promise;
-                })
-                .then(function (response) {
-                    console.log('device registered');
-                    deviceDatastore.setDeviceId(response.device);
+            var deviceToken = pushNotification.getRegistrationId();
+
+            function register(token) {
+                var data = {
+                    token: token,
+                    os: 'Android'
+                };
+                return device(userDatastore.getTokens().accessToken).save(data).$promise
+                    .then(function (response) {
+                        deviceDatastore.setDeviceId(response.device);
+                        return true;
+                    });
+            }
+
+            if (deviceToken) {
+                return register(deviceToken);
+            } else {
+                var deferred = $q.defer();
+
+                $rootScope.$on('pushRegistrationId', function (pushRegistrationId) {
+                    register(pushRegistrationId)
+                        .then(function () {
+                            deferred.resolve(true);
+                        });
                 });
+
+                return deferred.promise;
+            }
         }
 
         function verifyCode(code) {
@@ -36,11 +51,11 @@ angular.module('app.user', [])
                     userDatastore.setVerified(2);
                     userDatastore.setNumber(response.username);
                     userDatastore.setPassword(response.password);
-                    requestAccessToken()
-                        .then(function () {
-                            Contacts.loadContacts();
-                            return registerDevice();
-                        });
+                    return requestAccessToken();
+                })
+                .then(function () {
+                    Contacts.loadContacts();
+                    return registerDevice();
                 });
         }
 

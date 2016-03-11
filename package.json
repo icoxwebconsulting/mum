@@ -34,14 +34,14 @@
   ],
   "cordovaPlatforms": [
     {
-      "platform": "android",
-      "version": "5.0.0",
-      "locator": "android@5.0.0"
-    },
-    {
       "platform": "ios",
       "version": "4.0.0",
       "locator": "ios@4.0.0"
+    },
+    {
+      "platform": "android",
+      "version": "5.0.0",
+      "locator": "android@5.0.0"
     }
   ]
 }

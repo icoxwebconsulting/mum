@@ -2,7 +2,7 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
         'app.resources', 'app.messageResource', 'app.device', 'app.contactRes', 'app.deviceDataStore',
         'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore'])
     .run(function ($rootScope, $state, $stateParams, $ionicPlatform, user, Contacts, sqliteDatastore, userDatastore,
-                   pushNotification) {
+                   pushNotification, messageReceived) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
 
@@ -19,16 +19,21 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
                 StatusBar.styleDefault();
             }
 
-            sqliteDatastore.initDb();
-            pushNotification.init();
-            userDatastore.setRefreshingAccessToken(0);
-            user.refreshAccessToken()
-                .then(function () {
-                    Contacts.loadContacts();
-                });
+            init();
         });
 
         $rootScope.$on("$stateChangeStart", function (event, toState) {
 
         });
+
+        function init() {
+            sqliteDatastore.initDb();
+            pushNotification.init();
+            pushNotification.listenNotification(messageReceived.processReceivedMessage);
+            userDatastore.setRefreshingAccessToken(0);
+            user.refreshAccessToken()
+                .then(function () {
+                    Contacts.loadContacts();
+                });
+        };
     });
