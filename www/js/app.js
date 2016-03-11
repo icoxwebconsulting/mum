@@ -30,6 +30,7 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
             sqliteDatastore.initDb();
             pushNotification.init();
             pushNotification.listenNotification(messageReceived.processReceivedMessage);
+            pushNotification.listenNotification(MUMSMS.processPushNotification);
             userDatastore.setRefreshingAccessToken(0);
             if (SMS) {
                 MUMSMS.init();

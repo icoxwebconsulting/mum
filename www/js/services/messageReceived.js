@@ -17,20 +17,20 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
 
     function processReceivedMessage(data) {
         console.log(data);
-        //verificar que si existe ya una conversación asociada
-        //TODO: extraer esta info del mensaje que viene en data
-        var type, receivers;
-        messageStorage.findConversation(type, receivers).then(function (conversation) {
-            if (conversation) {
-                saveMessage(data, conversation.id);
-            } else {
-                //no existe, crearla
-                //TODO: definir objeto conversation
-                messageStorage.saveConversation(conversation).then(function (idConversation) {
-                    saveMessage(data, idConversation);
-                });
-            }
-        })
+        ////verificar que si existe ya una conversación asociada
+        ////TODO: extraer esta info del mensaje que viene en data
+        //var type, receivers;
+        //messageStorage.findConversation(type, receivers).then(function (conversation) {
+        //    if (conversation) {
+        //        saveMessage(data, conversation.id);
+        //    } else {
+        //        //no existe, crearla
+        //        //TODO: definir objeto conversation
+        //        messageStorage.saveConversation(conversation).then(function (idConversation) {
+        //            saveMessage(data, idConversation);
+        //        });
+        //    }
+        //})
     }
 
     return {
