@@ -75,34 +75,16 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
             messageData.message.at = moment.utc(message.date).format(DATETIME_FORMAT_CONF.dateTimeFormat);
         }
 
-        //--tipo de mensaje ((1)sms, (2)email, (3)instant)
         if (message.type == 'email') {
             messageData.about = message.subject;
             messageData.from = message.from;
-
-            console.log("QUEUE MESSAGE DATA EMAIL", messageData);
-
-            messageQueue.addEmail(messageData);
-            messageQueue.processEmail();
-            deferred.resolve();
-
-        } else if (message.type == 'sms') {
-
-            console.log("QUEUE  MESSAGE DATA SMS", messageData);
-
-            messageQueue.addSms(messageData);
-            messageQueue.processSms();
-            deferred.resolve();
-
-        } else if (message.type == 'mum') {
-
-            console.log("QUEUE MESSAGE DATA MUM", messageData);
-
-            messageQueue.addMum(messageData);
-            messageQueue.processMum();
-            deferred.resolve();
-
         }
+
+        messageStorage.savePendingMessage(messageData, message.type, messageData.idConversation).then(function (params) {
+            messageQueue.add(messageData, message.type, params.insertId);
+            messageQueue.process();
+            deferred.resolve();
+        });
 
         return deferred.promise;
     }

@@ -1,120 +1,75 @@
 angular.module('app').service('messageQueue', function (messageRes, $q, messageStorage, userDatastore, messageNotification) {
 
-    var smsQueue = [];
-    var emailQueue = [];
-    var mumQueue = [];
+    var queue = [];
 
-    function addSms(msg) {
-        smsQueue.push(msg);
+    function add(message, type, idPending) {
+        console.log("MENSAJE PENDIENTE EN COLA",message, type, idPending);
+        queue.push({
+            data: message,
+            type: type,
+            idPending: idPending
+        });
+        process();
     }
 
-    function addEmail(msg) {
-        emailQueue.push(msg);
+    function length() {
+        return queue.length;
     }
 
-    function addMum(msg) {
-        mumQueue.push(msg);
+    function processStorage(messageData, type, sentMessage, idConversation, isReceived, idPending, toUpdate) {
+        messageStorage.saveMessageHistory(messageData, type, sentMessage, idConversation, isReceived).then(function (params) {
+            messageStorage.deletePendingMessage(idPending).then(function () {
+                console.log("para notify", idConversation, toUpdate, sentMessage);
+                messageNotification.notifySendMessage(idConversation, toUpdate, sentMessage);
+                process();
+            });
+        });
     }
 
-    function lengthSms() {
-        return smsQueue.length;
-    }
-
-    function lengthEmail() {
-        return emailQueue.length;
-    }
-
-    function lengthMum() {
-        return mumQueue.length;
-    }
-
-    function processSms() {
-        runSmsQueue();
-    }
-
-    function runSmsQueue() {
-        if (smsQueue.length > 0) {
-            var messageData = smsQueue.shift();
+    function process() {
+        if (length() > 0) {
+            console.log("hay elementos para el process");
+            var messageData = queue.shift();
+            var idPending = messageData.idPending;
+            var type = messageData.type;
+            messageData = messageData.data;
             var idConversation = messageData.idConversation;
             var toUpdate = messageData.toUpdate;
+
             delete messageData.idConversation;
             delete messageData.toUpdate;
             var isReceived = false;
-            messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
-                //TODO handle server side error in data
-                messageStorage.saveMessageHistory(messageData, 'sms', response.message, idConversation, isReceived).then(function (params) {
-                    messageNotification.notifySendMessage(idConversation, toUpdate, response.message);
-                    processSms();
-                });
-            }).catch(function (error) {
-                messageStorage.savePendingMessage(messageData, 'sms', idConversation).then(function (params) {
-                    processSms();
-                });
-            });
-        }
-    }
 
-    function processEmail() {
-        runEmailQueue();
-    }
+            if (type == 'sms') {
+                messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
+                    //TODO handle server side error in data
+                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate);
+                }).catch(function (error) {
+                    process();
+                });
+            } else if (type == 'email') {
+                messageRes(userDatastore.getTokens().accessToken).sendEmail(messageData).$promise.then(function (response) {
+                    //TODO handle server side error in data
+                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate);
+                }).catch(function (error) {
+                    process();
+                });
+            } else if (type == 'mum') {
+                messageRes(userDatastore.getTokens().accessToken).sendInstant(messageData).$promise.then(function (response) {
+                    //TODO handle server side error in data
+                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate);
+                }).catch(function (error) {
+                    process();
+                });
+            }
 
-    function runEmailQueue() {
-        if (emailQueue.length > 0) {
-            var messageData = emailQueue.shift();
-            var idConversation = messageData.idConversation;
-            var toUpdate = messageData.toUpdate;
-            delete messageData.idConversation;
-            delete messageData.toUpdate;
-            var isReceived = false;
-            messageRes(userDatastore.getTokens().accessToken).sendEmail(messageData).$promise.then(function (response) {
-                //TODO handle server side error in data
-                messageStorage.saveMessageHistory(messageData, 'email', response.message, idConversation, isReceived).then(function (params) {
-                    messageNotification.notifySendMessage(idConversation, toUpdate, response.message);
-                    processEmail();
-                });
-            }).catch(function (error) {
-                messageStorage.savePendingMessage(messageData, 'email', idConversation).then(function (params) {
-                    processEmail();
-                });
-            });
-        }
-    }
 
-    function processMum() {
-        runMumQueue();
-    }
-
-    function runMumQueue() {
-        if (mumQueue.length > 0) {
-            var messageData = mumQueue.shift();
-            var idConversation = messageData.idConversation;
-            var toUpdate = messageData.toUpdate;
-            delete messageData.idConversation;
-            delete messageData.toUpdate;
-            var isReceived = false;
-            messageRes(userDatastore.getTokens().accessToken).sendInstant(messageData).$promise.then(function (response) {
-                //TODO handle server side error in data
-                messageStorage.saveMessageHistory(messageData, 'mum', response.message, idConversation, isReceived).then(function (params) {
-                    messageNotification.notifySendMessage(idConversation, toUpdate, response.message);
-                    processMum();
-                });
-            }).catch(function (error) {
-                messageStorage.savePendingMessage(messageData, 'mum', idConversation).then(function (params) {
-                    processMum();
-                });
-            });
         }
     }
 
     return {
-        addSms: addSms,
-        addEmail: addEmail,
-        addMum: addMum,
-        lengthSms: lengthSms,
-        lengthEmail: lengthEmail,
-        lengthMum: lengthMum,
-        processSms: processSms,
-        processEmail: processEmail,
-        processMum: processMum
+        add: add,
+        length: length,
+        process: process
     }
 });

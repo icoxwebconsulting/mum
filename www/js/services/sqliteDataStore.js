@@ -61,6 +61,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'from_address TEXT,' + // de email
                 'at DATETIME,' + //--solo para mensajes programados
                 'receivers TEXT,' + //guarda arreglo con los destinatarios, solo en esta tabla, una vez enviado se crea conversation
+                'to_update INTEGER,' +
                 'created DATETIME)';
             return execute(query);
         }
@@ -170,7 +171,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function savePendingMessage(data, type, idConversation) {
             var deferred = $q.defer();
 
-            var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, created) VALUES(?,?,?,?,?,?,?,?)';
+            var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, to_update, created) VALUES(?,?,?,?,?,?,?,?,?)';
             var values = [
                 parseInt(idConversation), //key del registro creado anteriormente en conversation
                 type,
@@ -179,6 +180,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 data.from || null,
                 data.message.at || null,
                 data.message.receivers,
+                data.toUpdate,
                 moment().format(sqlDateTimeFormat)
             ];
 
@@ -330,6 +332,11 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             return execute(query, values);
         }
 
+        function getOnePendingMessage() {
+            var query = "SELECT * FROM pending_message ORDER BY created LIMIT 1";
+            return execute(query, []);
+        }
+
         return {
             execute: execute,
             initDb: initDb,
@@ -343,6 +350,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
             deletePendingMessage: deletePendingMessage,
             findConversation: findConversation,
             updateConversation: updateConversation,
-            getScheduledMessagesCountByRange: getScheduledMessagesCountByRange
+            getScheduledMessagesCountByRange: getScheduledMessagesCountByRange,
+            getOnePendingMessage: getOnePendingMessage
         };
     });
