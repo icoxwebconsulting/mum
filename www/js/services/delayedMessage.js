@@ -6,12 +6,20 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
             message: {
                 body: message.body,
                 receivers: message.receivers
-            }
+            },
+            idConversation: message.id_conversation,
+            toUpdate: message.to_update
         };
 
         if (message.at) {
-            messageData.message.at = message.at;
+            messageData.message.at = moment.utc(message.at).format(DATETIME_FORMAT_CONF.dateTimeFormat);
         }
+
+        if (message.type == 'email') {
+            messageData.about = message.about;
+            messageData.from = message.from_address;
+        }
+
         return messageData;
     }
 
@@ -22,17 +30,9 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
             for (var i = 0; i < messages.length; i++) {
                 messageData = processDelayedMessage(messages[i]);
                 type = messages[i].type;
-                if (type == 'sms') {
-                    messageQueue.addSms(messageData);
-                } else if (type == 'email') {
-                    messageQueue.addEmail(messageData);
-                } else if (type == 'mum') {
-                    messageQueue.addMum(messageData);
-                }
+                messageQueue.add(messageData, type, messages[i].id);
             }
-            messageQueue.processSms();
-            messageQueue.processEmail();
-            messageQueue.processMum();
+            messageQueue.process();
         }).catch(function (error) {
             console.log("Error al obtener los mensajes pendientes", error);
         });
