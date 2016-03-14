@@ -121,7 +121,7 @@ angular.module('app.user', [])
             };
             return customer(null, null, userDatastore.getTokens().accessToken).setProfile(params, profileData).$promise
                 .then(function (response) {
-                    userDatastore.setProfile(response.display_name, response.avatar_url);
+                    userDatastore.setProfile(response.display_name, response.avatar_u_r_l);
                 });
         }
 
