@@ -1,6 +1,7 @@
 angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $ionicActionSheet, $cordovaCamera,
                                                           $cordovaFile, $ionicLoading, user) {
-    $scope.profile = user.getProfile();
+    $scope.displayName = user.getProfile().displayName;
+    $scope.avatarURL = user.getProfile().avatarURL;
 
     $ionicModal.fromTemplateUrl('templates/name-modal.html', {
         scope: $scope,
@@ -77,42 +78,24 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
                 }
 
                 $cordovaCamera.getPicture(options)
-                    //.then(function (imageURI) {
-                    //    $ionicLoading.show();
-                    //
-                    //    imageURI = prefix + imageURI;
-                    //
-                    //    var canvas = document.createElement('canvas');
-                    //    var ctx = canvas.getContext("2d");
-                    //    var image = new Image();
-                    //    image.onload = function () {
-                    //        canvas.width = this.width;
-                    //        canvas.height = this.height;
-                    //        ctx.drawImage(image, 0, 0);
-                    //    };
-                    //    image.src = imageURI;
-                    //    var dataURL = canvas.toDataURL("image/jpeg");
-                    //    dataURL = dataURL.substring(23);
-                    //    return user.setProfile(user.getProfile().displayName, dataURL, "jpeg");
-                    //})
                     .then(function (imageURI) {
+                        $ionicLoading.show();
                         imageURI = prefix + imageURI;
-                        var indexOfLash = imageURI.lastIndexOf('/') + 1;
-                        var name = imageURI.substr(indexOfLash);
-                        var namePath = imageURI.substr(0, indexOfLash);
+                        var indexOfSlash = imageURI.lastIndexOf('/') + 1;
+                        var name = imageURI.substr(indexOfSlash);
+                        var namePath = imageURI.substr(0, indexOfSlash);
 
                         return $cordovaFile.copyFile(namePath, name, cordova.file.dataDirectory, name);
                     })
                     .then(function (info) {
-                        console.log('copied', info);
-                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.nativeURL);
+                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.fullPath.substring(1));
                     })
-                    .then(function (success) {
-                        // success
-                        console.log("image data", success);
+                    .then(function (dataURL) {
+                        return user.setProfile(user.getProfile().displayName, dataURL.substring(23), "jpeg");
                     })
                     .then(function () {
-                        $scope.profile = user.getProfile();
+                        $scope.displayName = user.getProfile().displayName;
+                        $scope.avatarURL = user.getProfile().avatarURL + '?v' + Math.random().toString(36).substr(2, 16);
                         $ionicLoading.hide();
                     })
                     .catch(function (error) {
