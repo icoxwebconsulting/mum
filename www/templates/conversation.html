@@ -48,7 +48,7 @@
                 <div class="messages ">
 
                     <div class="message "
-                         ng-class="{'message-out':msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received, 'message-in': msj.is_received}"
+                         ng-class="{ 'message-in': msj.is_received, 'message-out':!msj.is_received && msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received}"
                          ng-repeat="msj in messages">
                         <div class="message-body">
                             <p>{{msj.body}}</p>

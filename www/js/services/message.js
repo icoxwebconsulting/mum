@@ -27,7 +27,8 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                     receivers: [],
                     lastMessage: "",
                     created: null,
-                    updated: null
+                    updated: null,
+                    isUnread: 0
                 };
 
                 return conversation;

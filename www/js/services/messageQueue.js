@@ -38,7 +38,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
 
             delete messageData.idConversation;
             delete messageData.toUpdate;
-            var isReceived = false;
+            var isReceived = 0;
 
             if (type == 'sms') {
                 messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {

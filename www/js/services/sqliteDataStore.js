@@ -144,13 +144,14 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function saveConversation(data) {
             var deferred = $q.defer();
 
-            var query = 'INSERT INTO conversation (type, receivers, display_name, image, last_message, created, updated) VALUES(?,?,?,?,?,?,?)';
+            var query = 'INSERT INTO conversation (type, receivers, display_name, image, last_message, is_unread, created, updated) VALUES(?,?,?,?,?,?,?,?)';
             var values = [
                 data.type,
                 JSON.stringify(data.receivers), // como json en string,
                 data.displayName, //nombre para mostrar
                 data.image || null,
                 data.lastMessage.slice(0, 20),
+                data.isUnread,
                 moment().format(sqlDateTimeFormat),
                 moment().format(sqlDateTimeFormat)
             ];
@@ -219,6 +220,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                         deferred.resolve(result);
                     },
                     function (transaction, error) {
+                        console.log("error",error);
                         deferred.reject(error);
                     });
             });
@@ -245,7 +247,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function getConversationMessages(id) {
             var query = 'SELECT id as id_message, type, body, is_received, created FROM message_history WHERE id_conversation = ' + id;
-            query += ' UNION SELECT null as id_message, type, body, null as is_received, created FROM pending_message WHERE id_conversation = ' + id + ' ORDER BY created';
+            query += ' UNION SELECT null as id_message, type, body, 0 as is_received, created FROM pending_message WHERE id_conversation = ' + id + ' ORDER BY created';
             var values = [];
             return execute(query, values);
         }
@@ -298,12 +300,13 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function updateConversation(conversation) {
             var deferred = $q.defer();
 
-            var query = "UPDATE conversation  SET display_name = ?, image = ?, last_message = ?, updated = ? WHERE id = ?";
+            var query = "UPDATE conversation  SET display_name = ?, image = ?, last_message = ?, is_unread = ?, updated = ? WHERE id = ?";
 
             var values = [
                 conversation.displayName,
                 conversation.image,
                 conversation.lastMessage.slice(0, 20),
+                conversation.isUnread,
                 conversation.updated,
                 conversation.id
             ];

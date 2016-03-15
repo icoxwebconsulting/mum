@@ -10,10 +10,12 @@ angular.module('app').service('messageNotification', function ($rootScope) {
         }
     }
 
-    function notifyReceivedMessage(data, idMessage) {
+    function notifyReceivedMessage(data, idMessage, type, idConversation) {
         $rootScope.$emit('receivedMessage', {
             data: data,
-            idMessage: idMessage
+            idMessage: idMessage,
+            type: type,
+            idConversation: idConversation
         });
     }
 

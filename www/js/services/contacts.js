@@ -345,11 +345,26 @@ angular.module('app.contacts', [])
                 });
         }
 
+        function getContact(phone) {
+            var query = 'SELECT * FROM contacts WHERE phone_number = ' + phone;
+
+            return sqliteDatastore.execute(query)
+                .then(function (response) {
+                    if (results.rows.length) {
+                        return results.rows[0];
+                    } else {
+                        return null;
+                    }
+                    return response.rows;
+                });
+        }
+
         return {
             loadContacts: loadContacts,
             getContacts: getContacts,
             getMUMContacts: getMUMContacts,
             setSingleContact: setSingleContact,
-            getSingleContact: getSingleContact
+            getSingleContact: getSingleContact,
+            getContact: getContact
         };
     });

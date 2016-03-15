@@ -22,6 +22,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $scope.messages = [];
         messageService.updateConversation($scope.conversation).then(function () {
             console.log("actualizado");
+            $scope.conversation = messageService.factory().createConversation();
         });
     });
 
@@ -32,8 +33,18 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $rootScope.$on('receivedMessage', function (e, data) {
-        //TODO
-        var message = messageService.factory().createMessage();
+        var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
+        console.log("LA DATA PARA RECEIVED", data);
+        $scope.messages.push({
+            about: (data.type = 'email') ? "" : null,
+            at: null,
+            from_address: (data.type = 'email') ? "" : null,
+            id: data.idConversation,
+            body: data.data.additionalData.message,
+            to_send: false,
+            is_received: true,
+            created: date
+        });
     });
 
     $scope.sendMessage = function () {
