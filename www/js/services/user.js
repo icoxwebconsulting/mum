@@ -119,9 +119,9 @@ angular.module('app.user', [])
                 avatarData: avatarData,
                 avatarMimeType: avatarMimeType
             };
-            return customer.setProfile(params, profileData).$promise
+            return customer(null, null, userDatastore.getTokens().accessToken).setProfile(params, profileData).$promise
                 .then(function (response) {
-                    userDatastore.setProfile(response.display_name, response.avatar_url);
+                    userDatastore.setProfile(response.display_name, response.avatar_u_r_l);
                 });
         }
 
