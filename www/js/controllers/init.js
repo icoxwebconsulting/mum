@@ -4,6 +4,8 @@ angular.module('app')
 
         $scope.toVerify = user.getVerified();
 
+        $scope.inProcess = 0;
+
         $scope.sendCode = function () {
             if (!$scope.data.cc) {
                 $ionicPopup.alert({
@@ -41,6 +43,7 @@ angular.module('app')
 
                             if (code) {
                                 $scope.data.code = code;
+                                $scope.inProcess = 1;
                                 verify();
                             }
                         } catch (error) {
@@ -59,7 +62,8 @@ angular.module('app')
                     });
                     $state.go('layout.home');
                 })
-                .catch(function () {
+                .catch(function (error) {
+                    $scope.inProcess = 0;
                     $ionicPopup.alert({
                         title: 'Código erróneo, verifique y vuelva a intentar.'
                     });
@@ -72,6 +76,7 @@ angular.module('app')
                     title: 'Ingrese el código recibido vía SMS'
                 });
             } else {
+                $scope.inProcess = 1;
                 verify();
             }
         };

@@ -47,9 +47,15 @@
                         <p>Ingrese el código que recibió por SMS</p>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ng-hide="inProcess == 1">
                     <div class="col">
                         <a href="#" ng-click="verifyCode()" class="button button-small button-stable">Confirmar</a>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="inProcess == 1">
+                    <div class="col">
+                        Verificando...<br><ion-spinner icon="lines"></ion-spinner>
                     </div>
                 </div>
             </div>

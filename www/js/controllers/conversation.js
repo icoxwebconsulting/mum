@@ -37,6 +37,10 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $scope.sendMessage = function () {
+        if ($scope.body == "" || $scope.body.length < 1) {
+            return;
+        }
+
         var type = $scope.conversation.type;
         var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
         message.created = date;
