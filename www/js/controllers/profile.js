@@ -1,6 +1,16 @@
 angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $ionicActionSheet, $cordovaCamera,
                                                           $cordovaFile, $ionicLoading, user) {
-    $scope.profile = user.getProfile();
+    function refreshProfileInfo() {
+        $scope.displayName = user.getProfile().displayName;
+        $scope.avatarURL = user.getProfile().avatarURL;
+
+        // workaround of modal edition
+        $scope.profile = {
+            displayName: user.getProfile().displayName
+        };
+    }
+
+    refreshProfileInfo();
 
     $ionicModal.fromTemplateUrl('templates/name-modal.html', {
         scope: $scope,
@@ -17,7 +27,7 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
         $ionicLoading.show();
         user.setProfile($scope.profile.displayName)
             .then(function () {
-                $scope.profile = user.getProfile();
+                refreshProfileInfo();
                 $scope.modal.hide();
                 $ionicLoading.hide();
             });
@@ -27,19 +37,8 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
         $scope.modal.hide();
     };
 
-    //Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function () {
         $scope.modal.remove();
-    });
-
-    // Execute action on hide modal
-    $scope.$on('modal.hidden', function () {
-        // Execute action
-    });
-
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function () {
-        // Execute action
     });
 
     $scope.actionSheet = function () {
@@ -77,46 +76,35 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
                 }
 
                 $cordovaCamera.getPicture(options)
-                    //.then(function (imageURI) {
-                    //    $ionicLoading.show();
-                    //
-                    //    imageURI = prefix + imageURI;
-                    //
-                    //    var canvas = document.createElement('canvas');
-                    //    var ctx = canvas.getContext("2d");
-                    //    var image = new Image();
-                    //    image.onload = function () {
-                    //        canvas.width = this.width;
-                    //        canvas.height = this.height;
-                    //        ctx.drawImage(image, 0, 0);
-                    //    };
-                    //    image.src = imageURI;
-                    //    var dataURL = canvas.toDataURL("image/jpeg");
-                    //    dataURL = dataURL.substring(23);
-                    //    return user.setProfile(user.getProfile().displayName, dataURL, "jpeg");
-                    //})
                     .then(function (imageURI) {
+                        $ionicLoading.show();
                         imageURI = prefix + imageURI;
-                        var indexOfLash = imageURI.lastIndexOf('/') + 1;
-                        var name = imageURI.substr(indexOfLash);
-                        var namePath = imageURI.substr(0, indexOfLash);
+                        var indexOfSlash = imageURI.lastIndexOf('/') + 1;
+                        var name = imageURI.substr(indexOfSlash);
+                        var namePath = imageURI.substr(0, indexOfSlash);
 
                         return $cordovaFile.copyFile(namePath, name, cordova.file.dataDirectory, name);
                     })
                     .then(function (info) {
-                        console.log('copied', info);
-                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.nativeURL);
+                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.fullPath.substring(1))
+                            .then(function (dataURL) {
+                                return {
+                                    path: info.nativeURL,
+                                    data: dataURL
+                                };
+                            });
                     })
-                    .then(function (success) {
-                        // success
-                        console.log("image data", success);
+                    .then(function (response) {
+                        return user.setProfile(user.getProfile().displayName,
+                            response.path,
+                            response.data.substring(23),
+                            "jpeg");
                     })
                     .then(function () {
-                        $scope.profile = user.getProfile();
+                        refreshProfileInfo();
                         $ionicLoading.hide();
                     })
                     .catch(function (error) {
-                        console.log('Failed because', error);
                         $ionicLoading.hide();
                     });
 

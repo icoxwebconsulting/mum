@@ -110,7 +110,7 @@ angular.module('app.user', [])
             return deferred.promise;
         }
 
-        function setProfile(displayName, avatarData, avatarMimeType) {
+        function setProfile(displayName, avatarPath, avatarData, avatarMimeType) {
             var params = {
                 customer: userDatastore.getCustomerId()
             };
@@ -121,7 +121,7 @@ angular.module('app.user', [])
             };
             return customer(null, null, userDatastore.getTokens().accessToken).setProfile(params, profileData).$promise
                 .then(function (response) {
-                    userDatastore.setProfile(response.display_name, response.avatar_u_r_l);
+                    userDatastore.setProfile(response.display_name, avatarPath ? avatarPath : getProfile().avatarURL);
                 });
         }
 
