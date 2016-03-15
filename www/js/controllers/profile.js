@@ -1,7 +1,16 @@
 angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $ionicActionSheet, $cordovaCamera,
                                                           $cordovaFile, $ionicLoading, user) {
-    $scope.displayName = user.getProfile().displayName;
-    $scope.avatarURL = user.getProfile().avatarURL;
+    function refreshProfileInfo() {
+        $scope.displayName = user.getProfile().displayName;
+        $scope.avatarURL = user.getProfile().avatarURL;
+
+        // workaround of modal edition
+        $scope.profile = {
+            displayName: user.getProfile().displayName
+        };
+    }
+
+    refreshProfileInfo();
 
     $ionicModal.fromTemplateUrl('templates/name-modal.html', {
         scope: $scope,
@@ -18,7 +27,7 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
         $ionicLoading.show();
         user.setProfile($scope.profile.displayName)
             .then(function () {
-                $scope.profile = user.getProfile();
+                refreshProfileInfo();
                 $scope.modal.hide();
                 $ionicLoading.hide();
             });
@@ -28,19 +37,8 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
         $scope.modal.hide();
     };
 
-    //Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function () {
         $scope.modal.remove();
-    });
-
-    // Execute action on hide modal
-    $scope.$on('modal.hidden', function () {
-        // Execute action
-    });
-
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function () {
-        // Execute action
     });
 
     $scope.actionSheet = function () {
@@ -88,18 +86,25 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
                         return $cordovaFile.copyFile(namePath, name, cordova.file.dataDirectory, name);
                     })
                     .then(function (info) {
-                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.fullPath.substring(1));
+                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.fullPath.substring(1))
+                            .then(function (dataURL) {
+                                return {
+                                    path: info.nativeURL,
+                                    data: dataURL
+                                };
+                            });
                     })
-                    .then(function (dataURL) {
-                        return user.setProfile(user.getProfile().displayName, dataURL.substring(23), "jpeg");
+                    .then(function (response) {
+                        return user.setProfile(user.getProfile().displayName,
+                            response.path,
+                            response.data.substring(23),
+                            "jpeg");
                     })
                     .then(function () {
-                        $scope.displayName = user.getProfile().displayName;
-                        $scope.avatarURL = user.getProfile().avatarURL + '?v' + Math.random().toString(36).substr(2, 16);
+                        refreshProfileInfo();
                         $ionicLoading.hide();
                     })
                     .catch(function (error) {
-                        console.log('Failed because', error);
                         $ionicLoading.hide();
                     });
 
