@@ -42,24 +42,8 @@ angular.module('app.MUMSMS', [])
             return deferred.promise;
         }
 
-        function send(number, message) {
-            SMS.sendSMS(number, message);
-        }
-
-        function processPushNotification(data) {
-            if (parseInt(data.additionalData.type) === 1) {
-                var receivers = data.additionalData.receivers;
-                var smsBody = data.additionalData.smsBody;
-                for (var i = 0, length = receivers.length; i < length; i++) {
-                    send(receivers[i], smsBody);
-                }
-            }
-        }
-
         return {
             init: init,
-            watchIncome: watchIncome,
-            send: send,
-            processPushNotification: processPushNotification
+            watchIncome: watchIncome
         };
     });
