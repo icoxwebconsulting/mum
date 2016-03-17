@@ -4,7 +4,8 @@
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="conversation in conversations"
                       type="item-text-wrap"
                       ng-click="open(conversation)"
-                      on-hold="deleteConversation(conversation)">
+                      on-hold="deleteConversation(conversation)"
+                      ng-class="{'unread-conversation': conversation.isUnread}">
                 <img ng-src="{{conversation.image ? conversation.image : 'img/person.png'}}">
 
                 <h2>{{conversation.displayName}}</h2>

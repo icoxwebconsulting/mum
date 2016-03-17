@@ -79,3 +79,8 @@ and (orientation: landscape) {
     background: url('../img/nuevo-sms.png') no-repeat left top;
     background-size: 20px 20px;
 }
+
+.unread-conversation {
+    border: 3px solid darkred;
+    font-weight: bold;
+}

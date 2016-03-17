@@ -1,4 +1,4 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, messageService) {
+angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService) {
 
     $scope.conversation = messageService.factory().createConversation();
 
@@ -43,7 +43,17 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     };
 
     $rootScope.$on('receivedMessage', function (e, data) {
-        var conversation = messageService.factory().createConversation();
-        //TODO
+
+        var found = $filter('getById')($rootScope.conversations, data.idConversation);
+        console.log("a ver que encontró", found);
+        if (found) {
+            found.isUnread = 1;
+        } else {
+            //TODO: insertar la nueva conversación.
+        }
+        if ($rootScope.currentState != "conversation") {
+            var conversation = messageService.factory().createConversation();
+
+        }
     });
 });

@@ -1,4 +1,4 @@
-angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, messageService) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService) {
 
     var message;
 
@@ -14,6 +14,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         if ($scope.conversation.id) {
             messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {
                 $scope.messages = msjs;
+                $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
             });
         }
     });
@@ -33,18 +34,21 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $rootScope.$on('receivedMessage', function (e, data) {
-        var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
-        console.log("LA DATA PARA RECEIVED", data);
-        $scope.messages.push({
-            about: (data.type = 'email') ? "" : null,
-            at: null,
-            from_address: (data.type = 'email') ? "" : null,
-            id: data.idConversation,
-            body: data.data.additionalData.message,
-            to_send: false,
-            is_received: true,
-            created: date
-        });
+        if ($rootScope.currentState == "conversation" && $scope.conversation.id == data.idConversation) {
+            var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
+            $scope.messages.push({
+                about: (data.type = 'email') ? "" : null,
+                at: null,
+                from_address: (data.type = 'email') ? "" : null,
+                id: data.idConversation,
+                body: data.data.message,
+                to_send: false,
+                is_received: true,
+                created: date
+            });
+
+            $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
+        }
     });
 
     $scope.sendMessage = function () {
@@ -67,6 +71,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             is_received: false,
             created: date
         });
+        //$ionicScrollDelegate.$getByHandle('mainScroll').resize();
+        $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
 
         var lastItem = $scope.messages.length - 1;
 

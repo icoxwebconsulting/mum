@@ -42,7 +42,7 @@
             </form>
         </div>
     </ion-header-bar>
-    <ion-content class="bg-main" ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}">
+    <ion-content class="bg-main" ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}" delegate-handle="mainScroll">
         <div class="text-left">
             <div class="container">
                 <div class="messages ">
@@ -54,16 +54,6 @@
                             <p>{{msj.body}}</p>
                         </div>
                     </div>
-                    <!--<div class="message message-in">-->
-                    <!--<div class="message-body">-->
-                    <!--<p>Como estas?</p>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="message message-out">-->
-                    <!--<div class="message-body">-->
-                    <!--<p>Muy bien</p>-->
-                    <!--</div>-->
-                    <!--</div>-->
 
                 </div>
                 <div id="bottom"></div>

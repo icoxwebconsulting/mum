@@ -29,6 +29,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
 
         messageStorage.findConversation(type, receivers).then(function (conversation) {
             if (conversation) {
+                console.log("entro en el caso que existe", conversation);
                 //TODO: actualizar conversación
                 saveMessage(data, conversation, type);
             } else {
