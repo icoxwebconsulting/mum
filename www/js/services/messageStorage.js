@@ -1,8 +1,23 @@
-angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
+angular.module('app').service('messageStorage', function ($q, sqliteDatastore, DATETIME_FORMAT_CONF) {
+
+    var sqlDateTimeFormat = DATETIME_FORMAT_CONF.dateTimeFormat;
 
     function saveConversation(conversation) {
         var deferred = $q.defer();
-        sqliteDatastore.saveConversation(conversation).then(function (resp) {
+
+        var query = 'INSERT INTO conversation (type, receivers, display_name, image, last_message, is_unread, created, updated) VALUES(?,?,?,?,?,?,?,?)';
+        var values = [
+            conversation.type,
+            JSON.stringify(conversation.receivers), // como json en string,
+            conversation.displayName, //nombre para mostrar
+            conversation.image || null,
+            conversation.lastMessage.slice(0, 20),
+            conversation.isUnread,
+            moment().format(sqlDateTimeFormat),
+            moment().format(sqlDateTimeFormat)
+        ];
+
+        sqliteDatastore.execute(query, values).then(function (resp) {
             deferred.resolve(resp.insertId);
         }).catch(function (error) {
             deferred.reject(error);
@@ -10,9 +25,14 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
-    function getConversationMessages(idConversation) {
+    function getConversationMessages(id) {
         var deferred = $q.defer();
-        sqliteDatastore.getConversationMessages(idConversation).then(function (results) {
+
+        var query = 'SELECT id as id_message, type, body, is_received, created FROM message_history WHERE id_conversation = ' + id;
+        query += ' UNION SELECT null as id_message, type, body, 0 as is_received, created FROM pending_message WHERE id_conversation = ' + id + ' ORDER BY created';
+        var values = [];
+
+        sqliteDatastore.execute(query, values).then(function (results) {
             var messages = [];
             for (var i = 0; i < results.rows.length; i++) {
                 messages.push(results.rows.item(i));
@@ -27,7 +47,10 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function getInboxMessages() {
         var deferred = $q.defer();
-        sqliteDatastore.getInboxConversations().then(function (results) {
+
+        var query = 'SELECT  c.id, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, c.last_message ' +
+            'FROM conversation c';
+        sqliteDatastore.execute(query).then(function (results) {
             var conversations = [];
             var t = {};
             var rec = [];
@@ -53,19 +76,53 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
+    function deleteMessageHistory(id) {
+        var query = 'DELETE FROM message_history WHERE id_conversation = ' + id;
+        sqliteDatastore.execute(query, []);
+    }
+
+    function deletePendingMessages(id) {
+        var query = 'DELETE FROM pending_message WHERE id_conversation = ' + id;
+        sqliteDatastore.execute(query, []);
+    }
+
+    function deleteFromConversation(id) {
+        var query = 'DELETE FROM conversation WHERE id = ' + id;
+        sqliteDatastore.execute(query, []);
+    }
+
     function deleteConversation(conversation) {
         var deferred = $q.defer();
-        sqliteDatastore.deleteConversation(conversation.id).then(function (result) {
-            deferred.resolve(result);
-        }).catch(function (error) {
-            deferred.reject(error);
+        $q.all([
+            deleteMessageHistory(conversation.id),
+            deletePendingMessages(conversation.id),
+            deleteFromConversation(conversation.id)
+        ]).then(function (value) {
+            deferred.resolve(value);
+        }, function (reason) {
+            deferred.reject();
         });
+
         return deferred.promise;
     }
 
-    function saveMessageHistory(messageData, type, message, idConversation, isReceived) {
+    function saveMessageHistory(data, type, messageId, idConversation, isReceived) {
         var deferred = $q.defer();
-        sqliteDatastore.saveMessageHistory(messageData, type, message, idConversation, isReceived).then(function (resp) {
+
+        var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, is_received, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?)';
+        var values = [
+            messageId,//key obtenida del servidor
+            parseInt(idConversation), //key del registro creado anteriormente en conversation
+            type,
+            data.message.body || null,
+            data.about || null,
+            isReceived || 0,
+            data.from || null,
+            data.message.at || null,
+            moment.utc().format(sqlDateTimeFormat)
+        ];
+
+        sqliteDatastore.execute(query, values).then(function (resp) {
             deferred.resolve({
                 insertId: resp.insertId,
                 toSend: false
@@ -76,9 +133,23 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
-    function savePendingMessage(messageData, type, idConversation) {
+    function savePendingMessage(data, type, idConversation) {
         var deferred = $q.defer();
-        sqliteDatastore.savePendingMessage(messageData, type, idConversation).then(function (resp) {
+
+        var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, to_update, created) VALUES(?,?,?,?,?,?,?,?,?)';
+        var values = [
+            parseInt(idConversation), //key del registro creado anteriormente en conversation
+            type,
+            data.message.body || null,
+            data.about || null,
+            data.from || null,
+            data.message.at || null,
+            data.message.receivers,
+            data.toUpdate,
+            moment().format(sqlDateTimeFormat)
+        ];
+
+        sqliteDatastore.execute(query, values).then(function (resp) {
             deferred.resolve({
                 insertId: resp.insertId,
                 toSend: true
@@ -91,7 +162,10 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function findConversation(type, receivers) {
         var deferred = $q.defer();
-        sqliteDatastore.findConversation(type, receivers).then(function (result) {
+
+        var query = "SELECT * FROM conversation WHERE type = '" + type + "' AND receivers = '" + JSON.stringify(receivers) + "'";
+
+        sqliteDatastore.execute(query).then(function (result) {
             if (result.rows.length > 0) {
                 var item = result.rows.item(0);
                 deferred.resolve(item);
@@ -106,7 +180,10 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function getDelayedMessages() {
         var deferred = $q.defer();
-        sqliteDatastore.getDelayedMessages().then(function (results) {
+
+        var query = 'SELECT * FROM pending_message';
+
+        sqliteDatastore.execute(query).then(function (results) {
             var items = [];
             for (var i = 0; i < results.rows.length; i++) {
                 items.push(results.rows.item(i));
@@ -120,7 +197,19 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function updateConversation(conversation) {
         var deferred = $q.defer();
-        sqliteDatastore.updateConversation(conversation).then(function (result) {
+
+        var query = "UPDATE conversation  SET display_name = ?, image = ?, last_message = ?, is_unread = ?, updated = ? WHERE id = ?";
+
+        var values = [
+            conversation.displayName,
+            conversation.image,
+            conversation.lastMessage.slice(0, 20),
+            conversation.isUnread,
+            conversation.updated,
+            conversation.id
+        ];
+
+        sqliteDatastore.execute(query, values).then(function (result) {
             deferred.resolve();
         }).catch(function (error) {
             deferred.reject(error);
@@ -130,7 +219,14 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function getScheduledMessagesCountByRange(start, end) {
         var deferred = $q.defer();
-        sqliteDatastore.getScheduledMessagesCountByRange(start, end).then(function (result) {
+
+        var values = [start.format(sqlDateTimeFormat), end.format(sqlDateTimeFormat)];
+
+        var query = "SELECT COUNT(*) AS count, at " +
+            "FROM message_history " +
+            "WHERE at BETWEEN ? AND ? " +
+            "GROUP BY at";
+        sqliteDatastore.execute(query, values).then(function (result) {
             deferred.resolve(result.rows);
         }).catch(function (error) {
             deferred.reject(error);
@@ -141,7 +237,9 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
 
     function getOnePendingMessage() {
         var deferred = $q.defer();
-        sqliteDatastore.getOnePendingMessage().then(function (result) {
+        var query = "SELECT * FROM pending_message ORDER BY created LIMIT 1";
+
+        sqliteDatastore.execute(query).then(function (result) {
             if (result.rows.length > 0) {
                 deferred.resolve(result.rows[0]);
             } else {
@@ -154,10 +252,30 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         return deferred.promise;
     }
 
-    function deletePendingMessage(id){
+    function deletePendingMessage(id) {
         var deferred = $q.defer();
-        sqliteDatastore.deletePendingMessage(id).then(function (result) {
+        var query = 'DELETE FROM pending_message WHERE id = ' + id;
+
+        sqliteDatastore.execute(query).then(function (result) {
             deferred.resolve(result);
+        }).catch(function (error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    function getUnreadMessages() {
+        var deferred = $q.defer();
+
+        var query = 'SELECT COUNT(id) as count FROM conversation WHERE is_unread = 1';
+        var values = [];
+
+        sqliteDatastore.execute(query, values).then(function (result) {
+            if(result.rows.length){
+                deferred.resolve(result.rows[0]);
+            }else{
+                deferred.resolve(null);
+            }
         }).catch(function (error) {
             deferred.reject(error);
         });
@@ -176,6 +294,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore) {
         updateConversation: updateConversation,
         getScheduledMessagesCountByRange: getScheduledMessagesCountByRange,
         getOnePendingMessage: getOnePendingMessage,
-        deletePendingMessage: deletePendingMessage
+        deletePendingMessage: deletePendingMessage,
+        getUnreadMessages: getUnreadMessages
     }
 });

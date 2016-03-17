@@ -1,8 +1,20 @@
-angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService) {
     moment.locale('es');
     $scope.day = moment();
 
     $rootScope.conversations = [];
+
+    $scope.count = 0;
+
+    $scope.$on('$ionicView.enter', function (e) {
+        messageService.getUnreadMessages.then(function (result) {
+            if (result) {
+                $scope.count = (result.count > 99) ? '+99' : result.count;
+            } else {
+                $scope.count = 0;
+            }
+        });
+    });
 
     $scope.showMenu = function () {
         // Show the action sheet

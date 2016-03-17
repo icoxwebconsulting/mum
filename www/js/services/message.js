@@ -114,6 +114,10 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         return messageStorage.updateConversation(conversation);
     }
 
+    function getUnreadMessages() {
+        return messageStorage.getUnreadMessages();
+    }
+
     return {
         factory: factory,
         setMessage: setMessage,
@@ -126,7 +130,8 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         getInboxMessages: getInboxMessages,
         deleteConversation: deleteConversation,
         findConversation: findConversation,
-        updateConversation: updateConversation
+        updateConversation: updateConversation,
+        getUnreadMessages: getUnreadMessages
     };
 
 });
