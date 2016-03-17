@@ -7,7 +7,7 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
     $scope.count = 0;
 
     $scope.$on('$ionicView.enter', function (e) {
-        messageService.getUnreadMessages.then(function (result) {
+        messageService.getUnreadMessages().then(function (result) {
             if (result) {
                 $scope.count = (result.count > 99) ? '+99' : result.count;
             } else {
@@ -15,6 +15,7 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
             }
         });
     });
+
 
     $scope.showMenu = function () {
         // Show the action sheet
