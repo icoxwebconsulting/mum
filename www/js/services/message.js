@@ -99,7 +99,33 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
     }
 
     function getInboxMessages() {
-        return messageStorage.getInboxMessages();
+        var deferred = $q.defer();
+
+        messageStorage.getInboxMessages().then(function (results) {
+            var conversations = [];
+            var t = {};
+            var rec = [];
+            var factoria = factory();
+            var conversation;
+            for (var i = 0; i < results.rows.length; i++) {
+                t = results.rows.item(i);
+                rec = JSON.parse(t.receivers);
+                conversation = factoria.createConversation();
+                conversation.id = t.id;
+                conversation.image = (t.image) ? t.image : 'img/person.png';
+                conversation.displayName = t.display_name;
+                conversation.type = t.type;
+                conversation.receivers = rec;
+                conversation.lastMessage = t.last_message;
+                conversation.created = t.created;
+                conversation.updated = t.updated;
+                conversation.isUnread = t.is_unread;
+                conversations.push(conversation);
+            }
+            deferred.resolve(conversations);
+        });
+
+        return deferred.promise;
     }
 
     function deleteConversation(conversation) {

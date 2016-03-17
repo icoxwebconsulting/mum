@@ -10,6 +10,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $scope.$on('$ionicView.enter', function (e) {
         $scope.conversation = messageService.getConversation();
+        $scope.conversation.isUnread = 0;
         message = messageService.getMessage();
         if ($scope.conversation.id) {
             messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {

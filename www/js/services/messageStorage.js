@@ -48,27 +48,9 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function getInboxMessages() {
         var deferred = $q.defer();
 
-        var query = 'SELECT  c.id, c.type, c.receivers, c.created, c.updated, c.display_name, c.image, c.last_message ' +
-            'FROM conversation c';
+        var query = 'SELECT * FROM conversation c';
         sqliteDatastore.execute(query).then(function (results) {
-            var conversations = [];
-            var t = {};
-            var rec = [];
-            for (var i = 0; i < results.rows.length; i++) {
-                t = results.rows.item(i);
-                rec = JSON.parse(t.receivers);
-                conversations.push({
-                    id: t.id,
-                    displayName: t.display_name,
-                    lastMessage: t.last_message,
-                    image: (t.image) ? t.image : 'img/person.png',
-                    type: t.type, //--tipo de mensaje ((1)sms, (2)email, (3)instant),
-                    receivers: rec,
-                    created: t.created,
-                    updated: t.updated
-                });
-            }
-            deferred.resolve(conversations);
+            deferred.resolve(results);
         }).catch(function (error) {
             // Tratar el error
             deferred.reject(error);
@@ -199,7 +181,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         var deferred = $q.defer();
 
         var query = "UPDATE conversation  SET display_name = ?, image = ?, last_message = ?, is_unread = ?, updated = ? WHERE id = ?";
-
+console.log("++",query, conversation);
         var values = [
             conversation.displayName,
             conversation.image,
