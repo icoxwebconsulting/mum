@@ -46,44 +46,6 @@ angular.module('app.contacts', [])
         };
 
         /**
-         * Format phone numbers to prepare for db match
-         *
-         * @param contact
-         * @returns {*}
-         */
-        function sanitizeContact(contact) {
-            var chars = [' ', '-', '+', '(', ')'];
-
-            // if the phone number don't starts with (+) or (00) elsewhere is international
-            if (contact.substring(0, 1) !== '+' && contact.substring(0, 2) !== '00') {
-                // if ti has (0) as first digit remove it
-                if (contact.substring(0, 1) === '0') {
-                    contact = contact.substring(1);
-                }
-
-                // add customer international code to it
-                contact = userDatastore.getCountryCode() + contact;
-            } else {
-                // if ti has (+) as first digit remove it
-                if (contact.substring(0, 1) === '+') {
-                    contact = contact.substring(1);
-                }
-
-                // if ti has (00) as first digit remove it
-                if (contact.substring(0, 2) === '00') {
-                    contact = contact.substring(2);
-                }
-            }
-
-            for (var j = 0, charsLength = chars.length; j < charsLength; j++) {
-                var char = chars[j];
-                contact = contact.replace(char, '');
-            }
-
-            return contact;
-        }
-
-        /**
          * Load from User Phone Address Book
          *
          * @returns {*|promise}
@@ -105,36 +67,143 @@ angular.module('app.contacts', [])
             options.multiple = true;
             options.hasPhoneNumber = false;
 
-            navigator.contacts.find(fields,
-                function onSuccess(loadedContacts) {
-                    for (var i = 0, length = loadedContacts.length; i < length; i++) {
-                        var loadedContact = loadedContacts[i];
-                        // only those hwo has display name and phone number
-                        if (loadedContact.displayName && loadedContact.phoneNumbers) {
-                            // create new contact
-                            var contact = new Contact(loadedContact.displayName,
-                                (loadedContact.photos) ? loadedContact.photos[0].value : 'img/person.png');
+            /**
+             * Format phone numbers to prepare for db match
+             *
+             * @param contact
+             * @returns {*}
+             */
+            function _sanitizeContact(contact) {
+                // if the phone number don't starts with (+) or (00) is local
+                if (contact.substring(0, 1) !== '+' && contact.substring(0, 2) !== '00') {
+                    // if it has (0) as first digit remove it
+                    if (contact.substring(0, 1) === '0') {
+                        contact = contact.substring(1);
+                    }
 
-                            if (loadedContact.emails) {
-                                contact.email = loadedContact.emails[0].value;
-                            } else {
-                                contact.email = null;
+                    // add customer international code to it
+                    contact = userDatastore.getCountryCode() + contact;
+                } else {
+                    // if it has (+) as first digit remove it
+                    if (contact.substring(0, 1) === '+') {
+                        contact = contact.substring(1);
+                    }
+
+                    // if it has (00) as first digit remove it
+                    if (contact.substring(0, 2) === '00') {
+                        contact = contact.substring(2);
+                    }
+                }
+
+                var chars = [' ', '-', '+', '(', ')'];
+                for (var j = 0, charsLength = chars.length; j < charsLength; j++) {
+                    var char = chars[j];
+                    contact = contact.split(char).join('');
+                }
+
+                return contact;
+            }
+
+            /**
+             * Create new contact
+             *
+             * @param displayName
+             * @param avatar
+             * @param email
+             * @param phoneNumber
+             * @returns {Contact}
+             * @private
+             */
+            function _createContact(displayName, avatar, email, phoneNumber) {
+                var contact = new Contact(displayName,
+                    (avatar) ? avatar : 'img/person.png');
+
+                contact.email = email;
+                contact.phoneNumber = (phoneNumber) ? _sanitizeContact(phoneNumber) : null;
+
+                return contact;
+            }
+
+            /**
+             * Sort it and remove duplicates
+             *
+             * @param contacts
+             * @returns {*}
+             * @private
+             */
+            function _sanitizeContacts(contacts) {
+                contacts.sort();
+
+                contacts = contacts.reduce(function (previous, current) {
+                    var contact = {};
+                    var index = current.phoneNumber;
+                    if (index == null && current.email) {
+                        index = current.email;
+                    }
+                    contact[index] = current;
+
+                    if (Object.keys(previous).indexOf(index) === -1) {
+                        previous[index] = current;
+                    }
+
+                    return previous;
+                }, {});
+
+                var sanitizedContacts = [];
+                for (var index in contacts) {
+                    sanitizedContacts.push(contacts[index]);
+                }
+
+                return sanitizedContacts;
+            }
+
+            /**
+             * Execute on contact load success execution
+             *
+             * @param loadedContacts
+             * @private
+             */
+            function _contactLoadSuccess(loadedContacts) {
+                for (var i = 0, length = loadedContacts.length; i < length; i++) {
+                    var loadedContact = loadedContacts[i];
+                    var photo = (loadedContact.photos) ? loadedContact.photos[0].value : null;
+                    var hasEmail = loadedContact.emails && loadedContact.emails.length;
+                    var hasPhoneNumber = loadedContact.phoneNumbers && loadedContact.phoneNumbers.length;
+                    // only those hwo has display name and phone number or email
+                    if (loadedContact.displayName && (hasPhoneNumber || hasEmail)) {
+                        var j = 0;
+                        var contact = null;
+                        if (hasEmail) {
+                            for (j = 0, emailsLength = loadedContact.emails.length; j < emailsLength; j++) {
+                                var email = loadedContact.emails[j].value;
+                                contact = _createContact(loadedContact.displayName, photo, email);
+                                contacts.push(contact);
                             }
-
-                            if (loadedContact.phoneNumbers) {
-                                contact.phoneNumber = sanitizeContact(loadedContact.phoneNumbers[0].value);
-                            } else {
-                                contact.phoneNumber = null;
+                        }
+                        if (hasPhoneNumber) {
+                            for (j = 0, phoneNumbersLength = loadedContact.phoneNumbers.length; j < phoneNumbersLength; j++) {
+                                var phoneNumber = loadedContact.phoneNumbers[j].value;
+                                contact = _createContact(loadedContact.displayName, photo, null, phoneNumber);
+                                contacts.push(contact);
                             }
-
-                            contacts.push(contact);
                         }
                     }
-                    contacts.sort();
-                    deferred.resolve(contacts);
-                }, function onError(error) {
-                    deferred.reject(error);
-                }, options);
+                }
+                contacts = _sanitizeContacts(contacts);
+                deferred.resolve(contacts);
+            }
+
+            /**
+             * Execute on contact load fail execution
+             *
+             * @param error
+             * @private
+             */
+            function _contactLoadError(error) {
+                deferred.reject(error);
+            }
+
+            navigator.contacts.find(fields, _contactLoadSuccess, _contactLoadError, options);
 
             return deferred.promise;
         }
@@ -214,7 +283,7 @@ angular.module('app.contacts', [])
                     .then(function () {
                         contactObjects.push(contact);
                         callback();
-                    })
+                    });
             }, function (error) {
                 if (!error) {
                     deferred.resolve(contactObjects);

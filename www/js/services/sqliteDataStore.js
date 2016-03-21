@@ -80,7 +80,8 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function createTableContacts() {
             var query = 'CREATE TABLE IF NOT EXISTS contacts (' +
-                'phone_number TEXT PRIMARY KEY,' +
+                'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                'phone_number TEXT NOT NULL UNIQUE,' +
                 'display_name TEXT,' +
                 'photo TEXT,' +
                 'email TEXT,' +
