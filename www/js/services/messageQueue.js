@@ -3,7 +3,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
     var queue = [];
 
     function add(message, type, idPending) {
-        console.log("MENSAJE PENDIENTE EN COLA",message, type, idPending);
         queue.push({
             data: message,
             type: type,
@@ -19,7 +18,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
     function processStorage(messageData, type, sentMessage, idConversation, isReceived, idPending, toUpdate) {
         messageStorage.saveMessageHistory(messageData, type, sentMessage, idConversation, isReceived).then(function (params) {
             messageStorage.deletePendingMessage(idPending).then(function () {
-                console.log("para notify", idConversation, toUpdate, sentMessage);
                 messageNotification.notifySendMessage(idConversation, toUpdate, sentMessage);
                 process();
             });
@@ -28,7 +26,6 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
 
     function process() {
         if (length() > 0) {
-            console.log("hay elementos para el process");
             var messageData = queue.shift();
             var idPending = messageData.idPending;
             var type = messageData.type;

@@ -193,7 +193,6 @@ angular.module('app.contacts', [])
                     previous.push(contacts[key]);
                     return previous;
                 }, []);
-                console.log(contacts);
                 contacts = _sanitizeContacts(contacts);
                 deferred.resolve(contacts);
             }

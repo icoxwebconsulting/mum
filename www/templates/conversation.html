@@ -42,7 +42,9 @@
             </form>
         </div>
     </ion-header-bar>
-    <ion-content class="bg-main" ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}" delegate-handle="mainScroll">
+    <ion-content class="bg-main"
+                 ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}"
+                 delegate-handle="mainScroll">
         <div class="text-left">
             <div class="container">
                 <div class="messages ">

@@ -253,9 +253,9 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         var values = [];
 
         sqliteDatastore.execute(query, values).then(function (result) {
-            if(result.rows.length){
+            if (result.rows.length) {
                 deferred.resolve(result.rows[0]);
-            }else{
+            } else {
                 deferred.resolve(null);
             }
         }).catch(function (error) {

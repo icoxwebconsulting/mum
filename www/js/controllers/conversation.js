@@ -23,7 +23,6 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.$on('$ionicView.leave', function (e) {
         $scope.messages = [];
         messageService.updateConversation($scope.conversation).then(function () {
-            console.log("actualizado");
             $scope.conversation = messageService.factory().createConversation();
         });
     });
@@ -87,9 +86,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             $scope.body = "";
             messageService.sendMessage(message, $scope.conversation).then(function () {
                 //TODO:
-                console.log("mensaje encolado");
             }).catch(function (error) {
-                console.log("error", error);
             });
         }
 

@@ -23,7 +23,6 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         messageService.deleteConversation($scope.conversation).then(function () {
             $scope.conversations.splice($scope.conversations.indexOf($scope.conversation), 1);
         }).catch(function (error) {
-            console.log("Error al borrar conversacion", error);
         })
     }
 
@@ -49,7 +48,6 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     $rootScope.$on('receivedMessage', function (e, data) {
 
         var found = $filter('getById')($scope.conversations, data.conversation.id);
-        console.log("a ver que encontró", found);
         if (found) {
             $scope.conversations.splice($scope.conversations.indexOf(found), 1);
         }

@@ -50,7 +50,6 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
     });
 
     $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
-        console.log("cambió el status de la red", networkState);
         delayedMessageService.run();
     });
 });

@@ -21,7 +21,6 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
     }
 
     function processReceivedMessage(data) {
-        console.log(data);
         //verificar que si existe ya una conversación asociada
         var sender = data.additionalData.sender;
         var type = data.additionalData.type;
@@ -31,7 +30,6 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
             var conversation = messageService.factory().createConversation();
             var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
             if (response) {
-                console.log("entro en el caso que existe", conversation);
                 conversation.id = response.id;
                 conversation.image = response.image;
                 conversation.displayName = response.display_name;
@@ -47,7 +45,6 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
                 });
             } else {
                 //no existe, crearla
-                console.log("no existe", conversation);
                 conversation.type = type;
                 conversation.receivers = [sender];
                 conversation.lastMessage = data.message;
