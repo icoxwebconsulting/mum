@@ -418,13 +418,12 @@ angular.module('app.contacts', [])
             var query = 'SELECT * FROM contacts WHERE phone_number = ' + phone;
 
             return sqliteDatastore.execute(query)
-                .then(function (response) {
+                .then(function (results) {
                     if (results.rows.length) {
                         return results.rows[0];
                     } else {
                         return null;
                     }
-                    return response.rows;
                 });
         }
 
