@@ -15,10 +15,6 @@ angular.module('app').controller('MumContactCtrl', function ($scope, $state, $io
             $ionicLoading.hide();
         });
 
-    $scope.filterContacts = function () {
-        return true;
-    };
-
     $scope.pickContact = function (contact) {
         message.phoneNumber = contact.phone_number;
         message.displayName = contact.display_name;

@@ -53,7 +53,7 @@ angular.module('app.contacts', [])
         function loadFromAddressBook() {
             var deferred = $q.defer();
 
-            var contacts = [];
+            var contacts = {};
 
             var fields = [
                 navigator.contacts.fieldType.displayName,
@@ -177,18 +177,23 @@ angular.module('app.contacts', [])
                             for (j = 0, emailsLength = loadedContact.emails.length; j < emailsLength; j++) {
                                 var email = loadedContact.emails[j].value;
                                 contact = _createContact(loadedContact.displayName, photo, email);
-                                contacts.push(contact);
+                                contacts[email] = contact;
                             }
                         }
                         if (hasPhoneNumber) {
                             for (j = 0, phoneNumbersLength = loadedContact.phoneNumbers.length; j < phoneNumbersLength; j++) {
                                 var phoneNumber = loadedContact.phoneNumbers[j].value;
                                 contact = _createContact(loadedContact.displayName, photo, null, phoneNumber);
-                                contacts.push(contact);
+                                contacts[phoneNumber] = contact;
                             }
                         }
                     }
                 }
+                contacts = Object.keys(contacts).reduce(function (previous, key) {
+                    previous.push(contacts[key]);
+                    return previous;
+                }, []);
+                console.log(contacts);
                 contacts = _sanitizeContacts(contacts);
                 deferred.resolve(contacts);
             }
@@ -414,6 +419,24 @@ angular.module('app.contacts', [])
                 });
         }
 
+        function getSMSContacts() {
+            var query = 'SELECT * FROM contacts WHERE phone_number IS NOT NULL';
+
+            return sqliteDatastore.execute(query)
+                .then(function (response) {
+                    return response.rows;
+                });
+        }
+
+        function getEmailContacts() {
+            var query = 'SELECT * FROM contacts WHERE email IS NOT NULL';
+
+            return sqliteDatastore.execute(query)
+                .then(function (response) {
+                    return response.rows;
+                });
+        }
+
         function getContact(phone) {
             var query = 'SELECT * FROM contacts WHERE phone_number = ' + phone;
 
@@ -431,6 +454,8 @@ angular.module('app.contacts', [])
             loadContacts: loadContacts,
             getContacts: getContacts,
             getMUMContacts: getMUMContacts,
+            getSMSContacts: getSMSContacts,
+            getEmailContacts: getEmailContacts,
             setSingleContact: setSingleContact,
             getSingleContact: getSingleContact,
             getContact: getContact

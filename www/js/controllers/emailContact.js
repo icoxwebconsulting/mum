@@ -6,7 +6,7 @@ angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $
     $scope.contactsType = message.type;
 
     $ionicLoading.show();
-    Contacts.getContacts()
+    Contacts.getEmailContacts()
         .then(function (dbContacts) {
             $scope.contacts = [];
             for (var i = 0, length = dbContacts.length; i < length; i++) {
@@ -14,10 +14,6 @@ angular.module('app').controller('EmailContactCtrl', function ($scope, $state, $
             }
             $ionicLoading.hide();
         });
-
-    $scope.filterContacts = function (contact) {
-        return contact.email !== null;
-    };
 
     $scope.pickContact = function (contact) {
         message.email = contact.email;

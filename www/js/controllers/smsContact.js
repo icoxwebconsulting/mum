@@ -6,7 +6,7 @@ angular.module('app').controller('SMSContactCtrl', function ($scope, $state, $io
     $scope.contactsType = message.type;
 
     $ionicLoading.show();
-    Contacts.getContacts()
+    Contacts.getSMSContacts()
         .then(function (dbContacts) {
             $scope.contacts = [];
             for (var i = 0, length = dbContacts.length; i < length; i++) {
@@ -14,10 +14,6 @@ angular.module('app').controller('SMSContactCtrl', function ($scope, $state, $io
             }
             $ionicLoading.hide();
         });
-
-    $scope.filterContacts = function (contact) {
-        return contact.phone_number !== null;
-    };
 
     $scope.pickContact = function (contact) {
         message.phoneNumber = contact.phone_number;
