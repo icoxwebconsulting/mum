@@ -181,7 +181,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         var deferred = $q.defer();
 
         var query = "UPDATE conversation  SET display_name = ?, image = ?, last_message = ?, is_unread = ?, updated = ? WHERE id = ?";
-console.log("++",query, conversation);
+
         var values = [
             conversation.displayName,
             conversation.image,

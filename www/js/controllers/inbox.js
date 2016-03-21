@@ -3,7 +3,11 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     $scope.conversation = messageService.factory().createConversation();
 
     messageService.getInboxMessages().then(function (conversations) {
-        $rootScope.conversations = conversations;
+        $scope.conversations = conversations;
+    });
+
+    $rootScope.$on('addConversation', function (e, data) {
+        $scope.conversations.unshift(data.conversation);
     });
 
     $scope.open = function (conversation) {
@@ -17,7 +21,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     function toDelete() {
         messageService.deleteConversation($scope.conversation).then(function () {
-            $rootScope.conversations.splice($rootScope.conversations.indexOf($scope.conversation), 1);
+            $scope.conversations.splice($scope.conversations.indexOf($scope.conversation), 1);
         }).catch(function (error) {
             console.log("Error al borrar conversacion", error);
         })
@@ -44,16 +48,11 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $rootScope.$on('receivedMessage', function (e, data) {
 
-        var found = $filter('getById')($rootScope.conversations, data.idConversation);
+        var found = $filter('getById')($scope.conversations, data.conversation.id);
         console.log("a ver que encontró", found);
         if (found) {
-            found.isUnread = 1;
-        } else {
-            //TODO: insertar la nueva conversación.
+            $scope.conversations.splice($scope.conversations.indexOf(found), 1);
         }
-        if ($rootScope.currentState != "conversation") {
-            var conversation = messageService.factory().createConversation();
-
-        }
+        $scope.conversations.unshift(data.conversation);
     });
 });

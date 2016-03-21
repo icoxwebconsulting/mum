@@ -81,7 +81,9 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
                 messageService.saveConversation($scope.conversation).then(function (insertId) {
                     $scope.conversation.id = insertId;
                     messageService.setConversation($scope.conversation);
-                    $rootScope.conversations.unshift($scope.conversation);
+                    $rootScope.$emit('addConversation', {
+                        conversation: $scope.conversation
+                    });
                     processSend();
                 });
             }
