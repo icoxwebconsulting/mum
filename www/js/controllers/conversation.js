@@ -35,14 +35,14 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $rootScope.$on('receivedMessage', function (e, data) {
-        if ($rootScope.currentState == "conversation" && $scope.conversation.id == data.idConversation) {
+        if ($rootScope.currentState == "conversation" && $scope.conversation.id == data.conversation.id) {
             var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
             $scope.messages.push({
                 about: (data.type = 'email') ? "" : null,
                 at: null,
                 from_address: (data.type = 'email') ? "" : null,
-                id: data.idConversation,
-                body: data.data.message,
+                id: data.idMessage, //TODO: revisar que se cambio de idConversation
+                body: data.message,
                 to_send: false,
                 is_received: true,
                 created: date
@@ -110,7 +110,9 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                     $scope.conversation.created = date;
                     messageService.saveConversation($scope.conversation).then(function (insertId) {
                         $scope.conversation.id = insertId;
-                        $rootScope.conversations.unshift($scope.conversation);
+                        $rootScope.$emit('addConversation', {
+                            conversation: $scope.conversation
+                        });
                         processSend();
                     });
                 }
