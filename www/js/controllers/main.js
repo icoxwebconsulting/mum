@@ -22,7 +22,7 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
         var hideSheet = $ionicActionSheet.show({
             buttons: [
                 {text: 'Perfil'},
-                {text: 'Nuevo grupo'},
+                //{text: 'Nuevo grupo'},
                 {text: 'Política de privacidad'}
             ],
             titleText: 'Opciones',
