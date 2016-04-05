@@ -1,46 +1,62 @@
 <div class="mum">
-    <ion-header-bar>
-        <div class="header header-bd">
-            <div class="flex flex-middle-xs">
-                <div class="flex-xs-2">
-                    <a href="#/content/home" class="button button-icon ion-chevron-left"></a>
-                </div>
-                <div class="flex-xs p-y-xs">
-                    <div class="flex flex-middle-xs">
-                        <img class="img-circle m-r-xs" src="img/person.png" style="border-radius: 50%;" alt=""
-                             width="56">
-                        {{message.displayName}}
+    <ion-content>
+        <div class="row">
+            <div class="col-33">
+                <div class="row">
+                    <div class="col">
+                        <a href="#/content/home" class="button button-icon ion-chevron-left"></a>
+                    </div>
+                    <div class="col">
+                        <img class="img-circle m-r-xs" src="img/person.png" style="border-radius: 50%;" alt="" width="56">
                     </div>
                 </div>
             </div>
+            <div class="col-66 col-center" style="text-align: left;">
+                {{message.displayName}}
+            </div>
         </div>
-    </ion-header-bar>
-    <ion-content style="margin-top: 75px;">
-        <p class="text-primary">Enviar {{message.date.format("LLLL")}}</p>
-        <p class="text-primary">Destinatario {{message.displayName}}
-            <span ng-show="message.type == 'sms' && message.number">({{message.number}})</span>
-            <span ng-show="message.type == 'email' && message.email">({{message.email}})</span>
-        </p>
 
-        <form class="form-paper">
-            <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
-                <label>Asunto:</label>
-                <div class="flex-xs">
-                    <input type="text" class="form-control" style="width:90%;" ng-model="message.subject"/>
-                </div>
+        <div class="row">
+            <div class="col">
+                <p class="text-primary">Enviar {{message.date.format("LLLL")}}</p>
             </div>
-            <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
-                <label>De:</label>
-                <div class="flex-xs">
-                    <input type="email" class="form-control" style="width:90%;" ng-model="message.from"/>
-                </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p class="text-primary">Destinatario {{message.displayName}}
+                    <span ng-show="message.type == 'sms' && message.number">({{message.number}})</span>
+                    <span ng-show="message.type == 'email' && message.email">({{message.email}})</span>
+                </p>
             </div>
-            <div class="form-group">
-                <textarea class="form-control" rows="10" style="width: 100%" ng-model="message.body"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <form class="form-paper">
+                    <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
+                        <label>Asunto:</label>
+                        <div class="flex-xs">
+                            <input type="text" class="form-control" style="width:90%;" ng-model="message.subject"/>
+                        </div>
+                    </div>
+                    <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
+                        <label>De:</label>
+                        <div class="flex-xs">
+                            <input type="email" class="form-control" style="width:90%;" ng-model="message.from"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="10" style="width: 100%" ng-model="message.body"></textarea>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <button style="font-size: 28px; color:gray" class="button button-icon ion-android-send" ng-click="sendMessage()"></button>
+            </div>
+        </div>
     </ion-content>
-    <ion-footer-bar>
-        <button class="button button-icon ion-android-send" style="padding-left: 50%" ng-click="sendMessage()"></button>
-    </ion-footer-bar>
 </div>
