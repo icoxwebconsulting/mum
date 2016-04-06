@@ -1,4 +1,4 @@
-angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus) {
 
     var message;
 
@@ -84,6 +84,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 message.subject = $scope.subject;
             }
             $scope.body = "";
+            focus('inputMsj');
             messageService.sendMessage(message, $scope.conversation).then(function () {
                 //TODO:
             }).catch(function (error) {

@@ -1,4 +1,4 @@
-<div class="mum">
+<!--<div class="mum">-->
     <ion-header-bar>
         <div class="header header-bd">
             <div class="flex flex-middle-xs">
@@ -42,6 +42,7 @@
             </form>
         </div>
     </ion-header-bar>
+
     <ion-content class="bg-main"
                  ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}"
                  delegate-handle="mainScroll">
@@ -62,23 +63,15 @@
             </div>
         </div>
     </ion-content>
-    <ion-footer-bar>
-        <div class="footer" style="width: 100%">
-            <form class="form-messages">
-                <div class="form-group">
-                    <div class="flex flex-middle-xs">
-                        <div class="flex-xs">
-                            <input type="text" class="form-control" style="width: 90%" placeholder="Escribir"
-                                   ng-model="body">
-                        </div>
-                        <div class="flex-xs-2">
-                            <button class="btn clear-btn btn-block" ng-click="sendMessage()">
-                                <span class="icon icon-dart-right"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+
+    <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+        <label class="item-input-wrapper">
+            <input type="text" id="inputMsj" placeholder="Escribir mensaje" on-return="sendMessage()" ng-model="body" /> <!-- on-focus="inputUp()" on-blur="inputDown()" -->
+        </label>
+        <button class="button button-clear" ng-click="sendMessage()" event-focus="click" event-focus-id="inputMsj">
+            <span class="icon icon-dart-right" style="color: #999999;"></span>
+        </button>
     </ion-footer-bar>
-</div>
+
+
+<!--</div>-->
