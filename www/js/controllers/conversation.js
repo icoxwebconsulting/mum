@@ -119,4 +119,17 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             processSend();
         }
     };
+
+    $scope.inputUp = function() {
+        if (isIOS) $scope.data.keyboardHeight = 216;
+        $timeout(function() {
+            $ionicScrollDelegate.scrollBottom(true);
+        }, 300);
+
+    };
+
+    $scope.inputDown = function() {
+        if (isIOS) $scope.data.keyboardHeight = 0;
+        $ionicScrollDelegate.resize();
+    };
 });
