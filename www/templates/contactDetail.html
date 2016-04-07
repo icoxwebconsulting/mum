@@ -9,19 +9,19 @@
 
             <div class="item item-body">
                 <p ng-if="contact.phone_number && contact.mum_id">
-                    <button class="button button-outline button-assertive" ng-click="startConversation('mum')">
+                    <button class="button button-outline button-mum" ng-click="startConversation('mum')">
                         Mum a: {{contact.phone_number}}
                     </button>
                 </p>
 
                 <p ng-if="contact.email">
-                    <button class="button button-outline button-assertive" ng-click="startConversation('email')">
+                    <button class="button button-outline button-mum" ng-click="startConversation('email')">
                         Correo a: {{contact.email}}
                     </button>
                 </p>
 
                 <p ng-if="contact.phone_number">
-                    <button class="button button-outline button-assertive" ng-click="startConversation('sms')">
+                    <button class="button button-outline button-mum" ng-click="startConversation('sms')">
                         Sms a: {{contact.phone_number}}
                     </button>
                 </p>

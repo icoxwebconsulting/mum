@@ -1521,3 +1521,26 @@ body {
     width: 45%;
     box-shadow: none;
 }
+/** CUSTOM DESIGN **/
+.bar.bar-mum {
+    border-color: #C83960;
+    background-color: #FB4B77;
+    background-image: linear-gradient(0deg, #FB4B77, #FB4B77 50%, transparent 50%);
+    color: #fff;
+}
+
+.bar-mum .button {
+    border-color: #C83960;
+    background-color: #FB4B77;
+    color: #fff;
+}
+
+.bar.bar-mum .title {
+    color: #fff;
+}
+
+.button.button-mum.button-outline {
+    border-color: #C83960;
+    background: transparent;
+    color: #FB4B77
+}

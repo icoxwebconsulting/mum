@@ -39,4 +39,6 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
                     Contacts.loadContacts();
                 });
         }
-    });
+    }).config(function ($ionicConfigProvider) {
+    $ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
+});
