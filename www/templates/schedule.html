@@ -19,7 +19,7 @@
                         </div>
                     </div>
 
-                    <ion-scroll zooming="false" direction="x" class="wide-as-needed">
+                    <ion-scroll zooming="false" direction="x" class="wide-as-needed" delegate-handle="vscroll">
                         <div class="calendar-days flex flex-middle-xs" style="width: 1700px;">
                             <button class="calendar-day clear-btn flex-xs" type="button"
                                     ng-repeat="day in getMaxDay() track by $index"

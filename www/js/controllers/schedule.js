@@ -1,4 +1,4 @@
-angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService) {
+angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition) {
 
     $scope.fecha = moment().add(1, 'hours');
     $scope.selectedTime = $scope.fecha.format('hh:mm a');
@@ -7,7 +7,13 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
         //fechas
         $scope.fecha = moment().add(1, 'hours');
         $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        $scope.scrollToDay();
     });
+
+    $scope.scrollToDay = function () {
+        var element = $ionicPosition.position(angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active')[0]));
+        $ionicScrollDelegate.$getByHandle('vscroll').scrollTo(element.left, element.top, true);
+    };
 
     function showPopup() {
         $ionicPopup.alert({
