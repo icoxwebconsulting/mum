@@ -1,4 +1,4 @@
-angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout) {
 
     var message;
 
@@ -121,15 +121,17 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     };
 
     $scope.inputUp = function() {
-        if (isIOS) $scope.data.keyboardHeight = 216;
+        if (ionic.Platform.isIOS()) $scope.data.keyboardHeight = 216;
         $timeout(function() {
             $ionicScrollDelegate.scrollBottom(true);
+            console.log("listo el scroll to bottom");
         }, 300);
 
     };
 
     $scope.inputDown = function() {
-        if (isIOS) $scope.data.keyboardHeight = 0;
+        if (ionic.Platform.isIOS()) $scope.data.keyboardHeight = 0;
         $ionicScrollDelegate.resize();
+        console.log("listo el otro scroll");
     };
 });
