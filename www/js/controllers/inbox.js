@@ -35,7 +35,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
             buttons: [
                 {
                     text: '<b>Aceptar</b>',
-                    type: 'button-positive',
+                    type: 'button-mum',
                     onTap: function (e) {
                         toDelete();
                     }
