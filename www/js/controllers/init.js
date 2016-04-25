@@ -48,7 +48,13 @@ angular.module('app')
                             }
                         } catch (error) {
                         }
+                    }).catch(function (error) {
+                    $ionicLoading.hide();
+
+                    $ionicPopup.alert({
+                        title: 'Ha ocurrido un error, intente más tarde. '
                     });
+                });
             }
         };
 
