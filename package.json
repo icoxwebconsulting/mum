@@ -25,7 +25,6 @@
     "cordova-plugin-sms",
     "cordova-sqlite-storage",
     "cordova-plugin-network-information",
-    "cordova-plugin-crosswalk-webview",
     {
       "variables": {
         "SENDER_ID": "850066050595"
