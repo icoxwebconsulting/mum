@@ -5,6 +5,14 @@ angular.module('app')
         $scope.toVerify = user.getVerified();
 
         $scope.inProcess = 0;
+        
+        $scope.haveCode = function (opt) {
+            if(opt){
+                $scope.toVerify = 1;
+            }else{
+                $scope.toVerify = 0;
+            }
+        };
 
         $scope.sendCode = function () {
             if (!$scope.data.cc) {

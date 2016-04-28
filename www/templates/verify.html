@@ -32,6 +32,12 @@
                         <a href="#" ng-click="sendCode()" class="button button-small button-stable">Aceptar</a>
                     </div>
                 </div>
+                <br/><br/>
+                <div class="row">
+                    <div class="col">
+                        <a href="#" class="link" ng-click="haveCode(1)">Ya tengo un código</a>
+                    </div>
+                </div>
             </div>
 
             <div ng-show="toVerify == 1">
@@ -50,6 +56,12 @@
                 <div class="row" ng-hide="inProcess == 1">
                     <div class="col">
                         <a href="#" ng-click="verifyCode()" class="button button-small button-stable">Confirmar</a>
+                    </div>
+                </div>
+                <br/><br/>
+                <div class="row" ng-hide="inProcess == 1">
+                    <div class="col">
+                        <a href="#" class="link" ng-click="haveCode(0)">Deseo solicitar un código</a>
                     </div>
                 </div>
 
