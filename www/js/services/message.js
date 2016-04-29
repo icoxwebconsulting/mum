@@ -4,6 +4,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         function messageFactory() {
             this.createMessage = function () {
                 var message = {
+                    id: null,
                     type: "",
                     body: "",
                     date: null,

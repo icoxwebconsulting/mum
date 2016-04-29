@@ -2,7 +2,7 @@
     <ion-content class="top-margin">
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
-                      ng-repeat="contact in contacts"
+                      collection-repeat="contact in contacts"
                       type="item-text-wrap"
                       ng-click="contactDetail(contact)">
                 <img ng-src="{{contact.photo}}">

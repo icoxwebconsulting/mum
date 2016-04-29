@@ -27,35 +27,11 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
         if ($scope.fecha.diff(now, 'seconds') < 3500) {
             showPopup();
         } else {
-            messageService.setMessage({
-                type: type,
-                body: "",
-                date: $scope.fecha,
-                from: null,
-                subject: null,
-                phoneNumber: null,
-                email: null,
-                displayName: "",
-                created: null,
-            });
-
-            switch (type) {
-                case 'email':
-                {
-                    $state.go('email_contacts');
-                    break;
-                }
-                case 'sms':
-                {
-                    $state.go('sms_contacts');
-                    break;
-                }
-                case 'mum':
-                {
-                    $state.go('mum_contacts');
-                    break;
-                }
-            }
+            var message = messageService.factory().createMessage();
+            message.type = type;
+            message.date = $scope.fecha;
+            messageService.setMessage(message);
+            $state.go('pick_contact');
         }
     };
 

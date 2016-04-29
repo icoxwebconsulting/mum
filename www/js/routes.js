@@ -59,22 +59,10 @@ angular.module('app.routes', [])
                 controller: 'ContactDetailCtrl'
             })
 
-            .state('email_contacts', {
-                url: '/pick/email/contact',
+            .state('pick_contact', {
+                url: '/pick/contact',
                 templateUrl: 'templates/pick-contacts.html',
-                controller: 'EmailContactCtrl'
-            })
-
-            .state('sms_contacts', {
-                url: '/pick/sms/contact',
-                templateUrl: 'templates/pick-contacts.html',
-                controller: 'SMSContactCtrl'
-            })
-
-            .state('mum_contacts', {
-                url: '/pick/mum/contact',
-                templateUrl: 'templates/pick-contacts.html',
-                controller: 'MumContactCtrl'
+                controller: 'PickContactCtrl'
             })
 
             .state('layout.schedule', {
