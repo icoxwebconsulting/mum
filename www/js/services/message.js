@@ -7,6 +7,8 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                     type: "",
                     body: "",
                     date: null,
+                    fileData: null,
+                    fileMimeType: null,
                     from: null,
                     subject: null,
                     phoneNumber: null,
