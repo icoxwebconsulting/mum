@@ -1,4 +1,6 @@
-angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout) {
+angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout,
+                                                               $ionicActionSheet, $cordovaCamera,
+                                                               $cordovaFile) {
 
     var message;
 
@@ -8,6 +10,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.subject = "";
     $scope.from = null;
 
+    //The view has fully entered and is now the active view. This event will fire, whether it was the first load or a cached view.
     $scope.$on('$ionicView.enter', function (e) {
         $scope.conversation = messageService.getConversation();
         $scope.conversation.isUnread = 0;
@@ -19,6 +22,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             });
         }
     });
+
+    //The view has finished leaving and is no longer the active view. This event will fire, whether it is cached or destroyed.
 
     $scope.$on('$ionicView.leave', function (e) {
         $scope.messages = [];
@@ -51,15 +56,23 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         }
     });
 
-    $scope.sendMessage = function () {
-        if ($scope.body == "" || $scope.body.length < 1) {
+    $scope.sendMessage = function (isFile, obj) {
+        if(isFile === undefined){
+            isFile = false;
+        }
+
+        if (!isFile && ($scope.body == "" || $scope.body.length < 1 )) {
             return;
         }
 
         var type = $scope.conversation.type;
         var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
         message.created = date;
-        $scope.conversation.lastMessage = $scope.body;
+        if (isFile) {
+            $scope.conversation.lastMessage = "Imagen";
+        } else {
+            $scope.conversation.lastMessage = $scope.body;
+        }
         $scope.conversation.updated = date;
         $scope.messages.push({
             about: (type = 'email') ? $scope.subject : null,
@@ -69,6 +82,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             body: $scope.body,
             to_send: true,
             is_received: false,
+            is_file: isFile,
+            //Agreaagr url de la imagen desde la vista
             created: date
         });
         //$ionicScrollDelegate.$getByHandle('mainScroll').resize();
@@ -82,6 +97,10 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             if (type == 'email') {
                 message.from = $scope.from;
                 message.subject = $scope.subject;
+            }
+            if (isFile) {
+                message.fileData = obj.fileData;
+                message.fileMimeType = obj.fileMimeType;
             }
             $scope.body = "";
             focus('inputMsj');
@@ -120,6 +139,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         }
     };
 
+
     $scope.inputUp = function () {
         if (ionic.Platform.isIOS()) {
             $scope.data.keyboardHeight = 216;
@@ -135,5 +155,82 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             $scope.data.keyboardHeight = 0;
         }
         $ionicScrollDelegate.resize();
+    };
+
+    $scope.actionSheet = function () {
+        $ionicActionSheet.show({
+            buttons: [
+                {text: '<i class="icon ion-camera"></i> Hacer Foto'},
+                {text: '<i class="icon ion-folder"></i> Seleccionar Foto'},
+                {text: '<i class="icon ion-folder"></i> Seleccionar Archivo'}
+            ],
+            titleText: 'Subir archivo',
+            cancel: function () {
+                return true;
+            },
+            buttonClicked: function (index) {
+                if (index == 0) {
+                    var prefix = '';
+                    var options = {
+                        quality: 50,
+                        destinationType: Camera.DestinationType.FILE_URI,
+                        sourceType: Camera.PictureSourceType.CAMERA,
+                        allowEdit: false,
+                        correctOrientation: true,
+                        encodingType: Camera.EncodingType.JPEG,
+                        saveToPhotoAlbum: false
+                    };
+                } else if (index == 1) {
+                    var prefix = 'file://';
+                    var options = {
+                        quality: 50,
+                        destinationType: Camera.DestinationType.FILE_URI,
+                        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+                        mediaType: Camera.MediaType.ALLMEDIA,
+                        saveToPhotoAlbum: true
+
+                    };
+                }
+
+                $cordovaCamera.getPicture(options)
+                    .then(function (imageURI) {
+                        $ionicLoading.show();
+                        imageURI = prefix + imageURI;
+                        var indexOfSlash = imageURI.lastIndexOf('/') + 1;
+                        var name = imageURI.substr(indexOfSlash);
+                        var namePath = imageURI.substr(0, indexOfSlash);
+
+                        return $cordovaFile.copyFile(namePath, name, cordova.file.dataDirectory, name);
+                    })
+                    .then(function (info) {
+                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.fullPath.substring(1))
+                            .then(function (dataURL) {
+                                return {
+                                    path: info.nativeURL,
+                                    data: dataURL
+                                };
+                            });
+                    })
+                    .then(function (response) {
+                        sendMessage(true,
+                            {
+                                path: response.path,
+                                fileData: response.data.substring(23),
+                                fileMimeType: "jpeg"
+                            });
+
+                    })
+                    .then(function () {
+                        //Preguntarle a David como guardar la Url en la base de datos del tlf y que se envie por el msj
+                        //refreshProfileInfo();
+                        //$ionicLoading.hide();
+                    })
+                    .catch(function (error) {
+                        $ionicLoading.hide();
+                    });
+
+                return true;
+            }
+        });
     };
 });
