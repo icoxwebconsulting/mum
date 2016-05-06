@@ -91,12 +91,13 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function saveMessageHistory(data, type, messageId, idConversation, isReceived) {
         var deferred = $q.defer();
 
-        var query = 'INSERT INTO message_history (id, id_conversation, type, body, about, is_received, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?)';
+        var query = 'INSERT INTO message_history (id, id_conversation, type, body, attachment, about, is_received, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?,?)';
         var values = [
             messageId,//key obtenida del servidor
             parseInt(idConversation), //key del registro creado anteriormente en conversation
             type,
             data.message.body || null,
+            data.path || null,
             data.about || null,
             isReceived || 0,
             data.from || null,
@@ -118,11 +119,15 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function savePendingMessage(data, type, idConversation) {
         var deferred = $q.defer();
 
-        var query = 'INSERT INTO pending_message (id_conversation, type, body, about, from_address, at, receivers, to_update, created) VALUES(?,?,?,?,?,?,?,?,?)';
+        var query = 'INSERT INTO pending_message (id_conversation, type, body, path, fileData, fileMimeType, about, from_address, at, receivers, to_update, created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
         var values = [
             parseInt(idConversation), //key del registro creado anteriormente en conversation
             type,
             data.message.body || null,
+            data.path || null,
+            data.message.fileData || null,
+            data.message.fileMimeType || null,
+            data.
             data.about || null,
             data.from || null,
             data.message.at || null,

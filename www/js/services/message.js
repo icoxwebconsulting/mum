@@ -7,6 +7,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                     type: "",
                     body: "",
                     date: null,
+                    path: null,
                     fileData: null,
                     fileMimeType: null,
                     from: null,
@@ -81,6 +82,13 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         if (message.type == 'email') {
             messageData.about = message.subject;
             messageData.from = message.from;
+        }
+
+        if (message.fileData && message.fileMimeType){
+            messageData.path = message.path;
+            messageData.message.fileData = message.fileData;
+            messageData.message.fileMimeType = message.fileMimeType;
+
         }
 
         messageStorage.savePendingMessage(messageData, message.type, messageData.idConversation).then(function (params) {

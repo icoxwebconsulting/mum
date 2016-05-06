@@ -40,6 +40,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'id_conversation INTEGER,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
+                'attachment TEXT,' + //upload file
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
                 'at DATETIME,' + //--solo para mensajes programados
@@ -55,6 +56,9 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
                 'id_conversation INTEGER,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
+                'path TEXT,' + // file path
+                'fileData TEXT,' + // -- file string
+                'fileMimeType TEXT,' + // -- file mime type
                 'about TEXT,' + //-- de email
                 'from_address TEXT,' + // de email
                 'at DATETIME,' + //--solo para mensajes programados
