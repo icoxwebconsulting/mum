@@ -83,6 +83,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             to_send: true,
             is_received: false,
             is_file: isFile,
+            attachSrc: obj.path,
             //Agreaagr url de la imagen desde la vista
             created: date
         });
@@ -99,6 +100,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 message.subject = $scope.subject;
             }
             if (isFile) {
+                message.path  = obj.path;
                 message.fileData = obj.fileData;
                 message.fileMimeType = obj.fileMimeType;
             }
@@ -157,7 +159,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $ionicScrollDelegate.resize();
     };
 
-    $scope.actionSheet = function () {
+    $scope.actionUpload = function () {
         $ionicActionSheet.show({
             buttons: [
                 {text: '<i class="icon ion-camera"></i> Hacer Foto'},
@@ -220,11 +222,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                             });
 
                     })
-                    .then(function () {
+                    //.then(function () {
                         //Preguntarle a David como guardar la Url en la base de datos del tlf y que se envie por el msj
                         //refreshProfileInfo();
                         //$ionicLoading.hide();
-                    })
+                    //})
                     .catch(function (error) {
                         $ionicLoading.hide();
                     });
