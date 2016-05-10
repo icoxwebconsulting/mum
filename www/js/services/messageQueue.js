@@ -35,6 +35,9 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
 
             delete messageData.idConversation;
             delete messageData.toUpdate;
+            delete messageData.path;
+            //delete messageData.message.fileData;
+            //delete messageData.message.fileMimeType;
             var isReceived = 0;
 
             if (type == 'sms') {

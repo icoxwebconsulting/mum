@@ -127,7 +127,6 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
             data.path || null,
             data.message.fileData || null,
             data.message.fileMimeType || null,
-            data.
             data.about || null,
             data.from || null,
             data.message.at || null,
