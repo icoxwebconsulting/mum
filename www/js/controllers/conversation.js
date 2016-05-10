@@ -1,6 +1,6 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout,
                                                                $ionicActionSheet, $cordovaCamera,
-                                                               $cordovaFile) {
+                                                               $cordovaFile, $ionicLoading) {
 
     var message;
 
@@ -57,10 +57,19 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $scope.sendMessage = function (isFile, obj) {
+        //console.log(obj);
+
         if(isFile === undefined){
-            isFile = false;
+            isFile   = false;
+            obj = {
+                path: null,
+                fileData: null,
+                fileMimeType: null
+            };
         }
 
+        //console.log(obj);
+        
         if (!isFile && ($scope.body == "" || $scope.body.length < 1 )) {
             return;
         }
@@ -214,12 +223,13 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                             });
                     })
                     .then(function (response) {
-                        sendMessage(true,
+                        $scope.sendMessage(true,
                             {
                                 path: response.path,
                                 fileData: response.data.substring(23),
                                 fileMimeType: "jpeg"
                             });
+                        $ionicLoading.hide();
 
                     })
                     //.then(function () {
