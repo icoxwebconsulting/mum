@@ -15,8 +15,8 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
         return queue.length;
     }
 
-    function processStorage(messageData, type, sentMessage, idConversation, isReceived, idPending, toUpdate) {
-        messageStorage.saveMessageHistory(messageData, type, sentMessage, idConversation, isReceived).then(function (params) {
+    function processStorage(messageData, type, sentMessage, idConversation, isReceived, idPending, toUpdate, attachment) {
+        messageStorage.saveMessageHistory(messageData, type, sentMessage, idConversation, isReceived, attachment).then(function (params) {
             messageStorage.deletePendingMessage(idPending).then(function () {
                 messageNotification.notifySendMessage(idConversation, toUpdate, sentMessage);
                 process();
@@ -32,6 +32,7 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             messageData = messageData.data;
             var idConversation = messageData.idConversation;
             var toUpdate = messageData.toUpdate;
+            //var attachment = messageData.path;
 
             delete messageData.idConversation;
             delete messageData.toUpdate;
@@ -43,21 +44,21 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             if (type == 'sms') {
                 messageRes(userDatastore.getTokens().accessToken).sendSms(messageData).$promise.then(function (response) {
                     //TODO handle server side error in data
-                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate);
+                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate, response.attachment);
                 }).catch(function (error) {
                     process();
                 });
             } else if (type == 'email') {
                 messageRes(userDatastore.getTokens().accessToken).sendEmail(messageData).$promise.then(function (response) {
                     //TODO handle server side error in data
-                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate);
+                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate, response.attachment);
                 }).catch(function (error) {
                     process();
                 });
             } else if (type == 'mum') {
                 messageRes(userDatastore.getTokens().accessToken).sendInstant(messageData).$promise.then(function (response) {
                     //TODO handle server side error in data
-                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate);
+                    processStorage(messageData, type, response.message, idConversation, isReceived, idPending, toUpdate, response.attachment);
                 }).catch(function (error) {
                     process();
                 });
