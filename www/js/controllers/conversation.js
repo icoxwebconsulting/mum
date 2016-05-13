@@ -92,7 +92,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             to_send: true,
             is_received: false,
             is_file: isFile,
-            attachSrc: obj.path,
+            attachment: obj.path,
+            //path: obj.path,
             //Agreaagr url de la imagen desde la vista
             created: date
         });
@@ -171,9 +172,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.actionUpload = function () {
         $ionicActionSheet.show({
             buttons: [
-                {text: '<i class="icon ion-camera"></i> Hacer Foto'},
-                {text: '<i class="icon ion-folder"></i> Seleccionar Foto'},
-                {text: '<i class="icon ion-folder"></i> Seleccionar Archivo'}
+                {text: '<i class="icon ion-camera"></i> Cámara'},
+                {text: '<i class="icon ion-folder"></i> Galería'}
             ],
             titleText: 'Subir archivo',
             cancel: function () {
@@ -191,7 +191,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                         encodingType: Camera.EncodingType.JPEG,
                         saveToPhotoAlbum: false
                     };
-                } else if (index == 1) {
+                } else {
                     var prefix = 'file://';
                     var options = {
                         quality: 50,
