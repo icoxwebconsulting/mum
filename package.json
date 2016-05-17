@@ -35,7 +35,8 @@
     "cordova.plugins.diagnostic",
     "cordova-plugin-camera",
     "cordova-plugin-file",
-    "cordova-plugin-crosswalk-webview"
+    "cordova-plugin-crosswalk-webview",
+    "cordova-plugin-sim"
   ],
   "cordovaPlatforms": [
     {

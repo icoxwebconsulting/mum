@@ -1,23 +1,63 @@
 angular.module('app')
-    .controller('InitCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, user, MUMSMS) {
+    .controller('InitCtrl', function ($scope, $state, $ionicPopup, $ionicLoading, $ionicHistory, user, MUMSMS, $http) {
         $scope.data = {};
 
         $scope.toVerify = user.getVerified();
 
         $scope.inProcess = 0;
-        
+
+        function buildSelect() {
+            $http.get('js/paises.json',
+                {header: {'Content-Type': 'application/json; charset=UTF-8'}}
+            ).then(function (countries) {
+                $scope.select.availableOptions = countries.data;
+                try {
+                    window.plugins.sim.getSimInfo(function (result) {
+                        console.log(result);
+                        var iso = result.countryCode;
+                        iso = iso.toUpperCase();
+                        for (var i = 0; i < $scope.select.availableOptions.length; i++) {
+                            if ($scope.select.availableOptions[i].iso2 == iso) {
+                                console.log($scope.select.availableOptions[i])
+                                $scope.myCountry = $scope.select.availableOptions[i];
+                                break;
+                            }
+                        }
+                    }, function () {
+                        //error
+                        $scope.myCountry = {"nombre":"España","name":"Spain","iso2":"ES","iso3":"ESP","phone_code":"34"};
+                    });
+                } catch (e) {
+                    //seleccionar españa como predeterminado
+                    $scope.myCountry = {"nombre":"España","name":"Spain","iso2":"ES","iso3":"ESP","phone_code":"34"};
+                }
+            }).catch(function () {
+
+            });
+        }
+
+        $scope.select = {
+            repeatSelect: null,
+            availableOptions: [],
+        };
+
+        buildSelect();
+
+
+
+
         $scope.haveCode = function (opt) {
-            if(opt){
+            if (opt) {
                 $scope.toVerify = 1;
-            }else{
+            } else {
                 $scope.toVerify = 0;
             }
         };
 
         $scope.sendCode = function () {
-            if (!$scope.data.cc) {
+            if (!$scope.myCountry) {
                 $ionicPopup.alert({
-                    title: 'Ingrese el código del país'
+                    title: 'Seleccione el país'
                 });
             } else if (!$scope.data.phone) {
                 $ionicPopup.alert({
@@ -29,7 +69,7 @@ angular.module('app')
                 });
 
                 var customerData = {
-                    countryCode: $scope.data.cc,
+                    countryCode: $scope.myCountry.phone_code,
                     phoneNumber: $scope.data.phone
                 };
 

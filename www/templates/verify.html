@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col">
                         <label class="item item-input">
-                            <input type="tel" class="mum-input" placeholder="+ Código de país" ng-model="data.cc">
+                            <select style="width: 95%" class="item item-select" ng-model="myCountry" ng-options="'+' + option.phone_code + ' ' + option.nombre for option in select.availableOptions"></select>
                         </label>
                         <label class="item item-input">
                             <input type="tel" class="mum-input" placeholder="Número telefónico" ng-model="data.phone">
