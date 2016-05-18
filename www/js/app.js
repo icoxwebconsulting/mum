@@ -31,8 +31,12 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
             pushNotification.init();
             pushNotification.listenNotification(messageReceived.processReceivedMessage);
             userDatastore.setRefreshingAccessToken(0);
-            if (SMS) {
-                MUMSMS.init();
+            try {
+                if (SMS) {
+                    MUMSMS.init();
+                }
+            } catch (e) {
+
             }
             user.refreshAccessToken()
                 .then(function () {

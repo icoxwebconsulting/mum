@@ -13,7 +13,6 @@ angular.module('app')
                 $scope.select.availableOptions = countries.data;
                 try {
                     window.plugins.sim.getSimInfo(function (result) {
-                        console.log(result);
                         var iso = result.countryCode;
                         iso = iso.toUpperCase();
                         for (var i = 0; i < $scope.select.availableOptions.length; i++) {
@@ -42,10 +41,8 @@ angular.module('app')
         };
 
         buildSelect();
-
-
-
-
+        
+        
         $scope.haveCode = function (opt) {
             if (opt) {
                 $scope.toVerify = 1;
