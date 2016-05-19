@@ -14,6 +14,10 @@ angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ioni
     $scope.contactDetail = function (contact) {
         Contacts.setSingleContact(contact);
         $state.go('layout.contactDetail');
-    }
+    };
+
+    $scope.clearSearch = function() {
+        $scope.search = '';
+    };
 
 });

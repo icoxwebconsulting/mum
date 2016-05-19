@@ -19,17 +19,18 @@
                         Teléfono {{contact.phone_number}}
                     </ion-item>
                 </ion-list>
-                <p ng-if="contact.phone_number && contact.mum_id">
-                    <a ng-click="startConversation('mum')"><img src="img/nuevo-mum.png" height="70" width="70" /></a>
-                </p>
 
-                <p ng-if="contact.email">
-                    <a ng-click="startConversation('email')"><img src="img/nuevo-mail.png" height="70" width="70" /></a>
-                </p>
-
-                <p ng-if="contact.phone_number">
-                    <a ng-click="startConversation('sms')"><img src="img/nuevo-sms.png" height="70" width="70" /></a>
-                </p>
+                <div class="row">
+                    <div class="col" ng-if="contact.phone_number && contact.mum_id">
+                        <a ng-click="startConversation('mum')"><img src="img/nuevo-mum.png" height="70" width="70" /></a>
+                    </div>
+                    <div class="col" ng-if="contact.email">
+                        <a ng-click="startConversation('email')"><img src="img/nuevo-mail.png" height="70" width="70" /></a>
+                    </div>
+                    <div class="col" ng-if="contact.phone_number">
+                        <a ng-click="startConversation('sms')"><img src="img/nuevo-sms.png" height="70" width="70" /></a>
+                    </div>
+                </div>
 
             </div>
 

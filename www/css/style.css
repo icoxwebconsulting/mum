@@ -175,3 +175,9 @@ margin-bottom: 10px;}
 .platform-android .action-sheet-has-icons .button {
     padding-left: 56px; }
 
+.button.button-icon.input-button {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    color: #bbb;
+}
