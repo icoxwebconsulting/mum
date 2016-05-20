@@ -1,6 +1,6 @@
 angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', 'app.pushNotification',
-        'app.resources', 'app.messageResource', 'app.device', 'app.contactRes', 'app.deviceDataStore',
-        'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore', 'app.MUMSMS', 'app.focus', 'app.filters'])
+    'app.resources', 'app.messageResource', 'app.device', 'app.contactRes', 'app.deviceDataStore',
+    'ngResource', 'ngCordova', 'app.contacts', 'ionic-timepicker', 'app.sqliteDataStore', 'app.MUMSMS', 'app.focus', 'app.filters'])
     .run(function ($rootScope, $state, $stateParams, $ionicPlatform, user, Contacts, sqliteDatastore, userDatastore,
                    pushNotification, messageReceived, MUMSMS) {
         $rootScope.$state = $state;
@@ -26,13 +26,21 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
 
         });
 
+        $ionicPlatform.on('resume', function () {
+            console.log("app resumida")
+        });
+
         function init() {
             sqliteDatastore.initDb();
             pushNotification.init();
             pushNotification.listenNotification(messageReceived.processReceivedMessage);
             userDatastore.setRefreshingAccessToken(0);
-            if (SMS) {
-                MUMSMS.init();
+            try {
+                if (SMS) {
+                    MUMSMS.init();
+                }
+            } catch (e) {
+
             }
             user.refreshAccessToken()
                 .then(function () {

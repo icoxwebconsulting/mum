@@ -1,11 +1,11 @@
 angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition) {
 
-    $scope.fecha = moment().add(1, 'hours');
+    $scope.fecha = moment().add(10, 'minutes');
     $scope.selectedTime = $scope.fecha.format('hh:mm a');
 
     $scope.$on('$ionicView.enter', function () {
         //fechas
-        $scope.fecha = moment().add(1, 'hours');
+        $scope.fecha = moment().add(10, 'minutes');
         $scope.selectedTime = $scope.fecha.format('hh:mm a');
         $scope.scrollToDay();
     });
@@ -18,44 +18,20 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
     function showPopup() {
         $ionicPopup.alert({
             title: 'Fecha inválida',
-            template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con una hora o más de retardo.</p>'
+            template: '<p>¡Ups! No podemos enviar mensajes al pasado. Envíe mensajes con 10 minutos o más de retardo.</p>'
         });
     }
 
     $scope.newSchedule = function (type) {
         var now = moment();
-        if ($scope.fecha.diff(now, 'seconds') < 3500) {
+        if ($scope.fecha.diff(now, 'seconds') < 540) {
             showPopup();
         } else {
-            messageService.setMessage({
-                type: type,
-                body: "",
-                date: $scope.fecha,
-                from: null,
-                subject: null,
-                phoneNumber: null,
-                email: null,
-                displayName: "",
-                created: null,
-            });
-
-            switch (type) {
-                case 'email':
-                {
-                    $state.go('email_contacts');
-                    break;
-                }
-                case 'sms':
-                {
-                    $state.go('sms_contacts');
-                    break;
-                }
-                case 'mum':
-                {
-                    $state.go('mum_contacts');
-                    break;
-                }
-            }
+            var message = messageService.factory().createMessage();
+            message.type = type;
+            message.date = $scope.fecha;
+            messageService.setMessage(message);
+            $state.go('pick_contact');
         }
     };
 

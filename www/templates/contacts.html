@@ -1,8 +1,17 @@
 <ion-view>
+    <ion-header-bar class="bar-light bar-subheader" style="margin-top: 100px;">
+        <input type="search"
+               placeholder="Buscar contacto..."
+               ng-model="search">
+        <button ng-if="search.length"
+                class="button button-icon ion-android-close input-button"
+                ng-click="clearSearch()">
+        </button>
+    </ion-header-bar>
     <ion-content class="top-margin">
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
-                      ng-repeat="contact in contacts"
+                      collection-repeat="contact in contacts | filter:search | orderBy:'display_name'"
                       type="item-text-wrap"
                       ng-click="contactDetail(contact)">
                 <img ng-src="{{contact.photo}}">

@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col">
                         <label class="item item-input">
-                            <input type="tel" class="mum-input" placeholder="+ Código de país" ng-model="data.cc">
+                            <select style="width: 95%" class="item item-select" ng-model="myCountry" ng-options="'+' + option.phone_code + ' ' + option.nombre for option in select.availableOptions"></select>
                         </label>
                         <label class="item item-input">
                             <input type="tel" class="mum-input" placeholder="Número telefónico" ng-model="data.phone">
@@ -30,6 +30,12 @@
                 <div class="row">
                     <div class="col">
                         <a href="#" ng-click="sendCode()" class="button button-small button-stable">Aceptar</a>
+                    </div>
+                </div>
+                <br/><br/>
+                <div class="row">
+                    <div class="col">
+                        <a href="#" class="link" ng-click="haveCode(1)">Ya tengo un código</a>
                     </div>
                 </div>
             </div>
@@ -50,6 +56,12 @@
                 <div class="row" ng-hide="inProcess == 1">
                     <div class="col">
                         <a href="#" ng-click="verifyCode()" class="button button-small button-stable">Confirmar</a>
+                    </div>
+                </div>
+                <br/><br/>
+                <div class="row" ng-hide="inProcess == 1">
+                    <div class="col">
+                        <a href="#" class="link" ng-click="haveCode(0)">Deseo solicitar un código</a>
                     </div>
                 </div>
 

@@ -1045,7 +1045,8 @@ body {
     min-height: 100vh;
     width: 100vw;
     background-image: url(../img/bg.jpg);
-    background-size: 277px auto;
+    background-size: 200px auto;
+    background-repeat: repeat;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;

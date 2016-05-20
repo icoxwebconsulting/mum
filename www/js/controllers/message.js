@@ -6,29 +6,8 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         $scope.message = messageService.getMessage();
     });
 
-    $scope.message = {
-        id: "",
-        type: "",
-        body: "",
-        date: null,
-        from: null,
-        subject: null,
-        phoneNumber: null,
-        email: null,
-        displayName: "",
-        created: null,
-    };
-
-    $scope.conversation = {
-        id: null,
-        image: null,
-        displayName: "",
-        type: "",
-        receivers: [],
-        lastMessage: "",
-        created: null,
-        updated: null
-    };
+    $scope.message = messageService.factory().createMessage();
+    $scope.conversation = messageService.factory().createConversation();
 
     $scope.sendMessage = function () {
         //$ionicLoading.show();
@@ -41,29 +20,8 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         function processSend() {
             messageService.sendMessage($scope.message, $scope.conversation).then(function () {
                 //$ionicLoading.hide();
-                $scope.message = {
-                    id: "",
-                    type: "",
-                    body: "",
-                    date: null,
-                    from: null,
-                    subject: null,
-                    phoneNumber: null,
-                    email: null,
-                    displayName: "",
-                    created: null,
-                };
-
-                $scope.conversation = {
-                    id: null,
-                    image: null,
-                    displayName: "",
-                    type: "",
-                    receivers: [],
-                    lastMessage: "",
-                    created: null,
-                    updated: null
-                };
+                $scope.message = messageService.factory().createMessage();
+                $scope.conversation = messageService.factory().createConversation();
 
                 $state.go('layout.inbox');
             }).catch(function (error) {

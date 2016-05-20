@@ -8,23 +8,29 @@
             </div>
 
             <div class="item item-body">
-                <p ng-if="contact.phone_number && contact.mum_id">
-                    <button class="button button-outline button-mum" ng-click="startConversation('mum')">
-                        Mum a: {{contact.phone_number}}
-                    </button>
-                </p>
+                <ion-list>
+                    <ion-item ng-if="contact.phone_number && contact.mum_id">
+                        Mum: {{contact.phone_number}}
+                    </ion-item>
+                    <ion-item ng-if="contact.email">
+                        Email: {{contact.email}}
+                    </ion-item>
+                    <ion-item ng-if="contact.phone_number">
+                        Teléfono: {{contact.phone_number}}
+                    </ion-item>
+                </ion-list>
 
-                <p ng-if="contact.email">
-                    <button class="button button-outline button-mum" ng-click="startConversation('email')">
-                        Correo a: {{contact.email}}
-                    </button>
-                </p>
-
-                <p ng-if="contact.phone_number">
-                    <button class="button button-outline button-mum" ng-click="startConversation('sms')">
-                        Sms a: {{contact.phone_number}}
-                    </button>
-                </p>
+                <div class="row">
+                    <div class="col" ng-if="contact.phone_number && contact.mum_id">
+                        <a ng-click="startConversation('mum')"><img src="img/nuevo-mum.png" height="70" width="70" /></a>
+                    </div>
+                    <div class="col" ng-if="contact.email">
+                        <a ng-click="startConversation('email')"><img src="img/nuevo-mail.png" height="70" width="70" /></a>
+                    </div>
+                    <div class="col" ng-if="contact.phone_number">
+                        <a ng-click="startConversation('sms')"><img src="img/nuevo-sms.png" height="70" width="70" /></a>
+                    </div>
+                </div>
 
             </div>
 

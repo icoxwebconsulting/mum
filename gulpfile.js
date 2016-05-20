@@ -23,6 +23,7 @@ var paths = {
         './www/lib/moment/locale/es.js',
         './www/lib/moment-timezone/moment-timezone.min.js',
         './www/lib/underscore/underscore-min.js',
+        './www/lib/node-uuid/uuid.js',
         './www/js/**/*.js'
     ]
 };
