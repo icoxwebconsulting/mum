@@ -18,26 +18,24 @@ angular.module('app')
                         for (var i = 0; i < $scope.select.availableOptions.length; i++) {
                             if ($scope.select.availableOptions[i].iso2 == iso) {
                                 console.log($scope.select.availableOptions[i])
-                                $scope.myCountry = $scope.select.availableOptions[i];
+                                $scope.select.selectedOption = $scope.select.availableOptions[i];
                                 break;
                             }
                         }
                     }, function () {
                         //error
-                        $scope.myCountry = {"nombre":"España","name":"Spain","iso2":"ES","iso3":"ESP","phone_code":"34"};
+                        $scope.select.selectedOption = $scope.select.availableOptions[63];
                     });
                 } catch (e) {
                     //seleccionar españa como predeterminado
-                    $scope.myCountry = {"nombre":"España","name":"Spain","iso2":"ES","iso3":"ESP","phone_code":"34"};
+                    $scope.select.selectedOption = $scope.select.availableOptions[63];
                 }
-            }).catch(function () {
-
             });
         }
 
         $scope.select = {
-            repeatSelect: null,
             availableOptions: [],
+            selectedOption: null
         };
 
         buildSelect();
@@ -52,7 +50,8 @@ angular.module('app')
         };
 
         $scope.sendCode = function () {
-            if (!$scope.myCountry) {
+            console.log($scope.select.selectedOption);
+            if (!$scope.select.selectedOption) {
                 $ionicPopup.alert({
                     title: 'Seleccione el país'
                 });
@@ -66,7 +65,7 @@ angular.module('app')
                 });
 
                 var customerData = {
-                    countryCode: $scope.myCountry.phone_code,
+                    countryCode: $scope.select.selectedOption.phone_code,
                     phoneNumber: $scope.data.phone
                 };
 
