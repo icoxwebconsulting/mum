@@ -37,7 +37,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function createTableMessageHistory() {
             var query = 'CREATE TABLE IF NOT EXISTS message_history (' +
                 'id TEXT primary key,' + //key obtenida del servidor
-                'id_conversation INTEGER,' + //fk contra conversation
+                'id_conversation VARCHAR(255) NOT NULL,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
                 'attachment TEXT,' + //upload file
@@ -53,7 +53,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
         function createTablePendingMessage() {
             var query = 'CREATE TABLE IF NOT EXISTS pending_message (' +
                 'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-                'id_conversation INTEGER,' + //fk contra conversation
+                'id_conversation VARCHAR(255) NOT NULL,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
                 'path TEXT,' + // file path
@@ -70,7 +70,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function createTableConversation() {
             var query = 'CREATE TABLE IF NOT EXISTS conversation (' +
-                'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                'id VARCHAR(255) NOT NULL,' +
                 'type INTEGER,' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
                 'display_name TEXT,' + //nombre para mostrar

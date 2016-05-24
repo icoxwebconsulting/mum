@@ -5,8 +5,10 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function saveConversation(conversation) {
         var deferred = $q.defer();
 
-        var query = 'INSERT INTO conversation (type, receivers, display_name, image, last_message, is_unread, created, updated) VALUES(?,?,?,?,?,?,?,?)';
+        var query = 'INSERT INTO conversation (id, type, receivers, display_name, image, last_message, is_unread, created, updated) VALUES(?,?,?,?,?,?,?,?,?)';
+        var id = uuid.v4();
         var values = [
+            id,
             conversation.type,
             JSON.stringify(conversation.receivers), // como json en string,
             conversation.displayName, //nombre para mostrar
@@ -17,8 +19,8 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
             moment().format(sqlDateTimeFormat)
         ];
 
-        sqliteDatastore.execute(query, values).then(function (resp) {
-            deferred.resolve(resp.insertId);
+        sqliteDatastore.execute(query, values).then(function () {
+            deferred.resolve(id);
         }).catch(function (error) {
             deferred.reject(error);
         });
@@ -28,11 +30,10 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function getConversationMessages(id) {
         var deferred = $q.defer();
 
-        var query = 'SELECT id as id_message, type, body, attachment, is_received, created FROM message_history WHERE id_conversation = ' + id;
-        query += ' UNION SELECT null as id_message, type, body, path as attachment, 0 as is_received, created FROM pending_message WHERE id_conversation = ' + id + ' ORDER BY created';
-        var values = [];
+        var query = "SELECT id as id_message, type, body, attachment, is_received, created FROM message_history WHERE id_conversation = ?";
+        query += " UNION SELECT null as id_message, type, body, path as attachment, 0 as is_received, created FROM pending_message WHERE id_conversation = ? ORDER BY created";
 
-        sqliteDatastore.execute(query, values).then(function (results) {
+        sqliteDatastore.execute(query, [id, id]).then(function (results) {
             var messages = [];
             for (var i = 0; i < results.rows.length; i++) {
                 messages.push(results.rows.item(i));
@@ -59,18 +60,18 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     }
 
     function deleteMessageHistory(id) {
-        var query = 'DELETE FROM message_history WHERE id_conversation = ' + id;
-        sqliteDatastore.execute(query, []);
+        var query = "DELETE FROM message_history WHERE id_conversation = ?";
+        sqliteDatastore.execute(query, [id]);
     }
 
     function deletePendingMessages(id) {
-        var query = 'DELETE FROM pending_message WHERE id_conversation = ' + id;
-        sqliteDatastore.execute(query, []);
+        var query = "DELETE FROM pending_message WHERE id_conversation = ?";
+        sqliteDatastore.execute(query, [id]);
     }
 
     function deleteFromConversation(id) {
-        var query = 'DELETE FROM conversation WHERE id = ' + id;
-        sqliteDatastore.execute(query, []);
+        var query = "DELETE FROM conversation WHERE id = ?";
+        sqliteDatastore.execute(query, [id]);
     }
 
     function deleteConversation(conversation) {
@@ -94,10 +95,10 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         var query = 'INSERT INTO message_history (id, id_conversation, type, body, attachment, about, is_received, from_address, at, created) VALUES(?,?,?,?,?,?,?,?,?,?)';
         var values = [
             messageId,//key obtenida del servidor
-            parseInt(idConversation), //key del registro creado anteriormente en conversation
+            idConversation, //key del registro creado anteriormente en conversation
             type,
             data.message.body || null,
-            attachment,
+            attachment || null,
             //data.path || null,
             data.about || null,
             isReceived || 0,
@@ -122,7 +123,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
 
         var query = 'INSERT INTO pending_message (id_conversation, type, body, path, fileData, fileMimeType, about, from_address, at, receivers, to_update, created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
         var values = [
-            parseInt(idConversation), //key del registro creado anteriormente en conversation
+            idConversation, //key del registro creado anteriormente en conversation
             type,
             data.message.body || null,
             data.path || null,

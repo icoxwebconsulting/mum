@@ -30,13 +30,15 @@ angular.module('app').service('messageQueue', function (messageRes, $q, messageS
             var idPending = messageData.idPending;
             var type = messageData.type;
             messageData = messageData.data;
-            var idConversation = messageData.idConversation;
+            var idConversation = messageData.room;
             var toUpdate = messageData.toUpdate;
             //var attachment = messageData.path;
 
-            delete messageData.idConversation;
             delete messageData.toUpdate;
             delete messageData.path;
+            if(type != 'mum'){
+                delete messageData.room;
+            }
             //delete messageData.message.fileData;
             //delete messageData.message.fileMimeType;
             var isReceived = 0;

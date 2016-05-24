@@ -68,11 +68,11 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         var deferred = $q.defer();
 
         var messageData = {
+            room: conversation.id,
             message: {
                 body: message.body,
                 receivers: JSON.stringify(conversation.receivers)
             },
-            idConversation: conversation.id,
             toUpdate: (message.hasOwnProperty('toUpdate')) ? message.toUpdate : null
         };
 
@@ -85,14 +85,14 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
             messageData.from = message.from;
         }
 
-        if (message.fileData && message.fileMimeType){
+        if (message.fileData && message.fileMimeType) {
             messageData.path = message.path;
             messageData.message.fileData = message.fileData;
             messageData.message.fileMimeType = message.fileMimeType;
 
         }
 
-        messageStorage.savePendingMessage(messageData, message.type, messageData.idConversation).then(function (params) {
+        messageStorage.savePendingMessage(messageData, message.type, messageData.room).then(function (params) {
             messageQueue.add(messageData, message.type, params.insertId);
             messageQueue.process();
             deferred.resolve();
