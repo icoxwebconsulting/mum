@@ -1,6 +1,7 @@
 angular.module('app').service('messageReceivedQueue', function (messageStorage, messageService, userDatastore, messageNotification, Contacts) {
 
     var queue = [];
+    var isRunning = false;
 
     function add(message, idMessage, type, sender) {
         queue.push({
@@ -21,12 +22,19 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
             //notificar al inbox para que muestre el mensaje recibido
             //notificar a conversation para que muestre/actualice la conversación recibida
             messageNotification.notifyReceivedMessage(messageData, messageId, type, conversation);
-            process();
+            nextElement();
         });
     }
 
     function process() {
+        if (!isRunning) {
+            nextElement();
+        }
+    }
+
+    function nextElement() {
         if (length() > 0) {
+            isRunning = true;
             var element = queue.shift();
             var messageData = element.data;
             var type = element.type;
@@ -72,6 +80,8 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
                     });
                 }
             });
+        } else {
+            isRunning = false;
         }
     }
 

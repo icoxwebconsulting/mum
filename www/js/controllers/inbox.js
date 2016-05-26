@@ -47,7 +47,13 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $rootScope.$on('receivedMessage', function (e, data) {
 
-        var found = $filter('getById')($scope.conversations, data.conversation.id);
+        var found;
+        for (var i = 0; i < $scope.conversations.length; i++) {
+            if ($scope.conversations[i]['id'] == data.conversation.id) {
+                found = $scope.conversations[i];
+            }
+        }
+
         if (found) {
             $scope.conversations.splice($scope.conversations.indexOf(found), 1);
         }
