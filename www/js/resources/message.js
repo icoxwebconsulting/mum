@@ -29,6 +29,21 @@ angular.module('app.messageResource', [])
                     headers: {
                         Authorization: 'Bearer ' + token
                     }
+                },
+                getInstants: {
+                    method: 'GET',
+                    url: SERVER_CONF.API_HOST + 'messages/instant',
+                    params: null,
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
+                },
+                notifyReceived: {
+                    method: 'PUT',
+                    url: SERVER_CONF.API_HOST + 'messages/instant/:messageId/received',
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
                 }
             });
         }

@@ -28,6 +28,7 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
 
         $ionicPlatform.on('resume', function () {
             console.log("app resumida")
+            messageReceived.getAndProcess();
         });
 
         function init() {

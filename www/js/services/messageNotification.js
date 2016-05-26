@@ -1,4 +1,4 @@
-angular.module('app').service('messageNotification', function ($rootScope) {
+angular.module('app').service('messageNotification', function ($rootScope, messageRes, userDatastore) {
 
     function notifySendMessage(idConversation, toUpdate, idMessage) {
         $rootScope.$emit('sentMessage', {
@@ -16,6 +16,14 @@ angular.module('app').service('messageNotification', function ($rootScope) {
             type: type,
             conversation: conversation
         });
+        
+        if (type == 'mum') {
+            messageRes(userDatastore.getTokens().accessToken).notifyReceived({messageId: idMessage}, {}).$promise.then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error)
+            });
+        }
     }
 
     return {
