@@ -33,7 +33,7 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
             var sender = element.sender;
             var idMessage = element.idMessage;
 
-            messageStorage.findConversation(type, [sender]).then(function (response) {
+            messageStorage.findConversation(type, sender).then(function (response) {
                 var conversation = messageService.factory().createConversation();
                 var date = moment.utc().format("DD-MM-YYYY HH:mm:ss");
                 if (response) {
@@ -53,7 +53,7 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
                 } else {
                     //no existe, crearla
                     conversation.type = type;
-                    conversation.receivers = [sender];
+                    conversation.receivers = sender;
                     conversation.lastMessage = messageData.message.body.substring(0, 19);
                     conversation.created = date;
                     conversation.updated = date;

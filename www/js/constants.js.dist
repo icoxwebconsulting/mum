@@ -6,12 +6,12 @@ angular.module('app')
         dateTimeFormat : "YYYY-MM-DD HH:MM:SS"
     })
     .constant("SERVER_CONF", {
-        HOST: "http://192.168.1.104/app_dev.php/",
-        API_HOST: "http://192.168.1.104/app_dev.php/api/v1/"
+        HOST: "http://188.138.127.53/mum/framework/web/app_dev.php/",
+        API_HOST: "http://188.138.127.53/mum/framework/web/app_dev.php/api/v1/"
     })
     .constant("OAUTH_CONF", {
-        OAUTH_HOST: "http://192.168.1.104/app_dev.php/oauth/v2/",
-        CLIENT_ID: "56848ba238161_2ycvebtvse4g8cs84s44kcog40ckwgscc480cgo80kcoowkwso",
-        CLIENT_SECRET: "2t27ugiufckkckk0sokkogw448gc04s44swskgcwog008owggg",
+        OAUTH_HOST: "http://188.138.127.53/mum/framework/web/app_dev.php/oauth/v2/",
+        CLIENT_ID: "57472c5b61ed2_39s30p1dq2o0k8wogggkwwco4gkwos0048cwwog4k80wkk8cok",
+        CLIENT_SECRET: "20rzootkf4xwow08s80sgg4ckw0ksowk88sog808w0gkgcwo0o",
         REFRESH_INTERVAL: 600000
     });
