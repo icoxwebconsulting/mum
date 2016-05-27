@@ -16,12 +16,11 @@ angular.module('app').service('messageNotification', function ($rootScope, messa
             type: type,
             conversation: conversation
         });
-        
+
         if (type == 'mum') {
             messageRes(userDatastore.getTokens().accessToken).notifyReceived({messageId: idMessage}, {}).$promise.then(function (response) {
-                console.log(response);
             }).catch(function (error) {
-                console.log(error)
+                console.error(error);
             });
         }
     }

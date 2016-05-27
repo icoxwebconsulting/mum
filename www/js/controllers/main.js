@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService, messageReceived) {
     moment.locale('es');
     $scope.day = moment();
 
@@ -15,6 +15,10 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
             }
         });
     });
+    
+    $scope.changePage = function () {
+        $state.go("layout.inbox");
+    };
 
 
     $scope.showMenu = function () {
@@ -51,5 +55,6 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
 
     $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
         delayedMessageService.run();
+        messageReceived.getAndProcess();
     });
 });

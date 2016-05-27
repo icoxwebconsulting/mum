@@ -1,6 +1,7 @@
 angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService) {
 
     $scope.conversation = messageService.factory().createConversation();
+    var popup;
 
     messageService.getInboxMessages().then(function (conversations) {
         $scope.conversations = conversations;
@@ -16,6 +17,9 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         message.type = conversation.type;
         message.displayName = conversation.displayName;
         messageService.setMessage(message);
+        if(popup){
+            popup.close();
+        }
         $state.go('conversation');
     };
 
@@ -28,7 +32,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $scope.deleteConversation = function (conversation) {
         $scope.conversation = conversation;
-        $ionicPopup.alert({
+        popup = $ionicPopup.alert({
             title: 'Eliminar conversación',
             subTitle: '¿Desea eliminar la conversación?',
             scope: $scope,

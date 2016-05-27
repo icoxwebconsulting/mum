@@ -17,7 +17,6 @@ angular.module('app')
                         iso = iso.toUpperCase();
                         for (var i = 0; i < $scope.select.availableOptions.length; i++) {
                             if ($scope.select.availableOptions[i].iso2 == iso) {
-                                console.log($scope.select.availableOptions[i])
                                 $scope.select.selectedOption = $scope.select.availableOptions[i];
                                 break;
                             }
@@ -50,7 +49,6 @@ angular.module('app')
         };
 
         $scope.sendCode = function () {
-            console.log($scope.select.selectedOption);
             if (!$scope.select.selectedOption) {
                 $ionicPopup.alert({
                     title: 'Seleccione el país'

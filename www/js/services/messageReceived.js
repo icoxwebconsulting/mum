@@ -14,8 +14,10 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
     }
 
     function getAndProcess() {
+        if(!userDatastore.isVerified()){
+            return;
+        }
         messageRes(userDatastore.getTokens().accessToken).getInstants().$promise.then(function (response) {
-            console.log(response)
             var message;
             for (var i = 0; i < response.messages.length; i++) {
                 message = response.messages[i];
@@ -29,7 +31,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
                 });
             }
         }).catch(function (error) {
-            console.log(error)
+            console.error(error);
         });
     }
 

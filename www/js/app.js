@@ -41,11 +41,12 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
                     MUMSMS.init();
                 }
             } catch (e) {
-
+                console.error(e);
             }
             user.refreshAccessToken()
                 .then(function () {
                     Contacts.loadContacts();
+                    messageReceived.getAndProcess();
                 });
         }
     }).config(function ($ionicConfigProvider) {
