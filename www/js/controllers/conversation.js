@@ -46,7 +46,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 at: null,
                 from_address: (data.type = 'email') ? "" : null,
                 id: data.idMessage, //TODO: revisar que se cambio de idConversation
-                body: data.message,
+                body: data.message.body,
                 to_send: false,
                 is_received: true,
                 created: date

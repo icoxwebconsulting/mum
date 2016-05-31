@@ -9,6 +9,7 @@ angular.module('app').service('messageNotification', function ($rootScope, messa
     }
 
     function notifyReceivedMessage(data, idMessage, type, conversation) {
+
         $rootScope.$emit('receivedMessage', {
             data: data,
             message: data.message,
