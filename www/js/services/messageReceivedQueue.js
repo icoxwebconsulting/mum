@@ -38,7 +38,7 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
             var element = queue.shift();
             var messageData = element.data;
             var type = element.type;
-            var sender = element.sender;
+            var sender = new Array(element.sender);
             var idMessage = element.idMessage;
 
             messageStorage.findConversation(type, sender).then(function (response) {

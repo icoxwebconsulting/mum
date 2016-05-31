@@ -17,7 +17,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
         if(!userDatastore.isVerified()){
             return;
         }
-        messageRes(userDatastore.getTokens().accessToken).getInstants().$promise.then(function (response) {
+        messageRes(userDatastore.getTokens().accessToken).getInstants({received: 0}).$promise.then(function (response) {
             var message;
             for (var i = 0; i < response.messages.length; i++) {
                 message = response.messages[i];
