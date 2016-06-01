@@ -54,12 +54,14 @@
                          ng-class="{ 'message-in': msj.is_received, 'message-out':!msj.is_received && msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received}"
                          collection-repeat="msj in messages">
                         <div class="message-body" ng-hide="msj.attachment != null">
-                            <p>{{msj.body}} <span class="message-date">{{msj.created}}</span></p>
+                            <p>{{msj.body}} </p>
                         </div>
+                        <div class="message-date" ng-hide="msj.attachment != null" ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}">{{msj.created}}</div>
                         <div class="message-body" ng-show="msj.attachment != null">
                             <!--{{msj.attachSrc}}-->
                             <img ng-src="{{ msj.attachment }}" style="width: 150px; height: 150px;">
                         </div>
+                        <div class="message-date" ng-show="msj.attachment != null" ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}">{{msj.created}}</div>
                     </div>
 
                 </div>
