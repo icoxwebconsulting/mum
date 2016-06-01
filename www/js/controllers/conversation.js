@@ -72,8 +72,6 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             };
         }
 
-        //console.log(obj);
-
         if (!isFile && ($scope.body == "" || $scope.body.length < 1 )) {
             return;
         }
@@ -113,11 +111,9 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 message.from = $scope.from;
                 message.subject = $scope.subject;
             }
-            if (isFile) {
-                message.path = obj.path;
-                message.fileData = obj.fileData;
-                message.fileMimeType = obj.fileMimeType;
-            }
+            message.path = obj.path;
+            message.fileData = obj.fileData;
+            message.fileMimeType = obj.fileMimeType;
             $scope.body = "";
             focus('inputMsj');
             messageService.sendMessage(message, $scope.conversation).then(function () {
