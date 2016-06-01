@@ -198,3 +198,8 @@ and (orientation: landscape) {
     top: 5px;
     color: #bbb;
 }
+
+.message-date {
+    font-size: 9px;
+    font-style: italic;
+}

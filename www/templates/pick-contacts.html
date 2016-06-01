@@ -8,7 +8,7 @@
     <ion-content>
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
-                      collection-repeat="contact in contacts"
+                      collection-repeat="contact in contacts | orderBy:'display_name'"
                       ng-click="pickContact(contact)"
                       type="item-text-wrap">
                 <img ng-src="{{contact.photo}}">

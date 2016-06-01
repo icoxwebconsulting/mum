@@ -23,7 +23,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
                 message = response.messages[i];
                 processReceivedMessage({
                     additionalData: {
-                        sender: [message.customer.username],
+                        sender: message.customer.username,
                         type: 2,
                         messageId: message.message.id
                     },

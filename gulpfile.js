@@ -21,7 +21,7 @@ var paths = {
         './www/lib/ionic-timepicker/dist/ionic-timepicker.bundle.min.js',
         './www/lib/moment/min/moment.min.js',
         './www/lib/moment/locale/es.js',
-        './www/lib/moment-timezone/moment-timezone.min.js',
+        './www/lib/moment-timezone/moment-timezone.js',
         './www/lib/underscore/underscore-min.js',
         './www/lib/node-uuid/uuid.js',
         './www/js/**/*.js'

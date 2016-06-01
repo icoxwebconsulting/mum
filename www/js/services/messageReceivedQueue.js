@@ -4,6 +4,9 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
     var isRunning = false;
 
     function add(message, idMessage, type, sender) {
+        if(length() == 0){
+            isRunning = false;
+        }
         queue.push({
             data: message,
             type: type,
