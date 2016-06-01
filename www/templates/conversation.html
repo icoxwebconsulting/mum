@@ -59,9 +59,11 @@
                         <div class="message-date" ng-hide="msj.attachment != null" ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}">{{msj.created}}</div>
                         <div class="message-body" ng-show="msj.attachment != null">
                             <!--{{msj.attachSrc}}-->
-                            <img ng-src="{{ msj.attachment }}" style="width: 150px; height: 150px;">
+                            <a ng-click="openFile(msj.attachment)" target="_system">
+                                <img ng-src="{{ msj.attachment }}" style="width: 150px; height: 150px;">
+                            </a>
                         </div>
-                        <div class="message-date" ng-show="msj.attachment != null" ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}">{{msj.created}}</div>
+                        <div class="message-date" ng-show="msj.attachment != null" ng-class="{ 'message-date-in-img': msj.is_received, 'message-date-out-img': !msj.is_received}">{{msj.created}}</div>
                     </div>
 
                 </div>

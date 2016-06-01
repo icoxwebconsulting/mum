@@ -17,7 +17,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         message = messageService.getMessage();
         if ($scope.conversation.id) {
             messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {
-                for(var i = 0; i < msjs.length; i++){
+                for (var i = 0; i < msjs.length; i++) {
                     msjs[i].created = moment.utc(msjs[i].created).tz(moment.tz.guess()).format("D MMM hh:mm a");
                 }
                 $scope.messages = msjs;
@@ -52,6 +52,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 body: data.message.body,
                 to_send: false,
                 is_received: true,
+                attachment: (data.message.body.indexOf("http://188.138.127.53/mum/framework/web/")  != -1) ? data.message.body : null,
                 created: date
             });
 
@@ -62,8 +63,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.sendMessage = function (isFile, obj) {
         //console.log(obj);
 
-        if(isFile === undefined){
-            isFile   = false;
+        if (isFile === undefined) {
+            isFile = false;
             obj = {
                 path: null,
                 fileData: null,
@@ -72,7 +73,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         }
 
         //console.log(obj);
-        
+
         if (!isFile && ($scope.body == "" || $scope.body.length < 1 )) {
             return;
         }
@@ -113,7 +114,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 message.subject = $scope.subject;
             }
             if (isFile) {
-                message.path  = obj.path;
+                message.path = obj.path;
                 message.fileData = obj.fileData;
                 message.fileMimeType = obj.fileMimeType;
             }
@@ -236,9 +237,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
                     })
                     //.then(function () {
-                        //Preguntarle a David como guardar la Url en la base de datos del tlf y que se envie por el msj
-                        //refreshProfileInfo();
-                        //$ionicLoading.hide();
+                    //refreshProfileInfo();
+                    //$ionicLoading.hide();
                     //})
                     .catch(function (error) {
                         $ionicLoading.hide();
@@ -248,4 +248,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             }
         });
     };
+    
+    $scope.openFile = function (url) {
+        cordova.InAppBrowser.open(url, '_system', 'location=no');
+    }
 });

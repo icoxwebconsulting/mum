@@ -203,13 +203,24 @@ and (orientation: landscape) {
     font-size: 9px;
     font-style: italic;
     position: absolute;
-    top: 30px;
 }
 
 .message-date-in {
     left: 10px;
+    top: 30px;
 }
 
 .message-date-out {
     right: 10px;
+    top: 30px;
+}
+
+.message-date-in-img {
+    left: 10px;
+    bottom: 5px;
+}
+
+.message-date-out-img {
+    right: 10px;
+    bottom: 5px;
 }

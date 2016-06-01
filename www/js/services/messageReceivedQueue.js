@@ -21,7 +21,8 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
     }
 
     function saveMessage(messageData, messageId, conversation, type) {
-        messageStorage.saveMessageHistory(messageData, type, messageId, conversation.id, 1).then(function () {
+        var attachment = (messageData.message.body.indexOf("http://188.138.127.53/mum/framework/web/")  != -1)? messageData.message.body : null;
+        messageStorage.saveMessageHistory(messageData, type, messageId, conversation.id, 1, attachment).then(function () {
             //notificar al inbox para que muestre el mensaje recibido
             //notificar a conversation para que muestre/actualice la conversación recibida
             messageNotification.notifyReceivedMessage(messageData, messageId, type, conversation);

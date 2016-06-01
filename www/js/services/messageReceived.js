@@ -10,7 +10,7 @@ angular.module('app').service('messageReceived', function ($rootScope, $q, messa
             }
         };
 
-        messageReceivedQueue.add(messageData, data.additionalData.messageId, type, sender);
+        messageReceivedQueue.add(messageData, data.additionalData.messageId, 'mum', sender);
     }
 
     function getAndProcess() {
