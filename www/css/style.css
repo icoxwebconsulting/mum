@@ -202,7 +202,7 @@ and (orientation: landscape) {
 .message-date {
     font-size: 9px;
     font-style: italic;
-    position: absolute;
+    /*position: absolute;*/
 }
 
 .message-date-in {
