@@ -27,6 +27,11 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
             //notificar a conversation para que muestre/actualice la conversación recibida
             messageNotification.notifyReceivedMessage(messageData, messageId, type, conversation);
             nextElement();
+        }).catch(function (error) {
+            if(error.code == 6){
+                messageNotification.notifyReceived(messageId);
+            }
+            nextElement();
         });
     }
 

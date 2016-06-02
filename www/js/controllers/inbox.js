@@ -17,7 +17,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         message.type = conversation.type;
         message.displayName = conversation.displayName;
         messageService.setMessage(message);
-        if(popup){
+        if (popup) {
             popup.close();
         }
         $state.go('conversation');
@@ -50,11 +50,14 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     };
 
     $rootScope.$on('receivedMessage', function (e, data) {
-
+        if (data.conversation.lastMessage.indexOf("http://188.138.127.") != -1) {
+            data.conversation.lastMessage = "Imagen";
+        }
         var found;
         for (var i = 0; i < $scope.conversations.length; i++) {
             if ($scope.conversations[i]['id'] == data.conversation.id) {
                 found = $scope.conversations[i];
+                break;
             }
         }
 

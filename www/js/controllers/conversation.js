@@ -1,6 +1,6 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout,
                                                                $ionicActionSheet, $cordovaCamera,
-                                                               $cordovaFile, $ionicLoading) {
+                                                               $cordovaFile, $ionicLoading, $ionicPopup) {
 
     var message;
 
@@ -199,18 +199,26 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                         sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
                         mediaType: Camera.MediaType.ALLMEDIA,
                         saveToPhotoAlbum: true
-
                     };
                 }
-
+                var fileExtension;
                 $cordovaCamera.getPicture(options)
                     .then(function (imageURI) {
                         $ionicLoading.show();
                         imageURI = prefix + imageURI;
                         var indexOfSlash = imageURI.lastIndexOf('/') + 1;
                         var name = imageURI.substr(indexOfSlash);
+                        var re = /(?:\.([^.]+))?$/;
+                        fileExtension = re.exec(name)[1];
+                        fileExtension = fileExtension.toLowerCase();
                         var namePath = imageURI.substr(0, indexOfSlash);
-
+                        if (['jpg', 'jpeg'].indexOf(fileExtension)) { //'doc', 'xls', 'pdf'
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'Información',
+                                template: 'Debe elegir archivos de tipo JPG.'
+                            });
+                            throw new Error();
+                        }
                         return $cordovaFile.copyFile(namePath, name, cordova.file.dataDirectory, name);
                     })
                     .then(function (info) {
@@ -227,15 +235,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                             {
                                 path: response.path,
                                 fileData: response.data.substring(23),
-                                fileMimeType: "jpeg"
+                                fileMimeType: fileExtension
                             });
                         $ionicLoading.hide();
 
                     })
-                    //.then(function () {
-                    //refreshProfileInfo();
-                    //$ionicLoading.hide();
-                    //})
                     .catch(function (error) {
                         $ionicLoading.hide();
                     });
@@ -244,7 +248,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             }
         });
     };
-    
+
     $scope.openFile = function (url) {
         cordova.InAppBrowser.open(url, '_system', 'location=no');
     }

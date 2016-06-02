@@ -19,15 +19,20 @@ angular.module('app').service('messageNotification', function ($rootScope, messa
         });
 
         if (type == 'mum') {
-            messageRes(userDatastore.getTokens().accessToken).notifyReceived({messageId: idMessage}, {}).$promise.then(function (response) {
-            }).catch(function (error) {
-                console.error(error);
-            });
+            notifyReceived(idMessage);
         }
+    }
+    
+    function notifyReceived(idMessage) {
+        messageRes(userDatastore.getTokens().accessToken).notifyReceived({messageId: idMessage}, {}).$promise.then(function (response) {
+        }).catch(function (error) {
+            console.error(error);
+        });
     }
 
     return {
         notifySendMessage: notifySendMessage,
-        notifyReceivedMessage: notifyReceivedMessage
+        notifyReceivedMessage: notifyReceivedMessage,
+        notifyReceived: notifyReceived
     }
 });
