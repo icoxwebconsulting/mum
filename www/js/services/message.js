@@ -127,7 +127,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                 conversation.displayName = t.display_name;
                 conversation.type = t.type;
                 conversation.receivers = rec;
-                conversation.lastMessage = t.last_message.substring(0, 27);
+                conversation.lastMessage = t.last_message.substring(0, 19);
                 conversation.created = t.created;
                 conversation.updated = t.updated;
                 conversation.isUnread = t.is_unread;

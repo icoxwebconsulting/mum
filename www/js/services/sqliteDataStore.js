@@ -36,7 +36,7 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function createTableMessageHistory() {
             var query = 'CREATE TABLE IF NOT EXISTS message_history (' +
-                'id TEXT primary key,' + //key obtenida del servidor
+                'id TEXT PRIMARY KEY,' + //key obtenida del servidor
                 'id_conversation VARCHAR(255) NOT NULL,' + //fk contra conversation
                 'type INTEGER,' + //fk contra conversation, tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'body TEXT,' + // -- de todos
@@ -70,15 +70,16 @@ angular.module('app.sqliteDataStore', ['ionic', 'app.deviceDataStore'])
 
         function createTableConversation() {
             var query = 'CREATE TABLE IF NOT EXISTS conversation (' +
-                'id VARCHAR(255) NOT NULL,' +
-                'type INTEGER,' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
+                'id VARCHAR(255) PRIMARY KEY,' +
+                'type VARCHAR(255),' + //--tipo de mensaje ((1)sms, (2)email, (3)instant)
                 'receivers TEXT,' + //arreglo de personas que recibieron el mensaje
                 'display_name TEXT,' + //nombre para mostrar
                 'image TEXT,' +
                 'last_message TEXT,' +
                 'is_unread INTEGER DEFAULT 0,' +
                 'created DATETIME,' + //fecha de creacion
-                'updated DATETIME)'; // fecha de actualizacion
+                'updated DATETIME,' +  // fecha de actualizacion
+                'UNIQUE (type, receivers) ON CONFLICT REPLACE)';
             return execute(query);
         }
 

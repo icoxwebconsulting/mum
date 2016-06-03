@@ -50,6 +50,10 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     };
 
     $rootScope.$on('receivedMessage', function (e, data) {
+        if($state.current.name == 'conversation' && messageService.getConversation().id == data.conversation.id){
+            data.conversation.isUnread = 0;
+        }
+
         if (data.conversation.lastMessage.indexOf("http://188.138.127.") != -1) {
             data.conversation.lastMessage = "Imagen";
         }
