@@ -1,6 +1,5 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout,
-                                                               $ionicActionSheet, $cordovaCamera,
-                                                               $cordovaFile, $ionicLoading, $ionicPopup) {
+                                                               $ionicActionSheet, $ionicLoading, $ionicPopup, $ionicModal, cameraService) {
 
     var message;
 
@@ -9,6 +8,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.body = "";
     $scope.subject = "";
     $scope.from = null;
+    $scope.imageSrc = '';
 
     //The view has fully entered and is now the active view. This event will fire, whether it was the first load or a cached view.
     $scope.$on('$ionicView.enter', function (e) {
@@ -52,7 +52,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 body: data.message.body,
                 to_send: false,
                 is_received: true,
-                attachment: (data.message.body.indexOf("http://188.138.127.53/mum/framework/web/")  != -1) ? data.message.body : null,
+                attachment: (data.message.body.indexOf("http://188.138.127.53/mum/framework/web/") != -1) ? data.message.body : null,
                 created: date
             });
 
@@ -169,6 +169,13 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $ionicScrollDelegate.resize();
     };
 
+    function badFileType(){
+        var alertPopup = $ionicPopup.alert({
+            title: 'Información',
+            template: 'Debe elegir archivos de tipo JPG.'
+        });
+    }
+
     $scope.actionUpload = function () {
         $ionicActionSheet.show({
             buttons: [
@@ -180,74 +187,69 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                 return true;
             },
             buttonClicked: function (index) {
-                if (index == 0) {
-                    var prefix = '';
-                    var options = {
-                        quality: 50,
-                        destinationType: Camera.DestinationType.FILE_URI,
-                        sourceType: Camera.PictureSourceType.CAMERA,
-                        allowEdit: false,
-                        correctOrientation: true,
-                        encodingType: Camera.EncodingType.JPEG,
-                        saveToPhotoAlbum: false
-                    };
-                } else {
-                    var prefix = 'file://';
-                    var options = {
-                        quality: 50,
-                        destinationType: Camera.DestinationType.FILE_URI,
-                        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
-                        mediaType: Camera.MediaType.ALLMEDIA,
-                        saveToPhotoAlbum: true
-                    };
-                }
-                var fileExtension;
-                $cordovaCamera.getPicture(options)
-                    .then(function (imageURI) {
-                        $ionicLoading.show();
-                        imageURI = prefix + imageURI;
-                        var indexOfSlash = imageURI.lastIndexOf('/') + 1;
-                        var name = imageURI.substr(indexOfSlash);
-                        var re = /(?:\.([^.]+))?$/;
-                        fileExtension = re.exec(name)[1];
-                        fileExtension = fileExtension.toLowerCase();
-                        var namePath = imageURI.substr(0, indexOfSlash);
-                        if (['jpg', 'jpeg'].indexOf(fileExtension)) { //'doc', 'xls', 'pdf'
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Información',
-                                template: 'Debe elegir archivos de tipo JPG.'
-                            });
-                            throw new Error();
-                        }
-                        return $cordovaFile.copyFile(namePath, name, cordova.file.dataDirectory, name);
-                    })
-                    .then(function (info) {
-                        return $cordovaFile.readAsDataURL(cordova.file.dataDirectory, info.fullPath.substring(1))
-                            .then(function (dataURL) {
-                                return {
-                                    path: info.nativeURL,
-                                    data: dataURL
-                                };
-                            });
-                    })
-                    .then(function (response) {
-                        $scope.sendMessage(true,
-                            {
-                                path: response.path,
-                                fileData: response.data.substring(23),
-                                fileMimeType: fileExtension
-                            });
-                        $ionicLoading.hide();
+                $ionicLoading.show();
+                cameraService.capture(index).then(function (response) {
+                    $ionicLoading.hide();
 
-                    })
-                    .catch(function (error) {
-                        $ionicLoading.hide();
-                    });
-
-                return true;
+                    $scope.imageSrc = response;
+                    setTimeout(function () {
+                        $scope.openModal();
+                    }, 2000);
+                    return true;
+                }).catch(function (error) {
+                    $ionicLoading.hide();
+                    if (error == 'badFileType') {
+                        badFileType();
+                    }
+                });
             }
         });
     };
+
+    $scope.sendImage = function () {
+        cameraService.sendImage($scope.imageSrc).then(function (response) {
+            $scope.sendMessage(true, {
+                path: response.path,
+                fileData: response.data.substring(23),
+                fileMimeType: response.fileExtension
+            });
+        }).catch(function (error) {
+            if (error == 'badFileType') {
+                badFileType();
+            }
+        });
+    };
+
+    $ionicModal.fromTemplateUrl('templates/image-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modal = modal;
+    });
+
+    $scope.openModal = function () {
+        $scope.modal.show();
+    };
+
+    $scope.closeModal = function () {
+        $scope.modal.hide();
+    };
+
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function () {
+        $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hide', function () {
+        // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function () {
+        // Execute action
+    });
+    $scope.$on('modal.shown', function () {
+        console.log('Modal is shown!');
+    });
 
     $scope.openFile = function (url) {
         cordova.InAppBrowser.open(url, '_system', 'location=no');
