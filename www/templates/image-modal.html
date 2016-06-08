@@ -1,16 +1,16 @@
-<div class="modal image-modal transparent" ng-click="closeModal()">
+<div class="modal image-modal transparent">
     <ion-pane class="transparent">
         <div class="row">
             <div class="col"><img ng-src="{{imageSrc}}" class="fullscreen-image"/></div>
         </div>
         <div class="row">
             <div class="col">
-                <button class="button button-small button-mum">
+                <button class="button button-small button-mum" ng-click="sendImage()">
                     Enviar
                 </button>
             </div>
             <div class="col">
-                <button class="button button-small button-mum">
+                <button class="button button-small button-mum" ng-click="closeModal()">
                     Cancelar
                 </button>
             </div>

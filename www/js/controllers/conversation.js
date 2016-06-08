@@ -177,7 +177,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     }
 
     $scope.actionUpload = function () {
-        $ionicActionSheet.show({
+        var hideSheet = $ionicActionSheet.show({
             buttons: [
                 {text: '<i class="icon ion-camera"></i> Cámara'},
                 {text: '<i class="icon ion-folder"></i> Galería'}
@@ -192,9 +192,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                     $ionicLoading.hide();
 
                     $scope.imageSrc = response;
-                    setTimeout(function () {
-                        $scope.openModal();
-                    }, 2000);
+                    hideSheet();
+                    $scope.openModal();
                     return true;
                 }).catch(function (error) {
                     $ionicLoading.hide();
@@ -208,6 +207,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $scope.sendImage = function () {
         cameraService.sendImage($scope.imageSrc).then(function (response) {
+            $scope.modal.hide();
             $scope.sendMessage(true, {
                 path: response.path,
                 fileData: response.data.substring(23),
@@ -238,17 +238,6 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     //Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function () {
         $scope.modal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('modal.hide', function () {
-        // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function () {
-        // Execute action
-    });
-    $scope.$on('modal.shown', function () {
-        console.log('Modal is shown!');
     });
 
     $scope.openFile = function (url) {

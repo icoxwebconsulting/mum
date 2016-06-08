@@ -26,14 +26,17 @@ angular.module('app').service('cameraService', function ($q, $cordovaCamera, $co
         var deferred = $q.defer();
 
         $cordovaCamera.getPicture(options).then(function (imageURI) {
+            var indexOfSlash = imageURI.lastIndexOf('/') + 1;
+            var name = imageURI.substr(indexOfSlash);
             imageURI = prefix + imageURI;
             var re = /(?:\.([^.]+))?$/;
             var fileExtension = re.exec(name)[1];
             fileExtension = fileExtension.toLowerCase();
-            if (['jpg', 'jpeg'].indexOf(fileExtension)) {
+            if (['jpg', 'jpeg'].indexOf(fileExtension) == -1) {
                 deferred.reject("badFileType");
+            } else {
+                deferred.resolve(imageURI);
             }
-            deferred.resolve(imageURI);
         });
 
         return deferred.promise;
