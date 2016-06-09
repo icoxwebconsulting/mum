@@ -60,9 +60,9 @@
                         </div>
 
                         <div class="message-body" ng-show="msj.attachment != null">
-                            <div>
+                            <div style="width: 150px;">
                             <a ng-click="openFile(msj.attachment)" target="_system">
-                                <img ng-src="{{ msj.attachment }}" style="width: 150px; height: 150px;">
+                                <img ng-src="{{ msj.attachment }}" style="max-height: 150px; width: auto">
                             </a>
                             </div>
                             <div class="message-date" ng-show="msj.attachment != null" ng-class="{ 'message-date-in-img': msj.is_received, 'message-date-out-img': !msj.is_received}">{{msj.created}}</div>
