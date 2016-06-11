@@ -37,7 +37,8 @@
     "cordova-plugin-file",
     "cordova-plugin-crosswalk-webview",
     "cordova-plugin-sim",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-file-opener2",
+    "cordova-plugin-file-transfer"
   ],
   "cordovaPlatforms": [
     {

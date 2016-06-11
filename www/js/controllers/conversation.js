@@ -1,5 +1,5 @@
 angular.module('app').controller('ConversationCtrl', function ($scope, $rootScope, $state, $ionicScrollDelegate, messageService, focus, $timeout,
-                                                               $ionicActionSheet, $ionicLoading, $ionicPopup, $ionicModal, cameraService) {
+                                                               $ionicActionSheet, $ionicLoading, $ionicPopup, $ionicModal, cameraService, fileService) {
 
     var message;
 
@@ -241,6 +241,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $scope.openFile = function (url) {
-        cordova.InAppBrowser.open(url, '_system', 'location=no');
+        //cordova.InAppBrowser.open(url, '_system', 'location=no');
+        url = url.replace("_mini", "");
+
+        var fileName = url.substr(url.lastIndexOf('/') + 1);
+        //TODO: leer archivo de carpeta mum, si no se encuentra descargar
+        fileService.download(url, "mum", fileName);
     }
 });
