@@ -5,8 +5,11 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="button button-small button-mum" ng-click="sendImage()">
+                <button class="button button-small button-mum" ng-click="sendImage()" ng-hide="isVisor">
                     Enviar
+                </button>
+                <button class="button button-small button-mum" ng-click="proccessImage()" ng-show="isVisor">
+                    Ver
                 </button>
             </div>
             <div class="col">

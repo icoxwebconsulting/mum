@@ -9,6 +9,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.subject = "";
     $scope.from = null;
     $scope.imageSrc = '';
+    $scope.isVisor = false;
 
     //The view has fully entered and is now the active view. This event will fire, whether it was the first load or a cached view.
     $scope.$on('$ionicView.enter', function (e) {
@@ -169,7 +170,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $ionicScrollDelegate.resize();
     };
 
-    function badFileType(){
+    function badFileType() {
         var alertPopup = $ionicPopup.alert({
             title: 'Información',
             template: 'Debe elegir archivos de tipo JPG.'
@@ -193,6 +194,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
                     $scope.imageSrc = response;
                     hideSheet();
+                    $scope.isVisor = false;
                     $scope.openModal();
                     return true;
                 }).catch(function (error) {
@@ -241,11 +243,32 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $scope.openFile = function (url) {
-        //cordova.InAppBrowser.open(url, '_system', 'location=no');
+        $scope.imageSrc = url;
+        $scope.isVisor = true;
+        $scope.openModal();
+    };
+
+    $scope.proccessImage = function () {
+
+        var url = $scope.imageSrc;
         url = url.replace("_mini", "");
 
         var fileName = url.substr(url.lastIndexOf('/') + 1);
-        //TODO: leer archivo de carpeta mum, si no se encuentra descargar
-        fileService.download(url, "mum", fileName);
+        //fileService.download(url, "mum", fileName);
+        fileService.saveImageToPhone(url, fileName, function (imageURI) {
+            //success
+            console.log(imageURI);
+            $scope.closeModal();
+            fileService.openFile(imageURI, "image/jpeg", function (m) {
+                //success
+            }, function (e) {
+                //error
+                console.log(e);
+            });
+        }, function (msg) {
+            //error
+            console.log(msg);
+        });
+
     }
 });
