@@ -1,82 +1,17 @@
 angular.module('app').service('fileService', function ($q) {
 
-    function download(URL, Folder_Name, File_Name) {
-        //step to request a file system
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
-            var download_link = encodeURI(URL);
-            var ext = download_link.substr(download_link.lastIndexOf('.') + 1); //Get extension of URL
-
-            var directoryEntry = fileSystem.root; // to get root path of directory
-            directoryEntry.getDirectory(Folder_Name, {
-                create: true,
-                exclusive: false
-            }, function (m) {//success
-                console.log("Directorio creado", m)
-            }, function () {//fail
-                alert("No se puede crear el directorio: " + error.code);
-            }); // creating folder in sdcard
-
-            var rootdir = fileSystem.root;
-            var fp = rootdir.toURL();//fileSystem.root.nativeURL//rootdir.fullPath; // Returns Fulpath of local directory
-            // reemplazar por rootdir.toUrl()? 
-
-            fp = fp + "/" + Folder_Name + "/" + File_Name; // fullpath and name of the file which we want to give
-            //fp = "cdvfile://localhost/persistent/" + File_Name;
-            // download function
-            var fileTransfer = new FileTransfer();
-            console.log(fp);
-
-            // File download function with URL and local path
-            fileTransfer.download(download_link, fp,
-                function (entry) {
-                    //alert("download complete: " + entry.fullPath);
-                    window.plugins.scanmedia.scanFile(fp, function (msg) {
-                        alert("Success ScanMedia");
-                    }, function (err) {
-                        alert("Fail ScanMedia: " + err);
-                    })
-                },
-                function (error) {
-                    //Download abort errors or download failed errors
-                    console.log(error);
-                    alert(error.exception);
-                    alert("download error source " + error.source);
-                    //alert("download error target " + error.target);
-                    //alert("upload error code" + error.code);
-                }
-            );
-
+    function fileExist(fileName) {
+        var deferred = $q.defer();
+        
+        window.resolveLocalFileSystemURL("file:///storage/emulated/0/Pictures/" + fileName, function (d) {
+            console.log(d);
+            deferred.resolve(true);
         }, function (e) {
-            var msg = '';
-
-            switch (e.code) {
-                case FileError.QUOTA_EXCEEDED_ERR:
-                    msg = 'QUOTA_EXCEEDED_ERR';
-                    break;
-                case FileError.NOT_FOUND_ERR:
-                    msg = 'NOT_FOUND_ERR';
-                    break;
-                case FileError.SECURITY_ERR:
-                    msg = 'SECURITY_ERR';
-                    break;
-                case FileError.INVALID_MODIFICATION_ERR:
-                    msg = 'INVALID_MODIFICATION_ERR';
-                    break;
-                case FileError.INVALID_STATE_ERR:
-                    msg = 'INVALID_STATE_ERR';
-                    break;
-                default:
-                    msg = 'Unknown Error';
-                    break;
-            }
-            ;
-
-            alert('Error: ' + msg);
+            console.log(e);
+            deferred.resolve(false);
         });
-    }
 
-    function readFile(fileName) {
-
+        return deferred.promise;
     }
 
     function saveImageToPhone(url, fileName, success, error) {
@@ -127,8 +62,7 @@ angular.module('app').service('fileService', function ($q) {
     }
 
     return {
-        download: download,
-        readFile: readFile,
+        fileExist: fileExist,
         saveImageToPhone: saveImageToPhone,
         openFile: openFile
     }

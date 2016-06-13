@@ -9,7 +9,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.subject = "";
     $scope.from = null;
     $scope.imageSrc = '';
-    $scope.isVisor = false;
+    $scope.isReceived = false;
 
     //The view has fully entered and is now the active view. This event will fire, whether it was the first load or a cached view.
     $scope.$on('$ionicView.enter', function (e) {
@@ -194,8 +194,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
                     $scope.imageSrc = response;
                     hideSheet();
-                    $scope.isVisor = false;
-                    $scope.openModal();
+                    $scope.sendModal.show();
                     return true;
                 }).catch(function (error) {
                     $ionicLoading.hide();
@@ -209,7 +208,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $scope.sendImage = function () {
         cameraService.sendImage($scope.imageSrc).then(function (response) {
-            $scope.modal.hide();
+            $scope.sendModal.hide();
             $scope.sendMessage(true, {
                 path: response.path,
                 fileData: response.data.substring(23),
@@ -229,6 +228,13 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $scope.modal = modal;
     });
 
+    $ionicModal.fromTemplateUrl('templates/send-image-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.sendModal = modal;
+    });
+
     $scope.openModal = function () {
         $scope.modal.show();
     };
@@ -237,14 +243,19 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         $scope.modal.hide();
     };
 
+    $scope.closeSendModal = function () {
+        $scope.sendModal.hide();
+    };
+
     //Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function () {
         $scope.modal.remove();
     });
 
-    $scope.openFile = function (url) {
+    $scope.openFile = function (url, isReceived) {
         $scope.imageSrc = url;
-        $scope.isVisor = true;
+        console.log("isReceived", isReceived);
+        $scope.isReceived = (isReceived) ? true : false;
         $scope.openModal();
     };
 
@@ -254,20 +265,36 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         url = url.replace("_mini", "");
 
         var fileName = url.substr(url.lastIndexOf('/') + 1);
-        //fileService.download(url, "mum", fileName);
-        fileService.saveImageToPhone(url, fileName, function (imageURI) {
-            //success
-            console.log(imageURI);
-            $scope.closeModal();
-            fileService.openFile(imageURI, "image/jpeg", function (m) {
-                //success
-            }, function (e) {
-                //error
-                console.log(e);
-            });
-        }, function (msg) {
-            //error
-            console.log(msg);
+        fileService.fileExist(fileName).then(function (exist) {
+            if (exist) {
+                fileService.openFile('/storage/emulated/0/Pictures/' + fileName, "image/jpeg", function (m) {
+                    //success
+                }, function (e) {
+                    //error
+                    console.log(e);
+                });
+            } else {
+                $ionicLoading.show({
+                    template: 'Descargando, espere por favor...'
+                });
+                fileService.saveImageToPhone(url, fileName, function (imageURI) {
+                    //success
+                    $ionicLoading.hide();
+                    console.log(imageURI);
+                    $scope.closeModal();
+                    fileService.openFile(imageURI, "image/jpeg", function (m) {
+                        //success
+                    }, function (e) {
+                        //error
+                        console.log(e);
+                    });
+                }, function (msg) {
+                    //error
+                    $scope.closeModal();
+                    console.log(msg);
+                });
+            }
+
         });
 
     }

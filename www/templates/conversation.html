@@ -61,7 +61,7 @@
 
                         <div class="message-body" ng-show="msj.attachment != null">
                             <div style="width: 150px;">
-                            <a ng-click="openFile(msj.attachment)" target="_system">
+                            <a ng-click="openFile(msj.attachment, msj.is_received)">
                                 <img ng-src="{{ msj.attachment }}" style="max-height: 150px; width: 100%">
                             </a>
                             </div>

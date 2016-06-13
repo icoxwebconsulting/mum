@@ -4,13 +4,13 @@
             <div class="col"><img ng-src="{{imageSrc}}" class="fullscreen-image"/></div>
         </div>
         <div class="row">
-            <div class="col" ng-hide="!isReceived">
-                <button class="button button-small button-mum" ng-click="proccessImage()">
-                    Ver
+            <div class="col">
+                <button class="button button-small button-mum" ng-click="sendImage()">
+                    Enviar
                 </button>
             </div>
             <div class="col">
-                <button class="button button-small button-mum" ng-click="closeModal()">
+                <button class="button button-small button-mum" ng-click="closeSendModal()">
                     Cancelar
                 </button>
             </div>
