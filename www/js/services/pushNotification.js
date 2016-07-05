@@ -12,6 +12,7 @@ angular.module('app.pushNotification', [])
                 var PushNotification = window.PushNotification;
 
                 push = PushNotification.init({
+                    forceReload: true,
                     android: {
                         senderID: "850066050595",
                         icon: "mum",
