@@ -22,7 +22,9 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
                     msjs[i].created = moment.utc(msjs[i].created).tz(moment.tz.guess()).format("D MMM hh:mm a");
                 }
                 $scope.messages = msjs;
-                $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
+                setTimeout(function () {
+                    $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
+                },1200);
             });
         }
     });
@@ -83,7 +85,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         if (isFile) {
             $scope.conversation.lastMessage = "Imagen";
         } else {
-            $scope.conversation.lastMessage = $scope.body;
+            $scope.conversation.lastMessage = $scope.body.substring(0, 19);
         }
         $scope.conversation.updated = date.format("DD-MM-YYYY HH:mm:ss");
         $scope.messages.push({
