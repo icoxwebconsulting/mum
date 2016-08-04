@@ -36,7 +36,7 @@ angular.module('app').directive("calendar", function (messageStorage) {
     };
 
     function _removeTime(date) {
-        return date.day(0).hour(0).minute(0).second(0).millisecond(0);
+        return date.day(1).hour(1).minute(1).second(1).millisecond(1);
     }
 
     function _buildMonth(scope, start, month) {
