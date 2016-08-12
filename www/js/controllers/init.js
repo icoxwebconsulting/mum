@@ -89,7 +89,8 @@ angular.module('app')
                                 verify();
                             }
                         } catch (error) {
-                            console.log("error");
+                            console.log("no leyó sms");
+                            verify();
                         }
                     }).catch(function (error) {
                     $ionicLoading.hide();
