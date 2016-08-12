@@ -90,15 +90,15 @@ angular.module('app')
                             }
                         } catch (error) {
                             console.log("no leyó sms");
-                            $scope.inProcess = 1;
-                            verify();
                         }
                     }).catch(function (error) {
                     $ionicLoading.hide();
 
-                    $ionicPopup.alert({
-                        title: 'Ha ocurrido un error, intente más tarde. '
-                    });
+                    if(error != 'isIOS'){
+                        $ionicPopup.alert({
+                            title: 'Ha ocurrido un error, intente más tarde. '
+                        });
+                    }
                 });
             }
         };

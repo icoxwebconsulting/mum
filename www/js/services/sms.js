@@ -37,7 +37,7 @@ angular.module('app.MUMSMS', [])
                     });
                 });
             } else {
-                deferred.resolve();
+                deferred.reject('isIOS');
             }
 
             return deferred.promise;
