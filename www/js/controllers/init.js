@@ -89,6 +89,7 @@ angular.module('app')
                                 verify();
                             }
                         } catch (error) {
+                            console.log("error");
                         }
                     }).catch(function (error) {
                     $ionicLoading.hide();

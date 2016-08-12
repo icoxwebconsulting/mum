@@ -30,12 +30,15 @@ angular.module('app.MUMSMS', [])
 
         function watchIncome() {
             var deferred = $q.defer();
-
-            SMS.startWatch(function () {
-                document.addEventListener('onSMSArrive', function (data) {
-                    deferred.resolve(data);
+            if (ionic.Platform.isAndroid()) {
+                SMS.startWatch(function () {
+                    document.addEventListener('onSMSArrive', function (data) {
+                        deferred.resolve(data);
+                    });
                 });
-            });
+            } else {
+                deferred.resolve();
+            }
 
             return deferred.promise;
         }
