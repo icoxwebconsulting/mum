@@ -90,6 +90,7 @@ angular.module('app')
                             }
                         } catch (error) {
                             console.log("no leyó sms");
+                            $scope.inProcess = 1;
                             verify();
                         }
                     }).catch(function (error) {
