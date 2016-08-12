@@ -18,6 +18,12 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
+            cordova.plugins.backgroundMode.setDefaults({
+                title:  "Mum",
+                ticker: "",
+                text:   "Mensajería Mum"
+            });
+
             cordova.plugins.backgroundMode.enable();
             init();
         });
