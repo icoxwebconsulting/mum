@@ -32,6 +32,11 @@ angular.module('app.pushNotification', [])
 
                         $rootScope.$emit('pushRegistrationId', registrationId);
                     });
+
+                    push.on('error', function (e) {
+                        console.log("Error en el registro");
+                        console.log(e);
+                    });
                 }
             }
         }
