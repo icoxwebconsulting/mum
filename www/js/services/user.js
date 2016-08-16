@@ -18,6 +18,9 @@ angular.module('app.user', [])
                     token: token,
                     os: 'Android'
                 };
+                if (ionic.Platform.isIOS()) {
+                    data.os = 'IOS';
+                }
                 return device(userDatastore.getTokens().accessToken).save(data).$promise
                     .then(function (response) {
                         deviceDatastore.setDeviceId(response.device);
