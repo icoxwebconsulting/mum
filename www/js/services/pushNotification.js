@@ -17,6 +17,12 @@ angular.module('app.pushNotification', [])
                         senderID: "850066050595",
                         icon: "mum",
                         iconColor: "lightgrey"
+                    },
+                    ios: {
+                        alert: "true",
+                        badge: "true",
+                        sound: "true",
+                        senderID: "850066050595" // GCM Sender ID (project ID)
                     }
                 });
 
