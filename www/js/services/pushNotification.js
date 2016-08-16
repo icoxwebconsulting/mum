@@ -20,9 +20,8 @@ angular.module('app.pushNotification', [])
                     },
                     ios: {
                         alert: "true",
-                        badge: "true",
-                        sound: "true",
-                        senderID: "850066050595" // GCM Sender ID (project ID)
+                        badge: true,
+                        sound: "true"
                     }
                 });
 
