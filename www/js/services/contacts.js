@@ -60,7 +60,9 @@ angular.module('app.contacts', [])
                 navigator.contacts.fieldType.name,
                 navigator.contacts.fieldType.emails,
                 navigator.contacts.fieldType.phoneNumbers,
-                navigator.contacts.fieldType.photos
+                navigator.contacts.fieldType.photos,
+                navigator.contacts.fieldType.country,
+                navigator.contacts.fieldType.region
             ];
 
             var options = new ContactFindOptions();
