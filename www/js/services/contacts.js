@@ -170,7 +170,7 @@ angular.module('app.contacts', [])
                     var hasEmail = loadedContact.emails && loadedContact.emails.length;
                     var hasPhoneNumber = loadedContact.phoneNumbers && loadedContact.phoneNumbers.length;
                     // only those hwo has display name and phone number or email
-                    if (loadedContact.displayName && (hasPhoneNumber || hasEmail)) {
+                    if ((loadedContact.name.formatted && loadedContact.name.formatted != "") && (hasPhoneNumber || hasEmail)) {
                         var j = 0;
                         var contact = null;
                         if (hasEmail) {
