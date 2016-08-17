@@ -60,9 +60,7 @@ angular.module('app.contacts', [])
                 navigator.contacts.fieldType.name,
                 navigator.contacts.fieldType.emails,
                 navigator.contacts.fieldType.phoneNumbers,
-                navigator.contacts.fieldType.photos,
-                navigator.contacts.fieldType.country,
-                navigator.contacts.fieldType.region
+                navigator.contacts.fieldType.photos
             ];
 
             var options = new ContactFindOptions();
@@ -84,7 +82,10 @@ angular.module('app.contacts', [])
                     }
 
                     // add customer international code to it
-                    contact = userDatastore.getCountryCode() + contact;
+                    var cc = userDatastore.getCountryCode();
+                    if (contact.substring(0, cc.length) != cc) {
+                        contact = userDatastore.getCountryCode() + contact;
+                    }
                 } else {
                     // if it has (+) as first digit remove it
                     if (contact.substring(0, 1) === '+') {
