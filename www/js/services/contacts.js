@@ -176,14 +176,14 @@ angular.module('app.contacts', [])
                         if (hasEmail) {
                             for (j = 0, emailsLength = loadedContact.emails.length; j < emailsLength; j++) {
                                 var email = loadedContact.emails[j].value;
-                                contact = _createContact(loadedContact.displayName, photo, email);
+                                contact = _createContact(loadedContact.name.formatted, photo, email);
                                 contacts[email] = contact;
                             }
                         }
                         if (hasPhoneNumber) {
                             for (j = 0, phoneNumbersLength = loadedContact.phoneNumbers.length; j < phoneNumbersLength; j++) {
                                 var phoneNumber = loadedContact.phoneNumbers[j].value;
-                                contact = _createContact(loadedContact.displayName, photo, null, phoneNumber);
+                                contact = _createContact(loadedContact.name.formatted, photo, null, phoneNumber);
                                 contacts[phoneNumber] = contact;
                             }
                         }
