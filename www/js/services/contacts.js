@@ -98,11 +98,7 @@ angular.module('app.contacts', [])
                     }
                 }
 
-                var chars = [' ', '-', '+', '(', ')'];
-                for (var j = 0, charsLength = chars.length; j < charsLength; j++) {
-                    var char = chars[j];
-                    contact = contact.split(char).join('');
-                }
+                contact = contact.replace(/[^\d]/g, '');
 
                 return contact;
             }
