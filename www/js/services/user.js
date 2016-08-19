@@ -6,7 +6,11 @@ angular.module('app.user', [])
                 .then(function (response) {
                     userDatastore.setVerified(1);
                     userDatastore.setCustomerId(response.customer);
-                    userDatastore.setCountryCode(registrationData.countryCode)
+                    var cc = registrationData.countryCode;
+                    if (cc == '54') {
+                        cc = '549';
+                    }
+                    userDatastore.setCountryCode(cc);
                 });
         }
 
