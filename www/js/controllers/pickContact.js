@@ -7,7 +7,7 @@ angular.module('app').controller('PickContactCtrl', function ($scope, $state, $i
     function processContacts(dbContacts){
         $scope.contacts = [];
         for (var i = 0, length = dbContacts.length; i < length; i++) {
-            $scope.contacts.push(dbContacts[i]);
+            $scope.contacts.push(dbContacts.item(i));
         }
         $ionicLoading.hide();
     }
