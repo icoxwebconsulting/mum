@@ -19,9 +19,9 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
                 StatusBar.styleDefault();
             }
             cordova.plugins.backgroundMode.setDefaults({
-                title:  "Mum",
+                title: "Mum",
                 ticker: "",
-                text:   "Mensajería Mum"
+                text: "Mensajería Mum"
             });
 
             cordova.plugins.backgroundMode.enable();
@@ -57,4 +57,7 @@ angular.module('app', ['ionic', 'app.routes', 'app.userDataStore', 'app.user', '
         }
     }).config(function ($ionicConfigProvider) {
     $ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
+    if (ionic.Platform.isIOS()) {
+        $ionicConfigProvider.views.transition('none');
+    }
 });
