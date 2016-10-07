@@ -71,8 +71,12 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
         popup.then(function (res) {
             if (res) {
-                var message = 'Estoy usando Mum, puedes entrar a tu tienda de aplicaciones y buscarlo para estar en contacto!';
-                number = '04123600295';
+                var message = 'Prueba MuM, La app de mensajería instantánea con la que puedes programar tus envíos. Visita : ';
+                if (ionic.Platform.isAndroid()) {
+                    message += 'https://play.google.com/store/apps/';
+                } else {
+                    message += '';
+                }
                 SMS.sendSMS(number, message, function () {
                     //enviado
                     $ionicPopup.alert({
