@@ -71,9 +71,9 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
 
         popup.then(function (res) {
             if (res) {
-                var message = 'Prueba MuM, La app de mensajería instantánea con la que puedes programar tus envíos. Visita : ';
+                var message = 'Prueba MuM, La app de mensajería instantánea con la que puedes programar tus envíos. Visita: ';
                 if (ionic.Platform.isAndroid()) {
-                    message += 'https://play.google.com/store/apps/';
+                    message += 'https://goo.gl/NOmYsh';
                 } else {
                     message += '';
                 }
