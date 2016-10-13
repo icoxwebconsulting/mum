@@ -57,5 +57,44 @@ angular.module('app').controller('ContactDetailCtrl', function ($scope, $state, 
             messageService.setConversation(conversation);
             $state.go('conversation');
         });
+    };
+
+    $scope.sendInvitation = function (number, name) {
+        var popup = $ionicPopup.confirm({
+            title: 'Mum Invitación',
+            subTitle: 'Se enviará una invitación a MUM a ' + name + ', pulse Aceptar para continuar.',
+            cancelText: 'Cancelar', // String (default: 'Cancel'). The text of the Cancel button.
+            //cancelType: '', // String (default: 'button-default'). The type of the Cancel button.
+            okText: 'Aceptar', // String (default: 'OK'). The text of the OK button.
+            okType: 'button-mum', // String (default: 'button-positive'). The type of the OK button.
+        });
+
+        popup.then(function (res) {
+            if (res) {
+                var message = 'Prueba MuM, La app de mensajería instantánea con la que puedes programar tus envíos. Visita: ';
+                if (ionic.Platform.isAndroid()) {
+                    message += 'https://goo.gl/NOmYsh';
+                } else {
+                    message += '';
+                }
+                SMS.sendSMS(number, message, function () {
+                    //enviado
+                    $ionicPopup.alert({
+                        title: 'Mum Invitación',
+                        subTitle: 'Se ha enviado el mensaje satisfactoriamente.',
+                        okText: 'Aceptar', // String (default: 'OK'). The text of the OK button.
+                        okType: 'button-mum', // String (default: 'button-positive'). The type of the OK button.
+                    });
+                }, function (e) {
+                    //no enviado
+                    $ionicPopup.alert({
+                        title: 'Mum Invitación',
+                        subTitle: 'Ha ocurrido un error a la hora de enviar el SMS: ' + e,
+                        okText: 'Aceptar', // String (default: 'OK'). The text of the OK button.
+                        okType: 'button-mum', // String (default: 'button-positive'). The type of the OK button.
+                    });
+                });
+            }
+        });
     }
 });

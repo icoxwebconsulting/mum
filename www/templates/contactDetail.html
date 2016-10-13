@@ -27,8 +27,8 @@
                     <div class="col" ng-if="contact.email">
                         <a ng-click="startConversation('email')"><img src="img/nuevo-mail.png" height="70" width="70" /></a>
                     </div>
-                    <div class="col" ng-if="contact.phone_number">
-                        <a ng-click="startConversation('sms')"><img src="img/nuevo-sms.png" height="70" width="70" /></a>
+                    <div class="col" ng-if="contact.phone_number  && !contact.mum_id">
+                        <a ng-click="sendInvitation(contact.phone_number, contact.display_name)"><img src="img/nuevo-sms.png" height="70" width="70" /></a>
                     </div>
                 </div>
 
