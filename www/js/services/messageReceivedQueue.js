@@ -1,4 +1,4 @@
-angular.module('app').service('messageReceivedQueue', function (messageStorage, messageService, userDatastore, messageNotification, Contacts) {
+angular.module('app').service('messageReceivedQueue', function (messageStorage, messageService, userDatastore, messageNotification, Contacts, $state) {
 
     var queue = [];
     var isRunning = false;
@@ -41,6 +41,16 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
         }
     }
 
+    function openConversation(conversation) {
+        //console.info('in here');
+        messageService.setConversation(conversation);
+        var message = messageService.factory().createMessage();
+        message.type = conversation.type;
+        message.displayName = conversation.displayName;
+        messageService.setMessage(message);
+        $state.go('conversation');
+    }
+
     function nextElement() {
         if (length() > 0) {
             isRunning = true;
@@ -66,6 +76,7 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
 
                     messageStorage.updateConversation(conversation).then(function () {
                         saveMessage(messageData, idMessage, conversation, type);
+                        openConversation(conversation);
                     });
                 } else {
                     //no existe, crearla
@@ -85,6 +96,7 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
                         messageStorage.saveConversation(conversation).then(function (idConversation) {
                             conversation.id = idConversation;
                             saveMessage(messageData, idMessage, conversation, type);
+                            openConversation(conversation);
                         });
                     });
                 }
