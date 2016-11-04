@@ -270,6 +270,21 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         return deferred.promise;
     }
 
+    function getSchedulesByDate(date) {
+        var deferred = $q.defer();
+        var query = "select mh.*, c.* from message_history as mh,conversation as c where at like '"+date+"%' and " +
+                    "mh.id_conversation = c.id order by mh.at asc";
+
+        sqliteDatastore.execute(query).then(function (results) {
+            deferred.resolve(results);
+        }).catch(function (error) {
+            // Tratar el error
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+
     return {
         saveConversation: saveConversation,
         getConversationMessages: getConversationMessages,
@@ -283,6 +298,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         getScheduledMessagesCountByRange: getScheduledMessagesCountByRange,
         getOnePendingMessage: getOnePendingMessage,
         deletePendingMessage: deletePendingMessage,
-        getUnreadMessages: getUnreadMessages
+        getUnreadMessages: getUnreadMessages,
+        getSchedulesByDate: getSchedulesByDate
     }
 });

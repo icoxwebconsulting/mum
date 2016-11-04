@@ -1,0 +1,17 @@
+<ion-view>
+    <ion-content class="top-margin">
+        <ion-list>
+            <p>Programados para {{dateParam.date}}</p>
+            <ion-item   class="item-avatar item-icon-right" ng-repeat="message in messages"
+                        ng-click="open(message)">
+                <img ng-src="{{message.image ? message.image : 'img/person.png'}}">
+                <h2>{{message.display_name}}</h2>
+                <p ng-class="{'bg-msg-mail': message.type == 'email', 'bg-msg-mum': message.type == 'mum', 'bg-msg-sms': message.type == 'sms'}">
+                    {{message.body}}
+                </p>
+                <h4>{{message.at | date:'HH:mm:ss' }}</h4>
+            </ion-item>
+
+        </ion-list>
+    </ion-content>
+</ion-view>

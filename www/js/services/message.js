@@ -36,6 +36,29 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
                 };
 
                 return conversation;
+            };
+
+            this.createSchedule = function(){
+                var schedule = {
+                    id: null,
+                    id_conversation: null,
+                    type: "",
+                    body: "",
+                    attachment: "",
+                    about: "",
+                    from_address: "",
+                    at: null,
+                    is_received: null,
+                    status: null,
+                    created: null,
+                    receivers: null,
+                    display_name: "",
+                    image: "",
+                    last_message: "",
+                    is_unread: null
+                };
+
+                return schedule;
             }
         }
 
@@ -139,6 +162,45 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         return deferred.promise;
     }
 
+    function getSchedulesByDate(date) {
+
+        var deferred = $q.defer();
+
+        messageStorage.getSchedulesByDate(date).then(function (results) {
+
+            var schedules = [];
+            var t = {};
+            var factoria = factory();
+            var schedule;
+            for (var i = 0; i < results.rows.length; i++) {
+                t = results.rows.item(i);
+                schedule = factoria.createSchedule();
+                schedule.id = t.id;
+                schedule.id_conversation = t.id_conversation;
+                schedule.type = t.type;
+                schedule.body = t.body;
+                schedule.attachment = t.attachment;
+                schedule.about = t.about;
+                schedule.from_address = t.from_address;
+                schedule.at = t.at;
+                schedule.is_received = t.is_received;
+                schedule.status = t.status;
+                schedule.created = t.created;
+
+                // var receiversClean = t.receivers.replace(/[^a-zA-Z 0-9.]+/g,'');
+                schedule.receivers = t.receivers.replace(/[^a-zA-Z 0-9.]+/g,'');
+                schedule.display_name = t.display_name;
+                schedule.image = t.image;
+                schedule.last_message = t.last_message;
+                schedule.is_unread = t.is_unread;
+                schedules.push(schedule);
+            }
+            deferred.resolve(schedules);
+        });
+        return deferred.promise;
+
+    }
+
     function deleteConversation(conversation) {
         return messageStorage.deleteConversation(conversation);
     }
@@ -168,7 +230,8 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         deleteConversation: deleteConversation,
         findConversation: findConversation,
         updateConversation: updateConversation,
-        getUnreadMessages: getUnreadMessages
+        getUnreadMessages: getUnreadMessages,
+        getSchedulesByDate: getSchedulesByDate
     };
 
 });

@@ -71,6 +71,18 @@ angular.module('app.routes', [])
                 controller: 'ScheduleCtrl'
             })
 
+            .state('layout.scheduleList', {
+              url: '/schedule/details/:date',
+              templateUrl: 'templates/scheduleList.html',
+              controller: 'ScheduleListCtrl'
+            })
+
+            .state('scheduleDetails', {
+                url: '/schedule/message/details',
+                templateUrl: 'templates/scheduleDetails.html',
+                controller: 'ScheduleDetailsCtrl'
+            })
+
             .state('message', {
                 url: '/message/create',
                 templateUrl: 'templates/message.html',
