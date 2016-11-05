@@ -1,4 +1,4 @@
-angular.module('app').directive("calendar", function (messageStorage) {
+angular.module('app').directive("calendar", function (messageStorage, $state, DATETIME_FORMAT_CONF) {
     return {
         restrict: "E",
         templateUrl: "templates/calendar.html",
@@ -17,6 +17,12 @@ angular.module('app').directive("calendar", function (messageStorage) {
 
             scope.select = function (day) {
                 scope.selected = day.date;
+                if (day.hasEvents){
+                    var dateParam = moment((day.date._d).toString()).format('YYYY-MM-DD');
+                    $state.go('layout.scheduleList',{"date":dateParam});
+                }else {
+                    console.log('No hay evento');
+                }
             };
 
             scope.next = function () {
