@@ -1,5 +1,9 @@
-angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ionicLoading, Contacts) {
+angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ionicLoading, Contacts, $ionicViewService) {
     $scope.contacts = [];
+
+    $scope.$on('$ionicView.enter', function (e) {
+        $ionicViewService.clearHistory();
+    });
 
     $ionicLoading.show();
     Contacts.getContacts()

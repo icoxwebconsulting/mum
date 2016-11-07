@@ -1,4 +1,4 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService) {
+angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService, $ionicViewService) {
 
     $scope.conversation = messageService.factory().createConversation();
     var popup;
@@ -9,6 +9,10 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $rootScope.$on('addConversation', function (e, data) {
         $scope.conversations.unshift(data.conversation);
+    });
+
+    $scope.$on('$ionicView.enter', function (e) {
+        $ionicViewService.clearHistory();
     });
 
     $scope.open = function (conversation) {
