@@ -4,6 +4,13 @@
 node_modules/
 platforms/
 plugins/
+resources/
+.tmp
+.sass-cache
+*.swp
+*.swo
+*.log
+*.DS_Store
 
 .idea/
 /www/res/*
