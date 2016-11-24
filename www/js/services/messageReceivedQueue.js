@@ -41,8 +41,9 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
         }
     }
 
-    function openConversation(conversation) {
-        //console.info('in here');
+    function openConversation(conversation)
+    {
+        console.info('in here');
         messageService.setConversation(conversation);
         var message = messageService.factory().createMessage();
         message.type = conversation.type;
@@ -50,6 +51,7 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
         messageService.setMessage(message);
         $state.go('conversation');
     }
+
 
     function nextElement() {
         if (length() > 0) {
@@ -96,7 +98,6 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
                         messageStorage.saveConversation(conversation).then(function (idConversation) {
                             conversation.id = idConversation;
                             saveMessage(messageData, idMessage, conversation, type);
-                            openConversation(conversation);
                         });
                     });
                 }

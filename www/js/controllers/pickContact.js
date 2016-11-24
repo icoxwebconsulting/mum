@@ -51,5 +51,9 @@ angular.module('app').controller('PickContactCtrl', function ($scope, $state, $i
         messageService.setMessage(message);
 
         $state.go('message');
-    }
+    };
+
+    $scope.clearSearch = function() {
+        $scope.search = '';
+    };
 });
