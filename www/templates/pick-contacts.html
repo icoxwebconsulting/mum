@@ -10,8 +10,9 @@
         <div style="margin: 5px">
             <input type="search"
                    placeholder="Buscar contacto..."
+                   style="width: 95%"
                    ng-model="search">
-            <button ng-if="search.length"
+            <button ng-if="search.length" style="top: -4px !important;"
                     class="button button-icon ion-android-close input-button"
                     ng-click="clearSearch()">
             </button>
