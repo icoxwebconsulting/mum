@@ -14,6 +14,9 @@ angular.module('app').controller('PickContactCtrl', function ($scope, $state, $i
 
     $scope.$on('$ionicView.enter', function () {
         message = messageService.getMessage();
+
+        console.info('message-type', message.type);
+
         $scope.contactsType = message.type;
         $ionicLoading.show();
 
