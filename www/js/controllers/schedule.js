@@ -1,17 +1,36 @@
-angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition) {
+angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition, userDatastore) {
 
-    $scope.fecha = moment().add(10, 'minutes');
-    $scope.selectedTime = $scope.fecha.format('hh:mm a');
+    var dateSchedule = userDatastore.getScheduleDay();
+
+    if (dateSchedule){
+        $scope.fecha = moment(dateSchedule);
+        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+    } else {
+        $scope.fecha = moment().add(10, 'minutes');
+        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+    }
 
     $scope.$on('$ionicView.enter', function () {
         //fechas
-        $scope.fecha = moment().add(10, 'minutes');
-        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+//        $scope.fecha = moment().add(10, 'minutes');
+//        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+//        dateSchedule();
+
+        var dateSchedule = userDatastore.getScheduleDay();
+        if (dateSchedule){
+            $scope.fecha = moment(dateSchedule);
+            $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        } else {
+            $scope.fecha = moment().add(10, 'minutes');
+            $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        }
         $scope.scrollToDay();
     });
 
     $scope.scrollToDay = function () {
         var element = $ionicPosition.position(angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active')[0]));
+//        console.log('scroll to day', $ionicPosition.position(angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active'))));
+        console.info('element --> ', angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active')[0]));
         $ionicScrollDelegate.$getByHandle('vscroll').scrollTo(element.left, element.top, true);
     };
 

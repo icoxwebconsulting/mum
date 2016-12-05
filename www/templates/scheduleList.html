@@ -2,7 +2,8 @@
     <ion-content class="top-margin">
         <ion-list>
             <p>Programados para {{dateParam.date}}</p>
-            <ion-item   class="item-avatar item-icon-right" ng-repeat="message in messages"
+            <ion-item   class="item-remove-animate item-avatar item-icon-right" ng-repeat="message in messages"
+                        on-hold="deleteMessage(message)"
                         ng-click="open(message)">
                 <img ng-src="{{message.image ? message.image : 'img/person.png'}}">
                 <h2>{{message.display_name}}</h2>
@@ -10,8 +11,19 @@
                     {{message.body}}
                 </p>
                 <h4>{{message.at | date:'HH:mm:ss' }}</h4>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <ion-option-button class="button-mum" ng-click="deleteMessage(message)">
+                    Borrar
+                </ion-option-button>
             </ion-item>
-
         </ion-list>
+        <div class="footer">
+            <div class="container p-y-sm">
+                <a href="#/content/schedule">
+                    <img src="img/nuevo-magenta.png" height="80" width="80"/>
+                </a>
+                <p>NUEVO</p>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

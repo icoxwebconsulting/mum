@@ -175,7 +175,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
             for (var i = 0; i < results.rows.length; i++) {
                 t = results.rows.item(i);
                 schedule = factoria.createSchedule();
-                schedule.id = t.id;
+                schedule.id = t.id_message;
                 schedule.id_conversation = t.id_conversation;
                 schedule.type = t.type;
                 schedule.body = t.body;
@@ -205,12 +205,25 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         return messageStorage.deleteConversation(conversation);
     }
 
+    function deleteSpecificMessage(message){
+        return messageStorage.deleteSpecificMessage(message);
+    }
+
     function findConversation(type, receivers) {
         return messageStorage.findConversation(type, receivers);
     }
 
+    function findSpecificMessage(id){
+        console.log('findSpecificMessage en MessageService id', id);
+        return messageStorage.findSpecificMessage(id);
+    }
+
     function updateConversation(conversation) {
         return messageStorage.updateConversation(conversation);
+    }
+
+    function updateSpecificMessage(message) {
+        return messageStorage.updateSpecificMessage(message);
     }
 
     function getUnreadMessages() {
@@ -228,8 +241,11 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         getConversationMessages: getConversationMessages,
         getInboxMessages: getInboxMessages,
         deleteConversation: deleteConversation,
+        deleteSpecificMessage: deleteSpecificMessage,
         findConversation: findConversation,
+        findSpecificMessage: findSpecificMessage,
         updateConversation: updateConversation,
+        updateSpecificMessage: updateSpecificMessage,
         getUnreadMessages: getUnreadMessages,
         getSchedulesByDate: getSchedulesByDate
     };

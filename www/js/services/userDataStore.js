@@ -77,6 +77,18 @@ angular.module('app.userDataStore', [])
             }
         }
 
+        function setScheduleDay(date){
+            window.localStorage.setItem('scheduleDay', date);
+        }
+
+        function getScheduleDay() {
+            return window.localStorage.getItem('scheduleDay');
+        }
+
+        function removeScheduleDay() {
+            return window.localStorage.removeItem('scheduleDay');
+        }
+
         return {
             getVerified: getVerified,
             isVerified: isVerified,
@@ -94,6 +106,9 @@ angular.module('app.userDataStore', [])
             isRefreshingAccessToken: isRefreshingAccessToken,
             setRefreshingAccessToken: setRefreshingAccessToken,
             setProfile: setProfile,
-            getProfile: getProfile
+            getProfile: getProfile,
+            setScheduleDay: setScheduleDay,
+            getScheduleDay: getScheduleDay,
+            removeScheduleDay: removeScheduleDay
         };
     });

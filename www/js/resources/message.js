@@ -44,6 +44,29 @@ angular.module('app.messageResource', [])
                     headers: {
                         Authorization: 'Bearer ' + token
                     }
+                },
+                deleteMessageRes: {
+                    method: 'DELETE',
+                    url: SERVER_CONF.API_HOST + 'messages/:messageId/delete',
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
+                },
+                patchMessageRes: {
+                    method: 'PATCH',
+                    url: SERVER_CONF.API_HOST + 'messages/:messageId/update',
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    },
+                    params: {message: '@message'}
+                },
+                patchEmailRes: {
+                    method: 'PATCH',
+                    url: SERVER_CONF.API_HOST + 'messages/email/:messageId/update',
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    },
+                    params: {message: '@message'}
                 }
             });
         }

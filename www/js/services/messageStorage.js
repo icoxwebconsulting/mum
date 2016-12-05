@@ -89,6 +89,30 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         return deferred.promise;
     }
 
+    function deleteSpecificMessageHistory(id){
+        console.log('id-->',id)
+        var query = "DELETE FROM message_history WHERE id = ?";
+        sqliteDatastore.execute(query, [id]);
+        return true;
+    }
+
+    function deleteSpecificMessage(message){
+        var deferred = $q.defer();
+        console.log('message',message)
+        $q.all([
+            deleteSpecificMessageHistory(message.id)
+        ]).then(function (value) {
+            console.log('value', value);
+            deferred.resolve(value);
+        }, function (reason) {
+            console.log('reason', reason);
+            deferred.reject();
+        });
+
+        return deferred.promise;
+
+    }
+
     function saveMessageHistory(data, type, messageId, idConversation, isReceived, attachment) {
         var deferred = $q.defer();
 
@@ -166,6 +190,26 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         return deferred.promise;
     }
 
+    function findSpecificMessage(id){
+        console.log('findSpecificMessage en messageStorage id', id);
+        var deferred = $q.defer();
+        var query = "SELECT * FROM message_history WHERE id = ?";
+        console.log("antes de execute query");
+        sqliteDatastore.execute(query, [id]).then(function(result){
+            console.log('dentro de execute query');
+           if (result.rows.length >0){
+               var item = result.rows.item(0);
+               deferred.resolve(item);
+           } else {
+               deferred.resolve(null);
+           }
+            console.log('result query', result);
+        }).catch(function(error){
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
     function getDelayedMessages() {
         var deferred = $q.defer();
 
@@ -199,6 +243,26 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
 
         sqliteDatastore.execute(query, values).then(function (result) {
             deferred.resolve();
+        }).catch(function (error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    function updateSpecificMessage(message){
+        console.log('updateSpecificMessage', message)
+        var deferred = $q.defer();
+
+        var query = "UPDATE message_history SET body = ? WHERE id = ?";
+
+        var values = [
+            message.body,
+            message.id
+        ];
+
+        sqliteDatastore.execute(query, values).then(function (result) {
+            deferred.resolve();
+            console.log('result update', result)
         }).catch(function (error) {
             deferred.reject(error);
         });
@@ -272,7 +336,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
 
     function getSchedulesByDate(date) {
         var deferred = $q.defer();
-        var query = "select mh.*, c.* from message_history as mh,conversation as c where at like '"+date+"%' and " +
+        var query = "select mh.id as id_message, mh.id_conversation, mh.type, mh.body, mh.attachment, mh.about, mh.from_address, mh.at, mh.is_received, mh.status, mh.created, c.* from message_history as mh,conversation as c where at like '"+date+"%' and " +
                     "mh.id_conversation = c.id order by mh.at asc";
 
         sqliteDatastore.execute(query).then(function (results) {
@@ -291,10 +355,14 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
         getInboxMessages: getInboxMessages,
         getDelayedMessages: getDelayedMessages,
         deleteConversation: deleteConversation,
+        deleteSpecificMessageHistory: deleteSpecificMessageHistory,
+        deleteSpecificMessage: deleteSpecificMessage,
         saveMessageHistory: saveMessageHistory,
         savePendingMessage: savePendingMessage,
         findConversation: findConversation,
+        findSpecificMessage: findSpecificMessage,
         updateConversation: updateConversation,
+        updateSpecificMessage: updateSpecificMessage,
         getScheduledMessagesCountByRange: getScheduledMessagesCountByRange,
         getOnePendingMessage: getOnePendingMessage,
         deletePendingMessage: deletePendingMessage,
