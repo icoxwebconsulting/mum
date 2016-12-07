@@ -21,7 +21,6 @@
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       collection-repeat="contact in contacts | filter:search | orderBy:'display_name'"
                       ng-click="pickContact(contact)"
-                      ng-if="(contactsType == 'email' && contact.email.length > 1 ) || contactsType == 'mum' "
                       type="item-text-wrap">
                 <img ng-src="{{contact.photo}}">
                 <h2>{{contact.display_name}}</h2>

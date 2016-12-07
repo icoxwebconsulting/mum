@@ -33,8 +33,7 @@ angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $
             }).then(function () {
             messageService.deleteSpecificMessage($scope.message).then(function () {
                 $scope.messages.splice($scope.messages.indexOf($scope.message), 1);
-                console.log('mum eliminado');
-                if($scope.message == ''){
+                if($scope.messages.length == 0){
                     $state.go('layout.home');
                 }
             }).catch(function (error) {

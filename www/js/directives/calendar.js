@@ -14,6 +14,9 @@ angular.module('app').directive("calendar", function (messageStorage, $state, DA
             _removeTime(start.day(0));
 
             _buildMonth(scope, start, scope.month);
+            console.log('scope->>', scope);
+            console.log('start->>', start);
+            console.log('scope.month->>', scope.month);
 
             scope.select = function (day) {
                 scope.selected = day.date;
