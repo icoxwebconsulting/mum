@@ -56,7 +56,9 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     $scope.changeDay = function ($index) {
         var selected = $index + 1;
-        if (selected < moment().date() && $scope.fecha.month() <= moment().month()) {
+        var selectedDate = moment($scope.fecha.date(selected)).format('YYYY-MM-DD HH:MM:SS');
+        
+        if (selectedDate < moment().format('YYYY-MM-DD HH:MM:SS')) {
             showPopup();
         } else {
             $scope.fecha.date(selected);
@@ -72,11 +74,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
     };
 
     $scope.monthDown = function () {
-        if ($scope.fecha.month() <= moment().month()) {
-            showPopup();
-        } else {
-            $scope.fecha.subtract(1, 'M');
-        }
+      $scope.fecha.subtract(1, 'M');
     };
 
     $scope.timeUp = function () {
