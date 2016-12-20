@@ -19,7 +19,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         if ($scope.conversation.id) {
             messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {
                 for (var i = 0; i < msjs.length; i++) {
-                    msjs[i].created = moment.utc(msjs[i].created).tz(moment.tz.guess()).format("D MMM hh:mm a");
+                    msjs[i].created = moment(moment.utc(msjs[i].created).toDate()).format("D MMM HH:mm");
+                    console.log('msjs[i].created', msjs[i].created);
                 }
                 $scope.messages = msjs;
                 setTimeout(function () {
@@ -46,7 +47,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $rootScope.$on('receivedMessage', function (e, data) {
         if ($rootScope.currentState == "conversation" && $scope.conversation.id == data.conversation.id) {
-            var date = moment.utc().tz(moment.tz.guess()).format("D MMM hh:mm a");
+            var date = moment(moment().toDate()).format("D MMM HH:mm");
             $scope.messages.push({
                 about: (data.type = 'email') ? "" : null,
                 at: null,
@@ -80,7 +81,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
         }
 
         var type = $scope.conversation.type;
-        var date = moment.utc();
+        var date = moment(moment().toDate());
         message.created = date.format("DD-MM-YYYY HH:mm:ss");
         if (isFile) {
             $scope.conversation.lastMessage = "Imagen";
@@ -100,7 +101,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             attachment: obj.path,
             //path: obj.path,
             //Agreaagr url de la imagen desde la vista
-            created: date.tz(moment.tz.guess()).format("D MMM hh:mm a")
+            created: moment(date).format("D MMM HH:mm")
         });
         //$ionicScrollDelegate.$getByHandle('mainScroll').resize();
         $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();

@@ -1,28 +1,28 @@
-angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition, userDatastore) {
+angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition, userDatastore, DATETIME_FORMAT_CONF) {
 
     var dateSchedule = userDatastore.getScheduleDay();
 
     if (dateSchedule){
         $scope.fecha = moment(dateSchedule);
-        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        $scope.selectedTime = $scope.fecha.format('HH:mm');
     } else {
         $scope.fecha = moment().add(10, 'minutes');
-        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        $scope.selectedTime = $scope.fecha.format('HH:mm');
     }
 
     $scope.$on('$ionicView.enter', function () {
         //fechas
 //        $scope.fecha = moment().add(10, 'minutes');
-//        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+//        $scope.selectedTime = $scope.fecha.format('HH:mm');
 //        dateSchedule();
 
         var dateSchedule = userDatastore.getScheduleDay();
         if (dateSchedule){
             $scope.fecha = moment(dateSchedule);
-            $scope.selectedTime = $scope.fecha.format('hh:mm a');
+            $scope.selectedTime = $scope.fecha.format('HH:mm');
         } else {
             $scope.fecha = moment().add(10, 'minutes');
-            $scope.selectedTime = $scope.fecha.format('hh:mm a');
+            $scope.selectedTime = $scope.fecha.format('HH:mm');
         }
         $scope.scrollToDay();
     });
@@ -56,9 +56,9 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     $scope.changeDay = function ($index) {
         var selected = $index + 1;
-        var selectedDate = moment($scope.fecha.date(selected)).format('YYYY-MM-DD HH:MM:SS');
+        var selectedDate = moment($scope.fecha.date(selected)).format(DATETIME_FORMAT_CONF.dateTimeFormat);
         
-        if (selectedDate < moment().format('YYYY-MM-DD HH:MM:SS')) {
+        if (selectedDate < moment().format(DATETIME_FORMAT_CONF.dateTimeFormat)) {
             showPopup();
         } else {
             $scope.fecha.date(selected);
@@ -66,7 +66,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
     };
 
     $scope.getTime = function () {
-        return $scope.fecha.format('hh:m a');
+        return $scope.fecha.format('HH:m');
     };
 
     $scope.monthUp = function () {
@@ -79,12 +79,12 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     $scope.timeUp = function () {
         $scope.fecha.add(1, 'm');
-        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        $scope.selectedTime = $scope.fecha.format('HH:mm');
     };
 
     $scope.timeDown = function () {
         $scope.fecha.subtract(1, 'm');
-        $scope.selectedTime = $scope.fecha.format('hh:mm a');
+        $scope.selectedTime = $scope.fecha.format('HH:mm');
     };
 
     $scope.getMaxDay = function () {
@@ -107,14 +107,14 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
             var selectedTime = new Date(val * 1000);
             $scope.fecha.hour(selectedTime.getUTCHours());
             $scope.fecha.minute(selectedTime.getUTCMinutes());
-            $scope.selectedTime = $scope.fecha.format('hh:mm a');
+            $scope.selectedTime = $scope.fecha.format('HH:mm');
         }
     }
 
     $scope.timePickerObject = {
         inputEpochTime: ($scope.fecha.unix() + ($scope.fecha.utcOffset() * 60)),  //Optional
         step: 1,  //Optional
-        format: 12,  //Optional
+        format: 24,  //Optional
         titleLabel: 'Seleccione una hora',  //Optional
         setLabel: 'Aceptar',  //Optional
         closeLabel: 'Cancelar',  //Optional

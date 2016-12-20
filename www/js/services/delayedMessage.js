@@ -12,7 +12,7 @@ angular.module('app').service('delayedMessageService', function ($q, messageStor
         };
 
         if (message.at) {
-            messageData.message.at = moment.utc(message.at).format(DATETIME_FORMAT_CONF.dateTimeFormat);
+            messageData.message.at = moment(moment.utc(message.at).toDate()).format(DATETIME_FORMAT_CONF.dateTimeFormat);
         }
 
         if (message.type == 'email') {
