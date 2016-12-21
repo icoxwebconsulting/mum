@@ -1,9 +1,13 @@
-angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $ionicLoading, $stateParams, $ionicPopup, messageService, userDatastore, messageRes) {
+angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $ionicLoading, $stateParams, $ionicPopup, messageService, userDatastore, messageRes, DATETIME_FORMAT_CONF) {
 
     $scope.dateParam = $stateParams;
     var popup;
     $ionicLoading.show();
     messageService.getSchedulesByDate($scope.dateParam.date).then(function (messages) {
+        for (var i = 0; i < messages.length; i++) {
+            messages[i].at = moment(moment.utc(messages[i].at).toDate()).format(DATETIME_FORMAT_CONF.dateTimeFormat);
+            console.log('msjs[i].at', messages[i].at);
+        }
         $scope.messages = messages;
         $ionicLoading.hide();
          console.log('messages:', $scope.messages);

@@ -46,7 +46,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
 
     $rootScope.$on('receivedMessage', function (e, data) {
         if ($rootScope.currentState == "conversation" && $scope.conversation.id == data.conversation.id) {
-            var date = moment.utc().tz(moment.tz.guess()).format("D MMM hh:mm a");
+            var date = moment.utc().tz(moment.tz.guess()).format("D MMM HH:mm");
             $scope.messages.push({
                 about: (data.type = 'email') ? "" : null,
                 at: null,
@@ -100,7 +100,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             attachment: obj.path,
             //path: obj.path,
             //Agreaagr url de la imagen desde la vista
-            created: date.tz(moment.tz.guess()).format("D MMM hh:mm a")
+            created: date.tz(moment.tz.guess()).format("D MMM HH:mm")
         });
         //$ionicScrollDelegate.$getByHandle('mainScroll').resize();
         $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
