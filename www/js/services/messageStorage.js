@@ -30,8 +30,8 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function getConversationMessages(id) {
         var deferred = $q.defer();
 
-        var query = "SELECT id as id_message, type, body, attachment, is_received, created FROM message_history WHERE id_conversation = ?";
-        query += " UNION SELECT null as id_message, type, body, path as attachment, 0 as is_received, created FROM pending_message WHERE id_conversation = ? ORDER BY created";
+        var query = "SELECT id as id_message, type, body, attachment, at, is_received, created FROM message_history WHERE id_conversation = ?";
+        query += " UNION SELECT null as id_message, type, body, path as attachment, at, 0 as is_received, created FROM pending_message WHERE id_conversation = ? ORDER BY created";
 
         sqliteDatastore.execute(query, [id, id]).then(function (results) {
             var messages = [];

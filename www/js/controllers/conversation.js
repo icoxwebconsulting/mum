@@ -10,9 +10,11 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.from = null;
     $scope.imageSrc = '';
     $scope.isReceived = false;
+    $scope.currentDate;
 
     //The view has fully entered and is now the active view. This event will fire, whether it was the first load or a cached view.
     $scope.$on('$ionicView.enter', function (e) {
+        $scope.currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
         $scope.conversation = messageService.getConversation();
         $scope.conversation.isUnread = 0;
         message = messageService.getMessage();
@@ -20,6 +22,9 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
             messageService.getConversationMessages($scope.conversation.id).then(function (msjs) {
                 for (var i = 0; i < msjs.length; i++) {
                     msjs[i].created = moment(moment.utc(msjs[i].created).toDate()).format("D MMM HH:mm");
+                    if (moment(moment.utc(msjs[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss') <= $scope.currentDate){
+                        msjs[i].show = true;
+                    }
                 }
                 $scope.messages = msjs;
                 setTimeout(function () {
