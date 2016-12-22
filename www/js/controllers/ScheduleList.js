@@ -5,7 +5,7 @@ angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $
     $ionicLoading.show();
     messageService.getSchedulesByDate($scope.dateParam.date).then(function (messages) {
         for (var i = 0; i < messages.length; i++) {
-            messages[i].at = moment(moment.utc(messages[i].at).toDate()).format(DATETIME_FORMAT_CONF.dateTimeFormat);
+            messages[i].at = moment(moment.utc(messages[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss');
             console.log('msjs[i].at', messages[i].at);
         }
         $scope.messages = messages;
