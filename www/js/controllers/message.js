@@ -15,7 +15,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
         $scope.conversation.receivers.push(($scope.message.type == 'email') ? $scope.message.email : $scope.message.phoneNumber);
         $scope.conversation.type = $scope.message.type;
         $scope.conversation.displayName = $scope.message.displayName;
-        $scope.conversation.lastMessage = $scope.message.body;
+        $scope.conversation.lastMessage = '';
 
         function processSend() {
             messageService.sendMessage($scope.message, $scope.conversation).then(function () {
@@ -23,7 +23,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
                 $scope.message = messageService.factory().createMessage();
                 $scope.conversation = messageService.factory().createConversation();
 
-                $state.go('layout.inbox');
+                $state.go('layout.home');
             }).catch(function (error) {
                 //$ionicLoading.hide();
             });

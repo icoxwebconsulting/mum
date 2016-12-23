@@ -49,7 +49,7 @@ angular.module('app').service('messageStorage', function ($q, sqliteDatastore, D
     function getInboxMessages() {
         var deferred = $q.defer();
 
-        var query = 'SELECT * FROM conversation c';
+        var query = "SELECT * FROM conversation c where last_message != '' ";
         sqliteDatastore.execute(query).then(function (results) {
             deferred.resolve(results);
         }).catch(function (error) {
