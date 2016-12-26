@@ -13,6 +13,13 @@ angular.module('app.contacts', [])
             return singleContact;
         }
 
+        function contactProfile(){
+            return contact(userDatastore.getTokens().accessToken).contactProfile(data).$promise
+                .then(function (response){
+                    console.log('contactProfile response--->', response);
+                })
+        }
+
         /**
          * Contact class
          *
@@ -399,6 +406,31 @@ angular.module('app.contacts', [])
             }
         }
 
+        function getContactsProfile(){
+          return contact(userDatastore.getTokens().accessToken).contactProfile().$promise
+            .then(function (response) {
+              return response
+            });
+        }
+
+        function uploadProfileContacts(data) {
+          var deferred = $q.defer();
+          var query = 'UPDATE contacts SET photo = ? WHERE phone_number = ?';
+
+          var values = [
+            data.photo,
+            data.phone_number
+          ];
+
+          sqliteDatastore.execute(query, values).then(function (result) {
+            deferred.resolve();
+            console.log('result update', result)
+          }).catch(function (error) {
+            deferred.reject(error);
+          });
+          return deferred.promise;
+        }
+
         function getContacts() {
             var query = 'SELECT * FROM contacts';
 
@@ -450,6 +482,8 @@ angular.module('app.contacts', [])
 
         return {
             loadContacts: loadContacts,
+            getContactsProfile: getContactsProfile,
+            uploadProfileContacts: uploadProfileContacts,
             getContacts: getContacts,
             getMUMContacts: getMUMContacts,
             getSMSContacts: getSMSContacts,

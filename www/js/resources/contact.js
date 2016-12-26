@@ -11,6 +11,14 @@ angular.module('app.contactRes', [])
                     headers: {
                         Authorization: 'Bearer ' + token
                     }
+                },
+                contactProfile: {
+                    method: 'GET',
+                    url: SERVER_CONF.API_HOST + 'customers/me/contactsProfile',
+                    isArray: true,
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
                 }
             });
         }
