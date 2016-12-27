@@ -35,6 +35,11 @@ angular.module('app.routes', [])
                 controller: 'MainCtrl'
             })
 
+            .state('refresh',{
+                url: '/refresh',
+                controller: 'RefreshCtrl'
+            })
+
             .state('layout.home', {
                 url: '/home',
                 templateUrl: 'templates/home.html',
