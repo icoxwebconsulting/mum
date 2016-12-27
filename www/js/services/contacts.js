@@ -89,10 +89,13 @@ angular.module('app.contacts', [])
                     }
 
                     // add customer international code to it
-                    var cc = userDatastore.getCountryCode();
-                    if (contact.substring(0, cc.length) != cc) {
+//                    var cc = userDatastore.getCountryCode();
+                    if (contact.length < 11){
                         contact = userDatastore.getCountryCode() + contact;
                     }
+//                    if (contact.substring(0, cc.length) != cc) {
+//                        contact = userDatastore.getCountryCode() + contact;
+//                    }
                 } else {
                     // if it has (+) as first digit remove it
                     if (contact.substring(0, 1) === '+') {
@@ -102,6 +105,10 @@ angular.module('app.contacts', [])
                     // if it has (00) as first digit remove it
                     if (contact.substring(0, 2) === '00') {
                         contact = contact.substring(2);
+                    }
+
+                    if (contact.length < 11){
+                        contact = userDatastore.getCountryCode() + contact;
                     }
                 }
 
