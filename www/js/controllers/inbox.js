@@ -7,6 +7,13 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         $scope.conversations = conversations;
     });
 
+    $scope.$on('$ionicView.beforeEnter', function (e) {
+        $ionicViewService.clearHistory();
+        messageService.getInboxMessages().then(function (conversations) {
+            $scope.conversations = conversations;
+        });
+    });
+
     $rootScope.$on('addConversation', function (e, data) {
         $scope.conversations.unshift(data.conversation);
     });
