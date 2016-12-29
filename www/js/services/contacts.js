@@ -81,7 +81,9 @@ angular.module('app.contacts', [])
              * @returns {*}
              */
             function _sanitizeContact(contact) {
-                // if the phone number don't starts with (+) or (00) is local
+              contact = contact.replace(/[^0-9]/g, '');
+
+              // if the phone number don't starts with (+) or (00) is local
                 if (contact.substring(0, 1) !== '+' && contact.substring(0, 2) !== '00') {
                     // if it has (0) as first digit remove it
                     if (contact.substring(0, 1) === '0') {
