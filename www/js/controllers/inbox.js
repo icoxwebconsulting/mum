@@ -1,4 +1,4 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService, $ionicViewService) {
+angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService, $ionicViewService, $ionicLoading, $timeout) {
 
     $scope.conversation = messageService.factory().createConversation();
     var popup;
@@ -20,6 +20,10 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $scope.$on('$ionicView.enter', function (e) {
         $ionicViewService.clearHistory();
+        $ionicLoading.show();
+        $timeout(function(){
+          $ionicLoading.hide();
+        },1000)
     });
 
     $scope.open = function (conversation) {
