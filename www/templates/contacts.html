@@ -1,4 +1,4 @@
-<ion-view>
+<ion-view cache-view="false">
     <ion-header-bar class="bar-light bar-subheader" style="margin-top: 100px;">
         <input type="search"
                placeholder="Buscar contacto..."
@@ -9,6 +9,10 @@
         </button>
     </ion-header-bar>
     <ion-content class="top-margin">
+        <ion-refresher
+          pulling-text="Hale para actualizar..."
+          on-refresh="refresh()">
+        </ion-refresher>
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       collection-repeat="contact in contacts | filter:search | orderBy:'display_name'"
