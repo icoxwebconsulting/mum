@@ -1,29 +1,53 @@
 <div class="mum">
-    <ion-header-bar style="height: 120px;">
+    <ion-header-bar style="height: 52px;">
         <div class="header">
-            <div class="flex flex-middle-xs"
-                 style="background: #FFFFFF url('img/logo-alt.png') no-repeat scroll center; background-size: 126px 41px; ">
+            <div class="flex flex-middle-xs layout-header"
+                 style="">
                 <div class="profile" ng-click="changePage()">
                     <div class="circle" ng-show="count">{{count}}</div>
-                    <img class="img-circle img-responsive" src="img/bell.png" alt="" width="30">
+                    <img class="img-circle img-responsive img-bell" src="img/bell.png">
                 </div>
                 <div class=" flex-xs p-y-xs">
                 </div>
-                <div class="text-right">
+                <div class="text-right profile">
                     <!--<button class="btn menu-btn" type="button">-->
-                    <div class="top-menu" ng-click="showMenu()"><span class="icon icon-menu"></span></div>
+                    <img ng-click="showMenu()" class="img-circle img-responsive img-gear" src="img/gear.png">
+                    <!--<div class="top-menu" ng-click="showMenu()"><span class="icon icon-menu"></span></div>-->
                     <!--</button>-->
                 </div>
             </div>
 
-            <div class="section-header">
-                <div class="button-bar">
-                    <a class="button" href="#/content/home">Calendario</a>
-                    <a class="button" href="#/content/inbox">Mums</a>
-                    <a class="button" href="#/content/contacts">Contactos</a>
-                </div>
-            </div>
         </div>
     </ion-header-bar>
     <ion-nav-view></ion-nav-view>
+    <ion-footer-bar style="height: 64px;">
+        <!--<div class="button-bar">
+            <a class="button" href="#/content/home">Calendario</a>
+            <a class="button" href="#/content/inbox">Mums</a>
+            <a class="button" href="#/content/contacts">Contactos</a>
+        </div>-->
+        <div class="row" style="padding: initial">
+            <div class="col">
+                <a class="button-footer" href="#/content/contacts">
+                    <img class="" src="img/contacts.png" style="padding-top: 6px">
+                </a>
+            </div>
+            <div class="col">
+                <a class="button-footer" href="#/content/schedule">
+                    <img class="" src="img/add-mum.png" style="height: 40px; margin-top: 8px;">
+                </a>
+            </div>
+            <div class="col">
+                <a class="button-footer" href="#/content/inbox">
+                    <img class="" src="img/message_count.png" style="margin-left: 35%;">
+                    <span class="counter-mum" ng-if="count">{{count}}</span>
+                </a>
+            </div>
+            <div class="col">
+                <a class="button-footer" href="#/content/home">
+                    <img class="" src="img/calendar-active.png" style="margin-top: 6px;">
+                </a>
+            </div>
+        </div>
+    </ion-footer-bar>
 </div>

@@ -10,6 +10,9 @@
 .mum-input {
     background: #eee;
 }
+.logo-splash {
+  width: 140px;
+}
 
 @media screen
 and (orientation: portrait) {
@@ -19,6 +22,10 @@ and (orientation: portrait) {
 
     .mum-verify {
         padding-top: 50%;
+    }
+
+    .row-content {
+        margin-top: 25%;
     }
 }
 
@@ -40,7 +47,7 @@ and (orientation: landscape) {
 }
 
 .top-margin {
-    margin-top: 105px;
+    margin-top: 10px;
 }
 
 .top-margin-s {
@@ -52,8 +59,12 @@ and (orientation: landscape) {
 }
 
 .h1-splash {
-    color: rgb(115, 123, 130);
+    color: #fff;
     font-family: Roboto sans-serif;
+    font-size: 25px!important;
+    margin-bottom: 5px!important;
+    margin-top: 15px;
+    font-weight: 700;
 }
 
 .top-menu {
@@ -249,6 +260,10 @@ and (orientation: landscape) {
         right: 0;
         top: 0;
     }
+
+    .row-content {
+        margin-top: 25%;
+    }
 }
 
 @media (orientation: landscape) {
@@ -277,5 +292,187 @@ and (orientation: landscape) {
         transition: opacity 300ms ease-in-out;
         background-color: #000;
         opacity: 0;
+    }
+}
+
+.p-splash {
+    font-size: 16px;
+    margin: 0 15px;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.button-verify {
+    background-color: rgba(255,255,255,.3);
+    width: 85%;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.term {
+    text-decoration: none;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.term:active {
+    color: gainsboro;
+}
+
+.layout-header {
+    background: url(../img/Logo-header.png) no-repeat scroll center;
+}
+
+
+.img-bell {
+    transform: rotate(22deg);
+    width: 30px;
+    margin-top: 10px;
+}
+
+
+.img-gear {
+    width: 32px;
+    height: 32px;
+    margin-top: 10px;
+}
+
+
+.calendar>div.ca-header {
+
+}
+
+.mum-pendings {
+    background-color: #E44D76;
+}
+
+
+.mum-pendings-text {
+    font-size: 15px;
+    font-weight: lighter;
+    color: #fff;
+}
+
+
+calendar>div.week>span.day.events{
+    color: #000 !important;
+    font-weight: normal !important;
+    font-size: 20px !important;
+}
+
+calendar>div.week>span.day {
+    height: 40px!important;
+}
+
+.date-div {
+    width: 100%!important;
+    max-width: 720px!important;
+    display: flex!important;
+}
+
+.row-date {
+    flex: 1!important;
+}
+
+.col-back {
+    align-self: center!important;
+    position: absolute!important;
+    top: 20px!important;
+    left: 5px!important;
+}
+
+.col-next {
+    align-self: center!important;
+    position: absolute!important;
+    top: 20px!important;
+    right: 5px!important;
+}
+
+.col-date {
+
+}
+
+.button-footer {
+    text-decoration: none!important;
+}
+
+.counter-mum {
+    position: relative!important;
+    bottom: 54px!important;
+    left: 28px!important;
+    color: #fff!important;
+    font-size: 12px!important;
+}
+
+
+/*iPhone < 5:*/
+@media screen and (device-aspect-ratio: 2/3) {
+
+
+}
+
+/*iPhone 5:*/
+@media screen and (device-aspect-ratio: 40/71) {
+    .counter-mum {
+        position: relative!important;
+        bottom: 54px!important;
+        left: 28px!important;
+        color: #fff!important;
+        font-size: 13px!important;
+    }
+}
+
+/*iPhone 6:*/
+@media screen and (device-aspect-ratio: 375/667) {
+    .counter-mum {
+        position: relative!important;
+        bottom: 53px!important;
+        left: 28px!important;
+        color: #fff!important;
+        font-size: 13px!important;
+    }
+}
+
+/*iPhone 6 Plus:*/
+@media only screen
+and (min-device-width: 412px)
+and (max-device-width: 732px)
+and (orientation: portrait) {
+    .counter-mum {
+        position: relative!important;
+        bottom: 34px!important;
+        right: 16px!important;
+        color: #fff!important;
+        font-size: 12px!important;
+        left: initial!important;
+    }
+}
+
+/*iPad:*/
+@media screen and (device-aspect-ratio: 3/4) {
+    .counter-mum {
+        position: relative!important;
+        bottom: 34px!important;
+        right: 16px!important;
+        color: #fff!important;
+        font-size: 12px!important;
+        left: initial!important;
+    }
+}
+
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (-webkit-min-device-pixel-ratio: 1){
+    .counter-mum {
+        position: relative!important;
+        bottom: 33px!important;
+        right: 16px!important;
+        color: #fff!important;
+        font-size: 12px!important;
+        left: initial!important;
     }
 }

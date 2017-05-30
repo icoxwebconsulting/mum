@@ -1,5 +1,10 @@
 <ion-view cache-view="false">
     <ion-content class="top-margin">
+        <div class="row mum-pendings" ng-if="count > 0">
+            <div class="flex-xs mum-pendings-text">
+                {{count}} Mums pendientes de enviar
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <calendar selected="selected"></calendar>
@@ -7,12 +12,12 @@
         </div>
 
         <div class="footer">
-            <div class="container p-y-sm">
+            <!--<div class="container p-y-sm">
                 <a href="#/content/schedule">
                     <img src="img/nuevo-magenta.png" height="80" width="80" />
                 </a>
                 <p>NUEVO</p>
-            </div>
+            </div>-->
         </div>
     </ion-content>
 </ion-view>

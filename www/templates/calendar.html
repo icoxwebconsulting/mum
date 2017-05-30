@@ -1,9 +1,29 @@
 <div class="ca-header">
-    <i class="fa fa-angle-left" ng-click="previous()">&lt;</i>
-    <span>{{month.format("MMMM, YYYY")}}</span>
-    <i class="fa fa-angle-right" ng-click="next()">&gt;</i>
+    <div class="date-div">
+        <div class="row-date">
+            <div class="col-back">
+                <img src="img/Back.png" alt="" ng-click="previous()">
+            </div>
+        </div>
+        <div style=" flex: 0 0 50%;max-width: 50%;" class="col-date">
+            <div style="display: block; text-transform: capitalize; height: 26px; align-self: flex-start;font-size: 18px;">
+                {{month.format("MMMM")}}
+            </div>
+            <div style="display: block;font-size: 12px;align-self: flex-start;margin-top: -10px;">{{month.format("YYYY")}}</div>
+        </div>
+        <div class="row-date">
+            <div class="col-next">
+                <img src="img/Back.png" ng-click="next()" alt="">
+            </div>
+        </div>
+    </div>
+    <!--<i class="fa fa-angle-left" ng-click="previous()">&lt;</i>
+    <span>{{month.format("MMMM")}}</span>
+    </br>
+    <span>{{month.format("YYYY")}}</span>
+    <i style="margin-top: -40px; margin-left: 0px;" class="fa fa-angle-right" ng-click="next()">&gt;</i>-->
 </div>
-<div class="week names">
+<div class="week names" style="margin-top: 40px;">
     <span class="day">LU</span>
     <span class="day">MA</span>
     <span class="day">MI</span>

@@ -13,21 +13,21 @@ calendar {
 }
 
 @media (min-width: 0px) and (max-width: 512px) {
-    calendar {
+    /*calendar {
         width: 300px;
-    }
+    }*/
 }
 
 @media (min-width: 512px) and (max-width: 1024px) {
-    calendar {
+    /*calendar {
         width: 450px;
-    }
+    }*/
 }
 
 @media (min-width: 1024px) {
-    calendar {
+    /*calendar {
         width: 800px;
-    }
+    }*/
 }
 
 calendar > div.ca-header {
@@ -82,7 +82,9 @@ calendar > div.ca-header > span {
 calendar > div.week {
     float: left;
     width: 100%;
-    /*border: solid 1px #CCC;*/
+    border-bottom: 1px solid #d1d1d1;
+    padding-top: 2px!important;
+    height: 50px;
 }
 
 calendar > div.week:first-child {
@@ -91,14 +93,14 @@ calendar > div.week:first-child {
 
 calendar > div.week > span.day {
     float: left;
-    width: 14.28571429%;
+    width: 14%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     /*border-left: solid 1px #CCC;*/
-    font-size: 0.75em;
+    font-size: 12px;
     text-align: center;
-    height: 30px;
-    line-height: 30px !important;
+    height: 40px!important;
+    line-height: 40px !important;
     display: inline-block;
     vertical-align: middle;
     background: white;
@@ -115,9 +117,11 @@ calendar > div.week > span.day.today {
 }
 
 calendar > div.week > span.day.events {
-    color: #C83960 !important;
-    font-weight: bold !important;
-    font-size: 20px !important;
+    font-weight: normal !important;
+    font-size: .75em!important;
+    background: url(../img/Logo-header.png) no-repeat center;
+    background-position: center 30px;
+    background-size: 9px;
 }
 
 calendar > div.week > span.day.different-month {
@@ -125,8 +129,15 @@ calendar > div.week > span.day.different-month {
 }
 
 calendar > div.week > span.day.selected {
-    background: #C83960 !important;
-    color: white !important;
+    background-color: #C83960!important;
+    font-weight: normal!important;
+    font-size: 10px!important;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px!important;
+    color: #fff!important;
+    margin-left: 9px;
+    margin-right: 9px;
 }
 
 div.week.names > span {
