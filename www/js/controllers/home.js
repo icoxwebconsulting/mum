@@ -7,6 +7,8 @@ angular.module('app').controller('HomeCtrl', function ($scope, $ionicViewService
         if (userDatastore.getScheduleDay()){
             userDatastore.removeScheduleDay();
         }
+
+        $scope.totalScheduleMessages = userDatastore.getScheduleMessages();
     });
 
 });

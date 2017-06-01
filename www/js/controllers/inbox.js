@@ -1,10 +1,11 @@
-angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService, $ionicViewService, $ionicLoading, $timeout) {
+angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $state, $ionicPopup, $filter, messageService, $ionicViewService, $ionicLoading, $timeout, userDatastore) {
 
     $scope.conversation = messageService.factory().createConversation();
     var popup;
 
     messageService.getInboxMessages().then(function (conversations) {
         $scope.conversations = conversations;
+        console.info('$scope.conversations', $scope.conversations);
     });
 
     $scope.$on('$ionicView.beforeEnter', function (e) {
@@ -84,5 +85,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
             $scope.conversations.splice($scope.conversations.indexOf(found), 1);
         }
         $scope.conversations.unshift(data.conversation);
+
+        $scope.totalScheduleMessages = userDatastore.getScheduleMessages();
     });
 });

@@ -1,5 +1,5 @@
 <ion-view>
-    <ion-content class="top-margin">
+    <ion-content style="margin-top: 6px;">
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="conversation in conversations"
                       type="item-text-wrap"
@@ -8,11 +8,22 @@
                       ng-class="{'unread-conversation': conversation.isUnread}">
                 <img ng-src="{{conversation.image ? conversation.image : 'img/person.png'}}">
 
-                <h2>{{conversation.displayName}}</h2>
+                <h2 style="text-align: left">{{conversation.displayName}}
+                    <span style="margin-left: 10px; color: #666; font-size: 10px;">
+                        {{ conversation.updated | parseDate}}
+                    </span>
+                </h2>
 
-                <p ng-class="{'bg-msg-mail': conversation.type == 'email', 'bg-msg-mum': conversation.type == 'mum', 'bg-msg-sms': conversation.type == 'sms'}">
+                <p style="text-align: left" ng-class="{'bg-msg-mail': conversation.type == 'email', 'bg-msg-mum': conversation.type == 'mum', 'bg-msg-sms': conversation.type == 'sms'}">
                     {{conversation.lastMessage}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
+                <i class="icon icon-accessory list-sms-counter" ng-if="conversation.isUnread > 1">
+                    <span style="font-size: 12px;margin-left: 3px;">{{conversation.isUnread}}</span>
+                </i>
+
+                <i class="icon icon-accessory list-sms-counter" ng-if="conversation.isUnread.length == 1">
+                    <span style="font-size: 12px;margin-left: 6px;">{{conversation.isUnread}}</span>
+                </i>
 
                 <ion-option-button class="button-mum" ng-click="deleteConversation(conversation)">
                     Borrar
@@ -22,4 +33,9 @@
         </ion-list>
         <h4 ng-show="!conversations.length">Aquí visualizará sus mensajes.</h4>
     </ion-content>
+    <div class="row mum-pendings pendings-footer" ng-if="totalScheduleMessages && totalScheduleMessages.length > 0">
+        <div class="flex-xs mum-pendings-text">
+            {{totalScheduleMessages}} Mums pendientes de enviar
+        </div>
+    </div>
 </ion-view>

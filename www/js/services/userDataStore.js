@@ -89,6 +89,18 @@ angular.module('app.userDataStore', [])
             return window.localStorage.removeItem('scheduleDay');
         }
 
+        function setScheduleMessages(total){
+            window.localStorage.setItem('scheduleMessages', total);
+        }
+
+        function getScheduleMessages() {
+            return window.localStorage.getItem('scheduleMessages');
+        }
+
+        function removeScheduleMessages() {
+            return window.localStorage.removeItem('scheduleMessages');
+        }
+
         return {
             getVerified: getVerified,
             isVerified: isVerified,
@@ -109,6 +121,9 @@ angular.module('app.userDataStore', [])
             getProfile: getProfile,
             setScheduleDay: setScheduleDay,
             getScheduleDay: getScheduleDay,
-            removeScheduleDay: removeScheduleDay
+            removeScheduleDay: removeScheduleDay,
+            setScheduleMessages: setScheduleMessages,
+            getScheduleMessages: getScheduleMessages,
+            removeScheduleMessages: removeScheduleMessages
         };
     });

@@ -82,8 +82,8 @@ and (orientation: landscape) {
 }
 
 .bg-msg-mum {
-    background: url('../img/nuevo-mum.png') no-repeat left top;
-    background-size: 20px 20px;
+    /*background: url('../img/nuevo-mum.png') no-repeat left top;*/
+    /*background-size: 20px 20px;*/
 }
 
 .bg-msg-sms {
@@ -92,7 +92,7 @@ and (orientation: landscape) {
 }
 
 .unread-conversation {
-    border: 3px solid darkred;
+    /*border: 3px solid darkred;*/
     font-weight: bold;
 }
 
@@ -352,7 +352,7 @@ and (orientation: landscape) {
 
 .mum-pendings-text {
     font-size: 15px;
-    font-weight: lighter;
+    font-weight: 700;
     color: #fff;
 }
 
@@ -406,12 +406,20 @@ calendar>div.week>span.day {
     color: #fff!important;
     font-size: 12px!important;
 }
+.list-sms-counter {
+    right: 40px!important;
+    background-color: #E44D76!important;
+    width: 20px!important;
+    height: 20px!important;
+    top: 28px!important;
+    border-radius: 50%!important;
+}
 
-
-/*iPhone < 5:*/
-@media screen and (device-aspect-ratio: 2/3) {
-
-
+.pendings-footer {
+    position: fixed;
+    left: 0px;
+    bottom: 10%;
+    width: 100%;
 }
 
 /*iPhone 5:*/
@@ -423,6 +431,10 @@ calendar>div.week>span.day {
         color: #fff!important;
         font-size: 13px!important;
     }
+
+    .pendings-footer {
+        bottom: 11%;
+    }
 }
 
 /*iPhone 6:*/
@@ -433,6 +445,10 @@ calendar>div.week>span.day {
         left: 28px!important;
         color: #fff!important;
         font-size: 13px!important;
+    }
+
+    .pendings-footer {
+        bottom: 9.5%;
     }
 }
 
@@ -449,6 +465,10 @@ and (orientation: portrait) {
         font-size: 12px!important;
         left: initial!important;
     }
+
+    .pendings-footer {
+        bottom: 9%;
+    }
 }
 
 /*iPad:*/
@@ -460,6 +480,10 @@ and (orientation: portrait) {
         color: #fff!important;
         font-size: 12px!important;
         left: initial!important;
+    }
+
+    .pendings-footer {
+        bottom: 9.5%;
     }
 }
 
@@ -474,5 +498,9 @@ and (-webkit-min-device-pixel-ratio: 1){
         color: #fff!important;
         font-size: 12px!important;
         left: initial!important;
+    }
+
+    .pendings-footer {
+        bottom: 6.5%;
     }
 }

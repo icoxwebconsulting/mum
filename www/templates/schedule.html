@@ -4,7 +4,25 @@
             <div class="container text-center">
                 <div class="calendar">
                     <div class="calendar-month flex flex-middle-xs">
-                        <div class="flex-xs">
+                        <div class="date-div">
+                            <div class="row-date">
+                                <div class="col-back" style="top: 3px!important;">
+                                    <img src="img/Back.png" alt="" ng-click="monthDown()">
+                                </div>
+                            </div>
+                            <div style=" flex: 0 0 50%;max-width: 50%;" class="col-date">
+                                <div style="display: block; text-transform: capitalize; height: 26px; align-self: flex-start;font-size: 18px;">
+                                    {{fecha.format("MMMM")}}
+                                </div>
+                                <div style="display: block;font-size: 12px;align-self: flex-start;margin-top: -10px;">{{fecha.format("YYYY")}}</div>
+                            </div>
+                            <div class="row-date">
+                                <div class="col-next" style="top: 3px!important;">
+                                    <img src="img/Back.png" ng-click="monthUp()" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="flex-xs">
                             <button type="button" class="btn clear-btn" ng-click="monthDown()">
                                 <span class="icon icon-pointer-left"></span>
                             </button>
@@ -16,7 +34,7 @@
                             <button type="button" class="btn clear-btn" ng-click="monthUp()">
                                 <span class="icon icon-pointer-right"></span>
                             </button>
-                        </div>
+                        </div>-->
                     </div>
 
                     <ion-scroll zooming="false" direction="x" class="wide-as-needed" delegate-handle="vscroll">

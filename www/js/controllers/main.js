@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService, messageReceived) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService, messageReceived, userDatastore) {
     moment.locale('es');
     $scope.day = moment();
 
@@ -15,10 +15,12 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
             }
         });
     });
-    
+
     $scope.changePage = function () {
         $state.go("layout.inbox");
     };
+
+    $scope.totalScheduleMessages = userDatastore.getScheduleMessages();
 
 
     $scope.showMenu = function () {

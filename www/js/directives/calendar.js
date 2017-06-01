@@ -14,6 +14,8 @@ angular.module('app').directive("calendar", function (messageStorage, $state, DA
             _removeTime(start.day(0));
 
             _buildMonth(scope, start, scope.month);
+            getAllScheduledMessages(start);
+            scope.totalScheduleMessages = userDatastore.getScheduleMessages();
             console.log('scope->>', scope);
             console.log('start->>', start);
             console.log('scope.month->>', scope.month);
@@ -89,5 +91,12 @@ angular.module('app').directive("calendar", function (messageStorage, $state, DA
             date.add(1, "d");
         }
         return days;
+    }
+
+    function getAllScheduledMessages(start) {
+        messageStorage.getScheduledMessagesCountByRange(start.clone().subtract(1, "week"), start.clone().add(12, "month"))
+            .then(function (scheduledMessages) {
+                userDatastore.setScheduleMessages(scheduledMessages.length);
+            });
     }
 });
