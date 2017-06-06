@@ -1,4 +1,4 @@
-angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ionicLoading, Contacts, $ionicViewService) {
+angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ionicLoading, Contacts, $ionicViewService, userDatastore) {
     $scope.contacts = [];
     $scope.$on('$ionicView.enter', function (e) {
         $ionicViewService.clearHistory();
@@ -18,6 +18,11 @@ angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ioni
               });
             });
           });
+    });
+
+    $scope.$on('$ionicView.beforeEnter', function (e) {
+        userDatastore.setStateCurrentName($state.current.name);
+        console.log('userDatastore.getStateCurrentName()', userDatastore.getStateCurrentName())
     });
 
     $ionicLoading.show();

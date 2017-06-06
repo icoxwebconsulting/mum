@@ -10,6 +10,10 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
         $scope.selectedTime = $scope.fecha.format('HH:mm');
     }
 
+    $scope.$on('$ionicView.beforeEnter', function (e) {
+        userDatastore.setStateCurrentName($state.current.name);
+    });
+
     $scope.$on('$ionicView.enter', function () {
         //fechas
 //        $scope.fecha = moment().add(10, 'minutes');
@@ -57,7 +61,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
     $scope.changeDay = function ($index) {
         var selected = $index + 1;
         var selectedDate = moment($scope.fecha.date(selected)).format(DATETIME_FORMAT_CONF.dateTimeFormat);
-        
+
         if (selectedDate < moment().format(DATETIME_FORMAT_CONF.dateTimeFormat)) {
             showPopup();
         } else {

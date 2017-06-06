@@ -1226,7 +1226,7 @@ body {
 .message-body {
     display: inline-block;
     max-width: 75%;
-    padding: 1rem 2rem;
+    /*padding: 1rem 2rem;*/
     position: relative;
 }
 
@@ -1255,18 +1255,18 @@ body {
 }
 
 .message-in .message-body:before {
-    content: "\e608";
-    color: #04C879;
+    /*content: "\e608";
+    color: #04C879;*/
 }
 
 .message-out .message-body:before {
-    content: "\e609";
-    color: #FF4D79;
+    /*content: "\e609";
+    color: #FF4D79;*/
 }
 
 .message-out-pending .message-body:before {
-    content: "\e602";
-    color: #FF4D79;
+    /*content: "\e602";
+    color: #FF4D79;*/
 }
 
 .message-in .message-body {

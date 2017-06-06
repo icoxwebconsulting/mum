@@ -1,8 +1,9 @@
 angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $ionicActionSheet, $cordovaCamera,
-                                                          $cordovaFile, $ionicLoading, user) {
+                                                          $cordovaFile, $ionicLoading, user, userDatastore) {
     function refreshProfileInfo() {
         $scope.displayName = user.getProfile().displayName;
         $scope.avatarURL = user.getProfile().avatarURL;
+        $scope.number = userDatastore.getNumber();
 
         // workaround of modal edition
         $scope.profile = {
@@ -10,7 +11,10 @@ angular.module('app').controller('ProfileCtrl', function ($scope, $ionicModal, $
         };
     }
 
+
+    console.log('userDatastore.getNumber', userDatastore.getNumber());
     refreshProfileInfo();
+    $scope.number = userDatastore.getNumber();
 
     $ionicModal.fromTemplateUrl('templates/name-modal.html', {
         scope: $scope,

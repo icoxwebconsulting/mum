@@ -14,6 +14,10 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
                 $scope.count = 0;
             }
         });
+
+        $scope.stateCurrent = userDatastore.getStateCurrentName()
+
+        console.log('$scope.stateCurrent', $scope.stateCurrent);
     });
 
     $scope.changePage = function () {

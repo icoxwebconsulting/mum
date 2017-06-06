@@ -13,6 +13,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         messageService.getInboxMessages().then(function (conversations) {
             $scope.conversations = conversations;
         });
+        userDatastore.setStateCurrentName($state.current.name);
     });
 
     $rootScope.$on('addConversation', function (e, data) {

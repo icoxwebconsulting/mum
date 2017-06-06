@@ -119,9 +119,9 @@ calendar > div.week > span.day.today {
 calendar > div.week > span.day.events {
     font-weight: normal !important;
     font-size: .75em!important;
-    background: url(../img/Logo-header.png) no-repeat center;
+    background: url(../img/mum-check.png) no-repeat center;
     background-position: center 30px;
-    background-size: 9px;
+    background-size: 5px;
 }
 
 calendar > div.week > span.day.different-month {

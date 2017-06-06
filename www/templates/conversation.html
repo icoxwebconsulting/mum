@@ -1,93 +1,144 @@
 <!--<div class="mum">-->
-    <ion-header-bar>
-        <div class="header header-bd">
-            <div class="flex flex-middle-xs">
+<!--<ion-header-bar>
+    <div class="header header-bd">
+        <div class="flex flex-middle-xs">
+            <div class="flex-xs-2">
                 <div class="flex-xs-2">
-                    <div class="flex-xs-2">
-                        <a href="#/content/inbox" class="button button-icon ion-chevron-left"></a>
-                    </div>
-                </div>
-                <div class="flex-xs p-y-xs">
-                    <div class="flex flex-middle-xs">
-                        <img class="img-circle m-r-xs"
-                             src="{{conversation.image ? conversation.image : 'img/person.png'}}"
-                             style="border-radius: 50%; overflow:;" alt=""
-                             width="56" height="56">
-                        {{conversation.displayName}}
-                    </div>
-                </div>
-                <div class="flex-xs-3">
-                    <!--<button class="btn clear-btn header-btn" type="button">-->
-                    <!--<span class="icon icon-clock"></span>-->
-                    <!--</button>-->
-
-                    <button class="btn clear-btn header-btn" ng-click="actionUpload()" type="button">
-                        <span class="icon icon-clip"></span>
-                    </button>
+                    <a href="#/content/inbox" class="button button-icon ion-chevron-left"></a>
                 </div>
             </div>
-            <form class="form-paper hide-on-keyboard-open" ng-show="conversation.type == 'email'">
-                <div class="form-group flex flex-middle-xs">
-                    <label>Asunto:</label>
-                    <div class="flex-xs">
-                        <input type="text" class="form-control" style="width: 90%;" ng-model="subject">
-                    </div>
+            <div class="flex-xs p-y-xs">
+                <div class="flex flex-middle-xs">
+                    <img class="img-circle m-r-xs"
+                         src="{{conversation.image ? conversation.image : 'img/person.png'}}"
+                         style="border-radius: 50%; overflow:;" alt=""
+                         width="56" height="56">
+                    {{conversation.displayName}}
                 </div>
-                <div class="form-group flex flex-middle-xs">
-                    <label>De:</label>
-                    <div class="flex-xs">
-                        <input type="email" class="form-control" style="width: 90%;" ng-model="from">
-                    </div>
-                </div>
-            </form>
+            </div>
+            <div class="flex-xs-3">
+                &lt;!&ndash;<button class="btn clear-btn header-btn" type="button">&ndash;&gt;
+                &lt;!&ndash;<span class="icon icon-clock"></span>&ndash;&gt;
+                &lt;!&ndash;</button>&ndash;&gt;
+
+                <button class="btn clear-btn header-btn" ng-click="actionUpload()" type="button">
+                    <span class="icon icon-clip"></span>
+                </button>
+            </div>
         </div>
-    </ion-header-bar>
+        <form class="form-paper hide-on-keyboard-open" ng-show="conversation.type == 'email'">
+            <div class="form-group flex flex-middle-xs">
+                <label>Asunto:</label>
+                <div class="flex-xs">
+                    <input type="text" class="form-control" style="width: 90%;" ng-model="subject">
+                </div>
+            </div>
+            <div class="form-group flex flex-middle-xs">
+                <label>De:</label>
+                <div class="flex-xs">
+                    <input type="email" class="form-control" style="width: 90%;" ng-model="from">
+                </div>
+            </div>
+        </form>
+    </div>
+</ion-header-bar>-->
 
-    <ion-content class="bg-main"
-                 ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-s': conversation.type != 'email'}"
-                 delegate-handle="mainScroll">
-        <div class="text-left">
-            <div class="container">
-                <div class="messages">
+<div class="bar bar-header bar-light" style="height: 62px; background-color: #F8F8F8">
+    <div class="row" style="padding: 0;">
+        <div class="col text-left" style="padding-left: 0;margin-top: 13px;">
+            <a href="#/content/inbox" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                <i class="icon ion-chevron-left" style="position: absolute;font-size: 30px;top: 17px;"></i>
+                <span style="margin-left: 17px;font-size: 16px;">Back</span>
+            </a>
+        </div>
+        <div class="col col-50">
+            <img class="img-circle"
+                 src="{{conversation.image ? conversation.image : 'img/person.png'}}"
+                 style="border-radius: 50%; width: 45px;height: 45px;" alt=""
+                 width="56" height="56">
+            <p style="font-size: 10px; color: #9e9e9e;margin-bottom: -5px;">{{conversation.displayName}}</p>
+            <p style="font-size: 10px; color: #9e9e9e;">{{conversation.updated}}</p>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
 
-                    <div class="message "
-                         ng-class="{ 'message-in': msj.is_received, 'message-out':!msj.is_received && msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received}"
-                         ng-repeat="msj in messages">
-                        <div ng-if="!msj.at || msj.show">
-                            <div class="message-body" ng-hide="msj.attachment != null">
-                                <div>{{msj.body}}</div>
-                                <span class="message-date" ng-hide="msj.attachment != null"
-                                      ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}">{{msj.created}}</span>
-                            </div>
+<ion-content class="bg-main"
+             ng-class="{'bg-main': true, 'top-margin-l' : conversation.type == 'email', 'top-margin-c': conversation.type != 'email'}"
+             delegate-handle="mainScroll">
+    <div class="text-left">
+        <div class="container">
+            <div class="messages">
 
-                            <div class="message-body" ng-show="msj.attachment != null">
-                                <div style="width: 150px;">
-                                    <a ng-click="openFile(msj.attachment, msj.is_received)">
-                                        <img ng-src="{{ msj.attachment }}" style="max-height: 150px; width: 100%">
-                                    </a>
-                                </div>
-                                <div class="message-date" ng-show="msj.attachment != null"
-                                     ng-class="{ 'message-date-in-img': msj.is_received, 'message-date-out-img': !msj.is_received}">
-                                    {{msj.created}}
-                                </div>
-                            </div>
+                <div class="message "
+                     ng-class="{ 'message-in': msj.is_received, 'message-out':!msj.is_received && msj.id_message, 'message-out-pending': !msj.id_message && !msj.is_received}"
+                     ng-repeat="msj in messages">
+                    <div ng-if="!msj.at || msj.show">
+                        <div class="message-body"
+                             ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}"
+                             ng-hide="msj.attachment != null">
+                            <div>{{msj.body}}</div>
+                            <!--<span class="message-date" ng-hide="msj.attachment != null"
+                                  ng-class="{ 'message-date-in': msj.is_received, 'message-date-out': !msj.is_received}">{{msj.created}}</span>-->
                         </div>
 
+                        <div class="message-body" ng-show="msj.attachment != null">
+                            <div style="width: 150px;">
+                                <a ng-click="openFile(msj.attachment, msj.is_received)">
+                                    <img
+                                        ng-class="{ 'message-date-in-img': msj.is_received, 'message-date-out-img': !msj.is_received}"
+                                        ng-src="{{ msj.attachment }}" style="max-height: 150px; width: 100%">
+                                    <i ng-click="sendMessage()" event-focus="click"
+                                       ng-class="{ 'message-in-img-arrow': msj.is_received, 'message-out-img-arrow': !msj.is_received}"></i>
+                                </a>
+                            </div>
+                            <!--<div class="message-date" ng-show="msj.attachment != null"
+                                 ng-class="{ 'message-date-in-img': msj.is_received, 'message-date-out-img': !msj.is_received}">
+                            </div>-->
+                        </div>
                     </div>
-                </div>
-                <div id="bottom"></div>
-            </div>
-        </div>
-    </ion-content>
 
-    <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
-        <label class="item-input-wrapper">
-            <input type="text" id="inputMsj" placeholder="Escribir mensaje" on-return="sendMessage()" ng-model="body" ng-focus="inputUp()" ng-blur="inputDown()" />
-        </label>
-        <button class="button button-clear" ng-click="sendMessage()" event-focus="click" event-focus-id="inputMsj">
-            <span class="icon icon-dart-right" style="color: #999999;"></span>
-        </button>
-    </ion-footer-bar>
+                </div>
+            </div>
+            <div id="bottom"></div>
+        </div>
+    </div>
+</ion-content>
+
+<ion-footer-bar keyboard-attach class="bar-stable item-input-inset" style="padding: 0; height: 55px;">
+
+    <div class="row" style="background-color: #F8F8F8!important;">
+        <div style="border: solid thin #868999;position: absolute;width: 88%;height: 84%;margin-left: 10%;border-radius: 30px;
+}"></div>
+        <div class="col">
+            <i class="icon ion-ios-plus-empty icon-add" ng-click="actionUpload()"></i>
+        </div>
+        <div class="col col-80" style="z-index: 9">
+            <label class="item-input-wrapper"
+                   style="background-color: #ffffff!important;border-radius: 30px; /*border: solid thin #868999;*/">
+                <input style="width: 100%; height: 40px"
+                       type="text" id="inputMsj"
+                       placeholder="Escribir mensaje"
+                       on-return="sendMessage()"
+                       ng-model="body" ng-focus="inputUp()"
+                       ng-blur="inputDown()"/>
+            </label>
+        </div>
+        <div class="col button-send" style="z-index: 9" ng-click="sendMessage()" event-focus="click" event-focus-id="inputMsj">
+            <span >
+                        <i class="icon ion-ios-arrow-right icon-send" style="color: #ffffff"></i>
+            </span>
+        </div>
+
+    </div>
+
+    <!--<label class="item-input-wrapper">
+        <input type="text" id="inputMsj" placeholder="Escribir mensaje" on-return="sendMessage()" ng-model="body" ng-focus="inputUp()" ng-blur="inputDown()" />
+    </label>
+    <button class="button button-clear" ng-click="sendMessage()" event-focus="click" event-focus-id="inputMsj">
+        <span class="icon icon-dart-right" style="color: #999999;"></span>
+    </button>-->
+</ion-footer-bar>
 
 
 <!--</div>-->

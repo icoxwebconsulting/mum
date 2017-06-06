@@ -1,10 +1,52 @@
 <ion-view>
-    <ion-header-bar class="bar bar-header bar-assertive">
+    <!--<ion-header-bar class="bar bar-header bar-assertive">
         <a href="#/content/home" class="button icon-left ion-chevron-left button-clear button-dark"></a>
         <h1 class="title">Perfil</h1>
-    </ion-header-bar>
-    <ion-content has-header="true">
-        <div class="list card">
+    </ion-header-bar>-->
+    <div class="bar bar-header bar-light" style="height: 62px; background-color: #F8F8F8">
+        <div class="row" style="padding: 0;">
+            <div class="col text-left" style="padding-left: 0;margin-top: 13px;">
+                <!--<a href="#/content/inbox">
+                    <img src="img/Back.png" style="margin-top: 10px;" alt="">
+                </a>-->
+                <a href="#/content/inbox" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                    <i class="icon ion-chevron-left" style="position: absolute;font-size: 30px;top: 17px;"></i>
+                    <span style="margin-left: 17px;font-size: 16px;">Back</span>
+                </a>
+            </div>
+            <div class="col col-50">
+                <img class="img-circle"
+                     src="img/Logo-header.png"
+                     style="border-radius: 50%; width: 35px;height: 35px;margin-top: 5px;" alt=""
+                     width="56" height="56">
+            </div>
+            <div class="col text-right" style="margin-top: 10px; ">
+                <a ng-click="openModal()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                    <span style="margin-right: 8px;font-size: 16px;">Edit</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <ion-content has-header="true" style="margin-top: 60px;">
+
+        <div class="row profile-bg" style="">
+            <div class="col">
+                <img ng-src="{{ avatarURL }}"
+                     style="width: 250px;height: 250px;max-height: 250px;border: solid 7px #BE0065;border-radius: 50%;background-color: #fff;">
+                </br>
+                <span style="font-size: 1.4em;color: #000000; ">{{ displayName }}</span>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 130px">
+            <div class="col" style="position: absolute;">
+                <img src="img/phone.png" alt="">
+                <span style="position: relative; bottom: 10px">+{{ number }}</span>
+            </div>
+        </div>
+
+        <!--<div class="list card">
             <div class="item">
                 <img ng-src="{{ avatarURL }}" style="width: 250px; height: 250px;">
             </div>
@@ -12,9 +54,9 @@
             <a class="item item-icon-left assertive" ng-click="actionSheet()">
                 <i class="icon ion-images"></i> Cambiar imagen
             </a>
-        </div>
+        </div>-->
 
-        <div class="list card">
+        <!--<div class="list card">
             <div class="row">
                 <div class="col col-75">{{ displayName }}</div>
                 <div class="col">
@@ -23,7 +65,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div>-->
 
     </ion-content>
 </ion-view>

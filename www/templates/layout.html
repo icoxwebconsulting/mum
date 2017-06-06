@@ -5,7 +5,7 @@
                  style="">
                 <div class="profile" ng-click="changePage()">
                     <!--<div class="circle" ng-show="count">{{count}}</div>-->
-                    <img class="img-circle img-responsive img-bell" src="img/bell.png">
+                    <!--<img class="img-circle img-responsive img-bell" src="img/bell.png">-->
                 </div>
                 <div class=" flex-xs p-y-xs">
                 </div>
@@ -27,25 +27,35 @@
             <a class="button" href="#/content/contacts">Contactos</a>
         </div>-->
         <div class="row" style="padding: initial">
-            <div class="col">
-                <a class="button-footer" href="#/content/contacts">
-                    <img class="" src="img/contacts.png" style="padding-top: 6px">
+            <div class="col button-bar-h ">
+                <a class="button-footer text-no-decoration" href="#/content/contacts">
+                    <img ng-src="{{ stateCurrent != 'layout.contacts' && 'img/contact.png' || 'img/contact-active.png' }}">
+                    <p class="text-bar-footer">Contactos</p>
                 </a>
             </div>
-            <div class="col">
+            <div class="col button-bar-h">
                 <a class="button-footer" href="#/content/schedule">
-                    <img class="" src="img/add-mum.png" style="height: 40px; margin-top: 8px;">
+                    <img style="height: 25px; /*margin-top: 8px;*/"
+                         src="img/add-mum.png"
+                         ng-src="{{ stateCurrent != 'layout.schedule' && 'img/schedule.png' || 'img/schedule-active.png' }}">
+                    <p class="text-bar-footer">Programar</p>
                 </a>
             </div>
-            <div class="col">
+            <div class="col button-bar-h">
                 <a class="button-footer" href="#/content/inbox">
-                    <img class="" src="img/message_count.png" style="margin-left: 35%;">
-                    <span class="counter-mum" ng-if="count">{{count}}</span>
+                    <img style="margin-left: 6px;"
+                         ng-src="{{ stateCurrent != 'layout.inbox' && 'img/mums.png' || 'img/mums-active.png' }}">
+                    <!--<span class="counter-mum" ng-if="count">{{count}}</span>-->
+                    <p class="text-bar-footer">Mums</p>
+                    <div class="counter-mum" ng-if="count">
+                        <i class="" style="bottom: 2px;position: relative">{{count}}</i>
+                    </div>
                 </a>
             </div>
-            <div class="col">
+            <div class="col button-bar-h">
                 <a class="button-footer" href="#/content/home">
-                    <img class="" src="img/calendar-active.png" style="margin-top: 6px;">
+                    <img ng-src="{{ stateCurrent != 'layout.home' && 'img/calendar.png' || 'img/calendar-active.png' }}">
+                    <p class="text-bar-footer">Calendarios</p>
                 </a>
             </div>
         </div>

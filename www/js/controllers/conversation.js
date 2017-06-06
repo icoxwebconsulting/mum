@@ -12,6 +12,8 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     $scope.isReceived = false;
     $scope.currentDate;
 
+    console.log('$state', $state.current.name);
+
     //The view has fully entered and is now the active view. This event will fire, whether it was the first load or a cached view.
     $scope.$on('$ionicView.enter', function (e) {
         $scope.currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -69,7 +71,7 @@ angular.module('app').controller('ConversationCtrl', function ($scope, $rootScop
     });
 
     $scope.sendMessage = function (isFile, obj) {
-        //console.log(obj);
+        console.log(obj);
 
         if (isFile === undefined) {
             isFile = false;

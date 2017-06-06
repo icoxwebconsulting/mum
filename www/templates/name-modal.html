@@ -7,11 +7,16 @@
             <label class="item item-input">
                 <input type="text" placeholder="Escribe tu nombre" ng-model="profile.displayName">
             </label>
-            <button ng-click="acceptChange()" class="button button-block button-assertive">
+            <button style="background-color: #E44D76" ng-click="acceptChange()" class="button button-block button-assertive">
                 Aceptar
             </button>
-            <button ng-click="cancelChange()" class="button button-block button-assertive">
+            <button style="background-color: #E44D76" ng-click="cancelChange()" class="button button-block button-assertive">
                 Cancelar
+            </button>
+        </div>
+        <div class="list">
+            <button style="background-color: #E44D76" ng-click="actionSheet()" class="button button-block button-assertive">
+                Cambiar imagen
             </button>
         </div>
     </ion-content>

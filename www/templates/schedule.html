@@ -6,8 +6,12 @@
                     <div class="calendar-month flex flex-middle-xs">
                         <div class="date-div">
                             <div class="row-date">
-                                <div class="col-back" style="top: 3px!important;">
-                                    <img src="img/Back.png" alt="" ng-click="monthDown()">
+                                <div class="col-back" style="top: 8px!important;">
+                                    <!--<img src="img/Back.png" alt="" ng-click="monthDown()">-->
+                                    <a ng-click="monthDown()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                                        <i class="icon ion-chevron-left" style="position: absolute;font-size: 30px;top: -7px;"></i>
+                                        <span style="margin-left: 17px;font-size: 16px;">Back</span>
+                                    </a>
                                 </div>
                             </div>
                             <div style=" flex: 0 0 50%;max-width: 50%;" class="col-date">
@@ -17,8 +21,12 @@
                                 <div style="display: block;font-size: 12px;align-self: flex-start;margin-top: -10px;">{{fecha.format("YYYY")}}</div>
                             </div>
                             <div class="row-date">
-                                <div class="col-next" style="top: 3px!important;">
-                                    <img src="img/Back.png" ng-click="monthUp()" alt="">
+                                <div class="col-next" style="top: 8px!important;">
+                                    <!--<img src="img/Back.png" ng-click="monthUp()" alt="">-->
+                                    <a ng-click="monthUp()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                                        <i class="icon ion-chevron-right" style="position: absolute;font-size: 30px;top: -7px;right: -1px;"></i>
+                                        <span style="margin-right: 15px;font-size: 16px;">Next</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
