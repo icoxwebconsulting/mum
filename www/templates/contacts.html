@@ -19,10 +19,18 @@
                       type="item-text-wrap"
                       ng-click="contactDetail(contact)">
                 <img ng-src="{{contact.photo}}">
-                <h2>{{contact.display_name}}</h2>
-                <p ng-show="contact.phone_number">{{contact.phone_number}}</p>
-                <p ng-show="contact.email">{{contact.email}}</p>
-                <i class="icon ion-chevron-right icon-accessory"></i>
+                <h2 style="text-align: left; display: flex!important;font-weight: normal!important;">
+                    {{contact.display_name}}
+                    <span style="text-align: left;" ng-show="contact.phone_number">
+                        <i class="icon ion-iphone" style="position: initial!important;font-size: 25px!important;"></i>
+                    </span>
+                    <span style="text-align: left;margin-left: 5px;" ng-show="contact.email">
+                        <i class="icon ion-email" style="position: initial!important;font-size: 25px!important;"></i>
+                    </span>
+                </h2>
+                <p class="text-left" ng-show="contact.phone_number">{{contact.phone_number}}</p>
+                <p class="text-left" ng-show="contact.email">{{contact.email}}</p>
+                <!--<i class="icon ion-chevron-right icon-accessory"></i>-->
             </ion-item>
         </ion-list>
     </ion-content>

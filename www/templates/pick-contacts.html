@@ -23,9 +23,9 @@
                       ng-click="pickContact(contact)"
                       type="item-text-wrap">
                 <img ng-src="{{contact.photo}}">
-                <h2>{{contact.display_name}}</h2>
-                <p ng-show="contactsType != 'email' && contact.phone_number">{{contact.phone_number}}</p>
-                <p ng-show="contactsType == 'email' && contact.email">{{contact.email}}</p>
+                <h2 style="text-align: left">{{contact.display_name}}</h2>
+                <p style="text-align: left" ng-show="contactsType != 'email' && contact.phone_number">{{contact.phone_number}}</p>
+                <p style="text-align: left" ng-show="contactsType == 'email' && contact.email">{{contact.email}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
                 <ion-option-button class="button-assertive" ng-click="remove(contact)">
