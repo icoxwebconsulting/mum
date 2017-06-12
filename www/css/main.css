@@ -35,6 +35,10 @@
     }
 }
 
+* {
+    font-family: "Helvetica";
+}
+
 .icon {
     font-family: 'icons';
     font-style: normal;
@@ -1311,7 +1315,7 @@ body {
 }
 
 .form-paper .form-group {
-    background-color: #eee;
+    background-color: transparent;
     border-color: #eee;
     margin-bottom: .5rem;
 }

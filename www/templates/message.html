@@ -1,63 +1,145 @@
-<div class="mum">
-    <ion-content>
-        <div class="row">
-            <div class="col-33">
-                <div class="row">
-                    <div class="col">
-                        <a href="#/content/home" class="button button-icon ion-chevron-left"></a>
-                    </div>
-                    <div class="col">
-                        <img class="img-circle m-r-xs" src="img/person.png" style="border-radius: 50%; overflow:hidden;" alt=""
-                             width="56" height="56">
-                    </div>
+<div class="bar bar-header bar-light bar-header-back">
+    <div class="row" style="padding: 0;">
+        <div class="col text-left" style="padding-left: 0;margin-top: 13px;">
+            <!--<a href="#/content/inbox">
+                <img src="img/Back.png" style="margin-top: 10px;" alt="">
+            </a>-->
+            <a href="#/content/home" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                <i class="icon ion-chevron-left" style="position: absolute;font-size: 30px;top: 17px;"></i>
+                <span style="margin-left: 17px;font-size: 16px;">Back</span>
+            </a>
+        </div>
+        <div class="col col-50">
+            <img class="img-circle"
+                 src="img/Logo-header.png"
+                 style="border-radius: 50%; width: 35px;height: 35px;margin-top: 5px;" alt=""
+                 width="56" height="56">
+        </div>
+        <div class="col text-right" style="margin-top: 10px; ">
+            <a ng-click="sendMessage()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                <span style="margin-right: 8px;font-size: 16px;">Programar</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<ion-content style="margin-top: 60px;background-image: url(img/backgrounds.png)">
+    <div class="row">
+        <div class="col col-center">
+            <p style="font-size: 12px; color: #9e9e9e;margin-bottom: -5px;"
+               ng-show="message.type == 'mum'">
+                Para {{message.displayName}}
+            </p>
+            <p style="font-size: 12px; color: #9e9e9e;margin-bottom: -5px;"
+               ng-show="message.type == 'email' && message.email">
+                Para {{message.email}}
+            </p>
+            <p style="font-size: 12px; color: #9e9e9e;">
+                Enviar el
+                {{message.date.format("dddd")}},
+                {{message.date.format("DD")}} de
+                {{message.date.format("MMMM")}}
+                {{message.date.format("YYYY")}} a las
+                {{message.date.format("HH:mm")}}
+            </p>
+        </div>
+    </div>
+
+    <div class="messages" ng-show="message.type == 'mum'" style="padding-top: 0px">
+        <div class="message message-out" ng-show="message.body" >
+            <div ng-if="!msj.at || msj.show">
+                <div class="message-body message-date-out">
+                    <div ng-model="message.body">{{message.body}}</div>
                 </div>
             </div>
-            <div class="col-66 col-center" style="text-align: left;">
-                {{message.displayName}}
+
+        </div>
+    </div>
+
+    <form class="form-paper" ng-show="message.type == 'email'">
+        <div class="row" style="border-top: solid thin #868999; padding: 10px">
+            <div class="col" style="padding: 0px">
+                <input class="email-schedule" type="text" placeholder="Asusto" autofocus ng-model="message.subject">
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <p class="text-primary">Enviar {{message.date.format("LLLL")}}</p>
+        <div class="row" style="border-top: solid thin #868999; padding: 10px">
+            <div class="col" style="padding: 0px">
+                <input class="email-schedule" type="email" placeholder="Tu email" ng-model="message.from">
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <p class="text-primary">Destinatario {{message.displayName}}
-                    <span ng-show="message.type == 'sms' && message.number">({{message.number}})</span>
-                    <span ng-show="message.type == 'email' && message.email">({{message.email}})</span>
-                </p>
+        <div class="row" style="border-top: solid thin #868999; padding: 10px">
+            <div class="col" style="padding: 0px">
+                <textarea rows="15" class="email-schedule" type="text" placeholder="Mensaje" ng-model="message.body">
+                </textarea>
+                <!--<input class="email-schedule" type="text" placeholder="Tu email">-->
             </div>
         </div>
 
-        <div class="row">
+        <!--<div class="row">
             <div class="col">
-                <form class="form-paper">
-                    <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
-                        <label>Asunto:</label>
-                        <div class="flex-xs">
-                            <input type="text" class="form-control" style="width:90%;" ng-model="message.subject"/>
-                        </div>
+                &lt;!&ndash;<div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">&ndash;&gt;
+                <div class="form-group flex flex-middle-xs">
+                    <div class="flex-xs">
+                        <input type="text" placeholder="Asunto" class="form-control"
+                               style="width:90%;"
+                               ng-model="message.subject"/>
                     </div>
-                    <div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">
-                        <label>De:</label>
-                        <div class="flex-xs">
-                            <input type="email" class="form-control" style="width:90%;" ng-model="message.from"/>
-                        </div>
+                </div>
+                &lt;!&ndash;<div class="form-group flex flex-middle-xs" ng-show="message.type == 'email'">&ndash;&gt;
+                <div class="form-group flex flex-middle-xs">
+                    <div class="flex-xs">
+                        <input type="email" placeholder="Tu email" class="form-control" style="width:90%;"
+                               ng-model="message.from"/>
                     </div>
-                    <div class="form-group">
-                        <textarea class="form-control" rows="10" style="width: 100%" ng-model="message.body"></textarea>
-                    </div>
-                </form>
+                </div>
+                <div class="form-group">
+                    &lt;!&ndash;<textarea class="form-control" rows="10" style="width: 100%" ng-model="message.body"></textarea>&ndash;&gt;
+                </div>
+
             </div>
+        </div>-->
+    </form>
+
+    <!--<div class="row">
+        <div class="col">
+            <button style="font-size: 28px; color:gray" class="button button-icon ion-android-send" ng-click="sendMessage()"></button>
+        </div>
+    </div>-->
+</ion-content>
+
+<ion-footer-bar keyboard-attach class="bar-stable item-input-inset" ng-show="message.type == 'mum'" style="padding: 0; height: 55px;">
+
+    <div class="row" style="background-color: #F8F8F8!important;">
+        <div style="border: solid thin #868999;position: absolute;width: 98%;height: 84%;border-radius: 30px;"></div>
+        <!--<div class="col">-->
+            <!--<i class="icon ion-ios-plus-empty icon-add" ng-click="actionUpload()"></i>-->
+        <!--</div>-->
+        <div class="col col-90" style="z-index: 9">
+            <label class="item-input-wrapper"
+                   style="background-color: #ffffff!important;border-radius: 30px; /*border: solid thin #868999;*/">
+                <input style="width: 100%; height: 40px"
+                       name="body"
+                       type="text" id="inputMsj"
+                       placeholder="Escribir mensaje"
+                       on-return="sendMessage()"
+                       ng-model="message.body"
+                       ng-blur="inputDown()"/>
+            </label>
+        </div>
+        <div class="col button-send" style="z-index: 9" ng-click="sendMessage()" event-focus="click" event-focus-id="inputMsj">
+            <span>
+                <i class="icon ion-ios-arrow-right icon-send" style="color: #ffffff"></i>
+            </span>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <button style="font-size: 28px; color:gray" class="button button-icon ion-android-send" ng-click="sendMessage()"></button>
-            </div>
-        </div>
-    </ion-content>
-</div>
+    </div>
+
+    <!--<label class="item-input-wrapper">
+        <input type="text" id="inputMsj" placeholder="Escribir mensaje" on-return="sendMessage()" ng-model="body" ng-focus="inputUp()" ng-blur="inputDown()" />
+    </label>
+    <button class="button button-clear" ng-click="sendMessage()" event-focus="click" event-focus-id="inputMsj">
+        <span class="icon icon-dart-right" style="color: #999999;"></span>
+    </button>-->
+</ion-footer-bar>

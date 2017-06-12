@@ -430,6 +430,37 @@ and (orientation: landscape) {
 
 }
 
+div.week>span.day-s.today{
+    background: #E3F2FF;
+}
+
+div.week>span.day-s.selected{
+    background-color: #C83960!important;
+    font-weight: 400!important;
+    font-size: 10px!important;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px!important;
+    color: #fff!important;
+    margin-left: 9px;
+    margin-right: 9px;
+}
+
+.day-s {
+    float: left;
+    width: 14%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    font-size: 12px;
+    text-align: center;
+    height: 40px!important;
+    line-height: 40px!important;
+    display: inline-block;
+    vertical-align: middle;
+    background: #fff;
+    cursor: pointer;
+    color: #000!important;
+}
 .mum-pendings {
     background-color: #E44D76;
 }
@@ -465,14 +496,16 @@ calendar>div.week>span.day {
 .col-back {
     align-self: center!important;
     position: absolute!important;
-    top: 17px!important;
+    /*top: 17px!important;*/
+    top: 2%!important;
     left: 5px!important;
 }
 
 .col-next {
     align-self: center!important;
     position: absolute!important;
-    top: 17px!important;
+    /*top: 17px!important;*/
+    top: 2%!important;
     right: 5px!important;
 }
 
@@ -561,6 +594,26 @@ calendar>div.week>span.day {
     background: linear-gradient(#BE0065, #E44D76); /* Standard syntax (must be last) */
 }
 
+.terms {
+    color: #000000;
+    margin-top: 60px;
+    text-align: justify;
+    padding-right: 27px;
+    padding-left: 27px;
+    padding-top: 20px;
+    font-size: 15px;
+}
+
+.bar-header-back {
+    height: 62px!important;
+    background-color: #F8F8F8!important;
+}
+
+.email-schedule {
+    padding-left: 5px!important;
+    padding-bottom: 6px!important;
+    width: 100%!important;
+}
 /*iPhone 5:*/
 @media screen and (device-aspect-ratio: 40/71) {
     .counter-mum {

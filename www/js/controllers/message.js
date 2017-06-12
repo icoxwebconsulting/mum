@@ -4,6 +4,7 @@ angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $s
 
     $scope.$on('$ionicView.enter', function () {
         $scope.message = messageService.getMessage();
+        console.log('$scope.message', $scope.message)
     });
 
     $scope.message = messageService.factory().createMessage();

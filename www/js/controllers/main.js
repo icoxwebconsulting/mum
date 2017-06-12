@@ -45,7 +45,7 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
                     case 0:
                         $state.go('profile');
                         break;
-                    case 2:
+                    case 1:
                         $state.go('terms');
                         break;
                 }
