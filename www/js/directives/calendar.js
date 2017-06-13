@@ -6,6 +6,7 @@ angular.module('app').directive("calendar", function (messageStorage, $state, DA
             selected: "="
         },
         link: function (scope) {
+            userDatastore.removeScheduleDay();
             scope.selected = _removeTime(scope.selected || moment());
             scope.month = scope.selected.clone();
 

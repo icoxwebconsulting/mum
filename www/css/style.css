@@ -434,6 +434,13 @@ div.week>span.day-s.today{
     background: #E3F2FF;
 }
 
+div.week>span.day-s.events {
+    font-weight: 400!important;
+    font-size: .75em!important;
+    background: url(../img/mum-check.png) center 30px no-repeat;
+    background-size: 5px;
+}
+
 div.week>span.day-s.selected{
     background-color: #C83960!important;
     font-weight: 400!important;
@@ -444,6 +451,18 @@ div.week>span.day-s.selected{
     color: #fff!important;
     margin-left: 9px;
     margin-right: 9px;
+}
+
+div.week {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #d1d1d1;
+    padding-top: 2px!important;
+    height: 50px;
+}
+
+div.week>span.day-s.different-month {
+    color: silver!important;
 }
 
 .day-s {

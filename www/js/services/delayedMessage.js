@@ -1,4 +1,4 @@
-angular.module('app').service('delayedMessageService', function ($q, messageStorage, messageQueue) {
+angular.module('app').service('delayedMessageService', function ($q, messageStorage, messageQueue, DATETIME_FORMAT_CONF) {
 
     function processDelayedMessage(message) {
 

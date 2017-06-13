@@ -8,7 +8,7 @@
                             <div class="row-date">
                                 <div class="col-back" style="top: 8px!important;">
                                     <!--<img src="img/Back.png" alt="" ng-click="monthDown()">-->
-                                    <a ng-click="monthDown()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                                    <a ng-click="previous()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
                                         <i class="icon ion-chevron-left" style="position: absolute;font-size: 30px;top: -7px;"></i>
                                         <span style="margin-left: 17px;font-size: 16px;">Back</span>
                                     </a>
@@ -23,7 +23,7 @@
                             <div class="row-date">
                                 <div class="col-next" style="top: 8px!important;">
                                     <!--<img src="img/Back.png" ng-click="monthUp()" alt="">-->
-                                    <a ng-click="monthUp()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                                    <a ng-click="next()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
                                         <i class="icon ion-chevron-right" style="position: absolute;font-size: 30px;top: -7px;right: -1px;"></i>
                                         <span style="margin-right: 15px;font-size: 16px;">Next</span>
                                     </a>
@@ -45,7 +45,7 @@
                         </div>-->
                     </div>
 
-                    <ion-scroll zooming="false" direction="x" class="wide-as-needed" delegate-handle="vscroll">
+                    <!--<ion-scroll zooming="false" direction="x" class="wide-as-needed" delegate-handle="vscroll">
                         <div class="calendar-days flex flex-middle-xs" style="width: 1700px;">
                             <button class="calendar-day clear-btn flex-xs" type="button"
                                     ng-repeat="day in getMaxDay() track by $index"
@@ -55,35 +55,79 @@
                                 <span class="day-label">{{calculateWeekDay($index + 1)}}</span>
                             </button>
                         </div>
-                    </ion-scroll>
+                    </ion-scroll>-->
                 </div>
-                <!--{{fecha.format("dddd, D")}}-->
-                <div class="timer">
-                    <button type="button" class="btn clear-btn" ng-click="timeUp()">
-                        <span class="icon icon-pointer-up"></span>
-                    </button>
-                    <ionic-timepicker input-obj="timePickerObject">
-                        <input class="form-control" type="text" id="" ng-model="selectedTime"
-                               input-obj="timePickerObject"/>
-                    </ionic-timepicker>
-                    <button type="button" class="btn clear-btn" ng-click="timeDown()">
-                        <span class="icon icon-pointer-down"></span>
-                    </button>
-                </div>
+
+                <!--<div class="row">
+                    <div class="col">
+                        <calendar selected="selected"></calendar>
+                    </div>
+                </div>-->
 
 
                 <div class="row">
                     <div class="col">
-                        <a ng-click="newSchedule('mum')"><img src="img/nuevo-mum.png" height="70" width="70" /></a>
+                        <div class="week names" style="">
+                            <span class="day-s">LU</span>
+                            <span class="day-s">MA</span>
+                            <span class="day-s">MI</span>
+                            <span class="day-s">JU</span>
+                            <span class="day-s">VI</span>
+                            <span class="day-s">SA</span>
+                            <span class="day-s">DO</span>
+                        </div>
+                        <div class="week" ng-repeat="week in weeks">
+                        <span class="day-s"
+                              ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, selected: day.date.isSame(selected), events: day.hasEvents }"
+                              ng-click="select(day)" ng-repeat="day in week.days">{{day.number}}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--{{fecha.format("dddd, D")}}-->
+                <div class="row">
+                    <div class="timer col" style="display: flex;padding-top: 0px; margin-top: 5px;margin-bottom: 5px">
+                        <button type="button" class="btn clear-btn" ng-click="timeDown()"
+                                style="position: relative;left: 25%">
+                            <span class="icon icon-pointer-down"></span>
+                        </button>
+                        <ionic-timepicker input-obj="timePickerObject">
+                            <input class="form-control" type="text" id="" ng-model="selectedTime"
+                                   input-obj="timePickerObject"/>
+                        </ionic-timepicker>
+                        <button type="button" class="btn clear-btn" ng-click="timeUp()"
+                                style="position: relative;right: 25%">
+                            <span class="icon icon-pointer-up"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="text-align: left;padding-left: 20px;border-top: 1px solid #d1d1d1;">
+                    <p style="margin-bottom: 0px;font-size: 20px;color: #000;margin-top: 10px;">Programado para:</p>
+                    <p style="">{{fecha.format("dddd, D MMMM YYYY, HH:mm")}}</p>
+                </div>
+
+                <div class="row" style="border-top: 1px solid #d1d1d1;">
+                    <div class="col">
+                        <a ng-click="newSchedule('mum')"><img src="img/logo.png" height="70" width="70" /></a>
+                        </br>
+                        <span style="font-size: 10px;    position: relative;top: -5px;">Nuevo Mum</span>
                     </div>
                     <!--<div class="col">-->
                         <!--<a ng-click="newSchedule('sms')"><img src="img/nuevo-sms.png" height="70" width="70" /></a>-->
                     <!--</div>-->
                     <div class="col">
-                        <a ng-click="newSchedule('email')"><img src="img/nuevo-mail.png" height="70" width="70" /></a>
+                        <div style="width: 70px;height: 70px; background-color: #E24D75; border-radius: 50%;margin-left: 27%;">
+                            <a ng-click="newSchedule('email')" >
+                                <i class="icon ion-email" style="color: #ffffff;position: relative;top: 22%;font-size: 36px;"></i>
+                            </a>
+                        </div>
+                        <span style="font-size: 10px">Nuevo Email</span>
+
                     </div>
                 </div>
-                <div>Programado para: {{fecha.format("dddd, D MMMM YYYY, HH:mm")}}</div>
+
             </div>
         </div>
     </ion-content>
