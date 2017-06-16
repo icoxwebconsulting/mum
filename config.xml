@@ -17,6 +17,7 @@
   <preference name="SplashScreen" value="none"/>
   <preference name="SplashScreenDelay" value="3000"/> 
  <preference name="AndroidPersistentFileLocation" value="Internal"/>
+  <preference name="KeyboardDisplayRequiresUserAction" value="false" />
   <preference name="xwalkMultipleApk" value="true"/>
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
