@@ -1,12 +1,25 @@
 angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $ionicLoading, $stateParams, $ionicPopup, messageService, userDatastore, messageRes, DATETIME_FORMAT_CONF) {
 
     $scope.dateParam = $stateParams;
+    userDatastore.setStateCurrentName($state.current.name);
     var popup;
     $ionicLoading.show();
     messageService.getSchedulesByDate($scope.dateParam.date).then(function (messages) {
         for (var i = 0; i < messages.length; i++) {
-            messages[i].at = moment(moment.utc(messages[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss');
-            console.log('msjs[i].at', messages[i].at);
+            console.log('messages[i].at', ' - ' + messages[i].at);
+            console.log('moment(messages[i].at)', ' - ' + moment(messages[i].at).format('YYYY-MM-DD HH:mm:ss'));
+            console.log('$scope.dateParam.date', ' - ' +  $scope.dateParam.date);
+            // debugger;
+            // messages[i].at = moment(moment.utc(messages[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss');
+            // messages[i].at = moment(moment.utc(messages[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss');
+            var gmtDateTime = moment.utc(messages[i].at, "YYYY-MM-DD HH:mm:ss");
+            var tzLocal = moment.tz.guess();
+            // messages[i].at = gmtDateTime.local().format('YYYY-MM-DD HH:mm:ss');
+            messages[i].at = moment(messages[i].at).format('YYYY-MM-DD HH:mm:ss');
+            console.log('tzLocal',moment(gmtDateTime).tz(tzLocal).format('YYYY-MM-DD HH:mm:ss'));
+
+
+            // console.log('msjs[i].at', messages[i].at);
         }
         $scope.messages = messages;
         $ionicLoading.hide();

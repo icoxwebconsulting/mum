@@ -37,7 +37,7 @@
                 <a class="button-footer" href="#/content/schedule">
                     <img style="height: 25px; /*margin-top: 8px;*/"
                          src="img/add-mum.png"
-                         ng-src="{{ stateCurrent != 'layout.schedule' && 'img/schedule.png' || 'img/schedule-active.png' }}">
+                         ng-src="{{ (stateCurrent == 'layout.schedule' || stateCurrent == 'layout.scheduleList') && 'img/schedule-active.png' || 'img/schedule.png' }}">
                     <p class="text-bar-footer">Programar</p>
                 </a>
             </div>

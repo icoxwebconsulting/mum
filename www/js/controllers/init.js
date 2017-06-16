@@ -38,8 +38,8 @@ angular.module('app')
         };
 
         buildSelect();
-        
-        
+
+
         $scope.haveCode = function (opt) {
             if (opt) {
                 $scope.toVerify = 1;

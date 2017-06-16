@@ -100,7 +100,7 @@ angular.module('app').service('messageService', function ($q, messageStorage, me
         };
 
         if (message.date) {
-            messageData.message.at = moment.utc(message.date).format(DATETIME_FORMAT_CONF.dateTimeFormat);
+            messageData.message.at = moment(message.date).tz("Europe/Madrid").format(DATETIME_FORMAT_CONF.dateTimeFormat);
         }
 
         if (message.type == 'email') {
