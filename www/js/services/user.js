@@ -137,7 +137,7 @@ angular.module('app.user', [])
             if (profile.avatarURL == null ||
                 profile.avatarURL == undefined ||
                 profile.avatarURL == 'undefined') {
-                profile.avatarURL = 'img/person.png';
+                profile.avatarURL = 'img/profile-img.png';
             }
             if (profile.displayName == null ||
                 profile.displayName == undefined ||
