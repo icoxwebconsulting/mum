@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.mumapp.mum" version="1.4" xmlns="http://www.w3.org/ns/widgets">
+<widget id="com.thinkandcloud.mum" version="1.9" xmlns="http://www.w3.org/ns/widgets">
   <name>mum</name>
   <description>
         Una aplicacion para intercambiar mensajes con todo el mundo
@@ -15,10 +15,10 @@
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="none"/>
-  <preference name="SplashScreenDelay" value="3000"/> 
- <preference name="AndroidPersistentFileLocation" value="Internal"/>
-  <preference name="KeyboardDisplayRequiresUserAction" value="false" />
-  <preference name="xwalkMultipleApk" value="true"/>
+  <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="AndroidPersistentFileLocation" value="Internal"/>
+  <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
+  <preference name="xwalkMultipleApk" value="false"/>
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>

@@ -78,7 +78,14 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
 
                     messageStorage.updateConversation(conversation).then(function () {
                         saveMessage(messageData, idMessage, conversation, type);
-                        openConversation(conversation);
+                        // openConversation(conversation);
+
+                        $scope.$on('$cordovaPush:notificationReceived', notificationHandler);
+                        console.log('notificationHandler', notificationHandler);
+
+                        messageService.getUnreadMessages().then(function (result) {
+                            console.log('result', result);
+                        });
                     });
                 } else {
                     //no existe, crearla

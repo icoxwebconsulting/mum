@@ -91,7 +91,8 @@
                                 <a ng-click="openFile(msj.attachment, msj.is_received)">
                                     <img
                                         ng-class="{ 'message-date-in-img': msj.is_received, 'message-date-out-img': !msj.is_received}"
-                                        ng-src="{{ msj.attachment }}" style="max-height: 150px; width: 100%">
+                                        ng-src="{{ msj.attachment.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com') }}"
+                                        style="max-height: 150px; width: 100%">
                                     <i ng-click="sendMessage()" event-focus="click"
                                        ng-class="{ 'message-in-img-arrow': msj.is_received, 'message-out-img-arrow': !msj.is_received}"></i>
                                 </a>

@@ -73,6 +73,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     $scope.next = function () {
         var next = $scope.month.clone();
+        $scope.fecha = next;
         _removeTime(next.month(next.month() + 1).date(1));
         $scope.month.month($scope.month.month() + 1);
         _buildMonth($scope, next, $scope.month);
@@ -80,6 +81,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     $scope.previous = function () {
         var previous = $scope.month.clone();
+        $scope.fecha = previous;
         _removeTime(previous.month(previous.month() - 1).date(1));
         $scope.month.month($scope.month.month() - 1);
         _buildMonth($scope, previous, $scope.month);
@@ -94,6 +96,11 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
     }
 
     $scope.$on('$ionicView.beforeEnter', function (e) {
+
+        if(userDatastore.getStateCurrentName() == 'layout.inbox') {
+            $scope.fecha = moment().add(10, 'minutes');
+            console.log('$scope.fecha', $scope.fecha)
+        }
         userDatastore.setStateCurrentName($state.current.name);
     });
 

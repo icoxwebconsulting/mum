@@ -1,7 +1,9 @@
 <div class="modal image-modal transparent">
     <ion-pane class="transparent">
         <div class="row">
-            <div class="col"><img ng-src="{{imageSrc}}" class="fullscreen-image"/></div>
+            <div class="col">
+                <img ng-src="{{imageSrc.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com').replace('_mini', '')  }}" class="fullscreen-image"/>
+            </div>
         </div>
         <div class="row">
             <div class="col" ng-hide="!isReceived">

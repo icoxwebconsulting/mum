@@ -2,6 +2,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
 
     $scope.conversation = messageService.factory().createConversation();
     var popup;
+    var valid = false;
 
     messageService.getInboxMessages().then(function (conversations) {
         $scope.conversations = conversations;
@@ -9,6 +10,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     });
 
     $scope.$on('$ionicView.beforeEnter', function (e) {
+        valid = false;
         $ionicViewService.clearHistory();
         messageService.getInboxMessages().then(function (conversations) {
             $scope.conversations = conversations;
@@ -37,7 +39,9 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
         if (popup) {
             popup.close();
         }
-        $state.go('conversation');
+        if (valid == false){
+            $state.go('conversation');
+        }
     };
 
     function toDelete() {
@@ -48,6 +52,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
     }
 
     $scope.deleteConversation = function (conversation) {
+        valid = true;
         $scope.conversation = conversation;
         popup = $ionicPopup.alert({
             title: 'Eliminar conversación',
@@ -64,6 +69,7 @@ angular.module('app').controller('InboxCtrl', function ($scope, $rootScope, $sta
                 {text: 'Cancelar'}
             ]
         });
+        valid = false;
     };
 
     $rootScope.$on('receivedMessage', function (e, data) {
