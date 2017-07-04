@@ -6,7 +6,7 @@
                       ng-click="open(conversation)"
                       on-hold="deleteConversation(conversation)"
                       ng-class="{'unread-conversation': conversation.isUnread}">
-                <img ng-src="{{conversation.image ? conversation.image : 'img/person.png'}}">
+                <img ng-src="{{conversation.image.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com') ? conversation.image.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com') : 'img/person.png'}}">
 
                 <h2 style="text-align: left">{{conversation.displayName}}
                     <span style="margin-left: 10px; color: #666; font-size: 10px;">

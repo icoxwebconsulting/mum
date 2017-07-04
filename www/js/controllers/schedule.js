@@ -99,7 +99,6 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
         if(userDatastore.getStateCurrentName() == 'layout.inbox') {
             $scope.fecha = moment().add(10, 'minutes');
-            console.log('$scope.fecha', $scope.fecha)
         }
         userDatastore.setStateCurrentName($state.current.name);
     });

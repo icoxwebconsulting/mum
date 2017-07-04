@@ -7,9 +7,11 @@ angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ioni
 
               angular.forEach(contactsMum, function(value1, key1){
                   angular.forEach($scope.contacts, function(value2, key2){
-                 if(value1.customer.username === value2.phone_number && value1.avatar_u_r_l != value2.photo){
+                 if(value1.customer.username === value2.phone_number && value1.avatar_u_r_l){
+                     var photo = value1.avatar_u_r_l.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com');
+                     console.log('photo', photo);
                    var data = {
-                      photo: value1.avatar_u_r_l,
+                      photo: value1.avatar_u_r_l.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com'),
                       phone_number: value2.phone_number
                    };
                    Contacts.uploadProfileContacts(data);
@@ -51,9 +53,11 @@ angular.module('app').controller('ContactsCtrl', function ($scope, $state, $ioni
             angular.forEach(contactsMum, function(value1, key1){
               angular.forEach($scope.contacts, function(value2, key2){
                 if(value1.customer.username === value2.phone_number && value1.avatar_u_r_l != value2.photo){
+                    var photo = value1.avatar_u_r_l.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com');
+                    console.log('photo', photo);
                   var data = {
-                    photo: value1.avatar_u_r_l,
-                    phone_number: value2.phone_number
+                      photo: value1.avatar_u_r_l.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com'),
+                      phone_number: value2.phone_number
                   };
                   Contacts.uploadProfileContacts(data);
                   console.log('upload photo in ', value1.customer.username);

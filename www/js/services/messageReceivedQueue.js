@@ -1,4 +1,4 @@
-angular.module('app').service('messageReceivedQueue', function (messageStorage, messageService, userDatastore, messageNotification, Contacts, $state) {
+angular.module('app').service('messageReceivedQueue', function (messageStorage, messageService, userDatastore, messageNotification, Contacts, $state, $ionicPopup, userDatastore) {
 
     var queue = [];
     var isRunning = false;
@@ -80,12 +80,31 @@ angular.module('app').service('messageReceivedQueue', function (messageStorage, 
                         saveMessage(messageData, idMessage, conversation, type);
                         // openConversation(conversation);
 
-                        $scope.$on('$cordovaPush:notificationReceived', notificationHandler);
-                        console.log('notificationHandler', notificationHandler);
 
-                        messageService.getUnreadMessages().then(function (result) {
-                            console.log('result', result);
-                        });
+                        /*messageService.getUnreadMessages().then(function (result) {
+
+                            var stateCurrent = userDatastore.getStateCurrentName();
+
+                            if(stateCurrent == 'layout.inbox' || stateCurrent == 'conversation'){
+
+                                console.log('not Popup')
+                            }else{
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Nuevo mensaje',
+                                    template: '<b>De: </b>' + conversation.displayName
+                                });
+                                console.log('conversation', conversation);
+                                console.log('alertPopup', alertPopup);
+
+                                alertPopup.then(function(res) {
+                                    console.log('res popup',res);
+                                });
+                                console.log('result', result);
+                                setTimeout(function(){ alertPopup.close() }, 3000);
+                            }
+
+
+                        });*/
                     });
                 } else {
                     //no existe, crearla

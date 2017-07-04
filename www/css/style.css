@@ -14,6 +14,10 @@
   width: 140px;
 }
 
+.new-msg {
+    text-align: center;
+}
+
 @media screen
 and (orientation: portrait) {
     .mum-init-start {
