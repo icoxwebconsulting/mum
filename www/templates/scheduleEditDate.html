@@ -1,0 +1,152 @@
+<ion-view>
+    <ion-content class="top-margin">
+        <div style="font-size: medium">
+            <div class="container text-center">
+                <div class="calendar">
+                    <div class="calendar-month flex flex-middle-xs">
+                        <div class="date-div">
+                            <div class="row-date">
+                                <div class="col-back" style="top: 8px!important;">
+                                    <!--<img src="img/Back.png" alt="" ng-click="monthDown()">-->
+                                    <a ng-click="previous()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                                        <i class="icon ion-chevron-left" style="position: absolute;font-size: 30px;top: -7px;"></i>
+                                        <span style="margin-left: 17px;font-size: 16px;">Back</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div style=" flex: 0 0 50%;max-width: 50%;" class="col-date">
+                                <div style="display: block; text-transform: capitalize; height: 26px; align-self: flex-start;font-size: 18px;">
+                                    {{fecha.format("MMMM")}}
+                                </div>
+                                <div style="display: block;font-size: 12px;align-self: flex-start;margin-top: -10px;">{{fecha.format("YYYY")}}</div>
+                            </div>
+                            <div class="row-date">
+                                <div class="col-next" style="top: 8px!important;">
+                                    <!--<img src="img/Back.png" ng-click="monthUp()" alt="">-->
+                                    <a ng-click="next()" style="text-decoration: none;font-size: 18px;color: #E44D76;">
+                                        <i class="icon ion-chevron-right" style="position: absolute;font-size: 30px;top: -7px;right: -1px;"></i>
+                                        <span style="margin-right: 15px;font-size: 16px;">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="flex-xs">
+                            <button type="button" class="btn clear-btn" ng-click="monthDown()">
+                                <span class="icon icon-pointer-left"></span>
+                            </button>
+                        </div>
+                        <div class="flex-xs">
+                            <span class="text-uppercase">{{fecha.format("MMMM, YYYY")}}</span>
+                        </div>
+                        <div class="flex-xs">
+                            <button type="button" class="btn clear-btn" ng-click="monthUp()">
+                                <span class="icon icon-pointer-right"></span>
+                            </button>
+                        </div>-->
+                    </div>
+
+                    <!--<ion-scroll zooming="false" direction="x" class="wide-as-needed" delegate-handle="vscroll">
+                        <div class="calendar-days flex flex-middle-xs" style="width: 1700px;">
+                            <button class="calendar-day clear-btn flex-xs" type="button"
+                                    ng-repeat="day in getMaxDay() track by $index"
+                                    ng-class="{active: ($index+1)==fecha.date()}"
+                                    ng-click="changeDay($index)">
+                                <span class="day-number">{{$index + 1}}</span>
+                                <span class="day-label">{{calculateWeekDay($index + 1)}}</span>
+                            </button>
+                        </div>
+                    </ion-scroll>-->
+                </div>
+
+                <!--<div class="row">
+                    <div class="col">
+                        <calendar selected="selected"></calendar>
+                    </div>
+                </div>-->
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="week names" style="">
+                            <span class="day-s">LU</span>
+                            <span class="day-s">MA</span>
+                            <span class="day-s">MI</span>
+                            <span class="day-s">JU</span>
+                            <span class="day-s">VI</span>
+                            <span class="day-s">SA</span>
+                            <span class="day-s">DO</span>
+                        </div>
+                        <div class="week" ng-repeat="week in weeks">
+                        <span class="day-s"
+                              ng-class="{ today: day.isToday, 'different-month': !day.isCurrentMonth, selected: day.date.isSame(selected), events: day.hasEvents }"
+                              ng-click="select(day)" ng-repeat="day in week.days">{{day.number}}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--{{fecha.format("dddd, D")}}-->
+                <div class="row">
+                    <div class="timer col" style="display: flex;padding-top: 0px; margin-top: 5px;margin-bottom: 5px">
+                        <button type="button" class="btn clear-btn" ng-click="timeDown()"
+                                style="position: relative;left: 25%">
+                            <span class="icon icon-pointer-down"></span>
+                        </button>
+                        <ionic-timepicker input-obj="timePickerObject">
+                            <input class="form-control" type="text" id="" ng-model="selectedTime"
+                                   input-obj="timePickerObject"/>
+                        </ionic-timepicker>
+                        <button type="button" class="btn clear-btn" ng-click="timeUp()"
+                                style="position: relative;right: 25%">
+                            <span class="icon icon-pointer-up"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="text-align: left;padding-left: 20px;border-top: 1px solid #d1d1d1;">
+                    <p style="margin-bottom: 0px;font-size: 20px;color: #000;margin-top: 10px;">Programado para:</p>
+                    <p style="">{{fecha.format("dddd, D MMMM YYYY, HH:mm")}}</p>
+                </div>
+
+                <div class="row">
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-50">
+                        <a class="item assertive" ng-click="backNavigation()">
+                            Regresar
+                        </a>
+                    </div>
+                    <div class="col" style="padding-top: 0px!important; padding-right: 0px!important;">
+                        <a class="item assertive" ng-click="updateMessage()">
+                            Guardar
+                        </a>
+                    </div>
+                </div>
+
+                <!--<div class="row" style="border-top: 1px solid #d1d1d1;">
+                    <div class="col">
+                        <a ng-click="newSchedule('mum')"><img src="img/logo.png" height="70" width="70" /></a>
+                        </br>
+                        <span style="font-size: 10px;    position: relative;top: -5px;">Nuevo Mum</span>
+                    </div>
+                    &lt;!&ndash;<div class="col">&ndash;&gt;
+                        &lt;!&ndash;<a ng-click="newSchedule('sms')"><img src="img/nuevo-sms.png" height="70" width="70" /></a>&ndash;&gt;
+                    &lt;!&ndash;</div>&ndash;&gt;
+                    <div class="col">
+                        <div style="width: 70px;height: 70px; background-color: #E24D75; border-radius: 50%;margin-left: 27%;">
+                            <a ng-click="newSchedule('email')" >
+                                <i class="icon ion-email" style="color: #ffffff;position: relative;top: 22%;font-size: 36px;"></i>
+                            </a>
+                        </div>
+                        <span style="font-size: 10px">Nuevo Email</span>
+
+                    </div>
+                </div>-->
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

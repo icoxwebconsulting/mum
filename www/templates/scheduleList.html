@@ -5,7 +5,7 @@
             <ion-item   class="item-remove-animate item-avatar item-icon-right" ng-repeat="message in messages"
                         on-hold="deleteMessage(message)"
                         ng-click="open(message)">
-                <img ng-src="{{message.image ? message.image : 'img/person.png'}}">
+                <img ng-src="{{message.image.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com') ? message.image.replace('http://188.138.127.53/mum/framework/web', 'http://mum.icox.com') : 'img/person.png'}}">
                 <h2>{{message.display_name}}</h2>
                 <p ng-class="{'bg-msg-mail': message.type == 'email', 'bg-msg-mum': message.type == 'mum', 'bg-msg-sms': message.type == 'sms'}">
                     {{message.body}}

@@ -1,4 +1,4 @@
-angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition, userDatastore, DATETIME_FORMAT_CONF, messageStorage) {
+angular.module('app').controller('ScheduleEditDateCtrl', function ($scope, $state, $ionicPopup, messageService, $ionicScrollDelegate, $ionicPosition, $ionicLoading, $timeout, userDatastore, DATETIME_FORMAT_CONF, messageStorage) {
 
     function _removeTime(date) {
         return date.day(1).hour(1).minute(1).second(1).millisecond(1);
@@ -67,6 +67,9 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
     _buildMonth($scope, start, $scope.month);
     getAllScheduledMessages(start);
     $scope.totalScheduleMessages = userDatastore.getScheduleMessages();
+    console.log('$scope->>', $scope);
+    console.log('start->>', start);
+    console.log('$scope.month->>', $scope.month);
 
     $scope.next = function () {
         var next = $scope.month.clone();
@@ -119,6 +122,8 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
 
     $scope.scrollToDay = function () {
         var element = $ionicPosition.position(angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active')[0]));
+//        console.log('scroll to day', $ionicPosition.position(angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active'))));
+        console.info('element --> ', angular.element(document.getElementsByClassName('calendar-day clear-btn flex-xs active')[0]));
         $ionicScrollDelegate.$getByHandle('vscroll').scrollTo(element.left, element.top, true);
     };
 
@@ -136,8 +141,7 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
         } else {
             var message = messageService.factory().createMessage();
             message.type = type;
-            var dateChange = moment($scope.fecha).tz(DATETIME_FORMAT_CONF.dateTimeZone).format(DATETIME_FORMAT_CONF.dateTimeFormat);
-            message.date = moment(dateChange, DATETIME_FORMAT_CONF.dateTimeFormat);
+            message.date = $scope.fecha;
             messageService.setMessage(message);
             $state.go('pick_contact');
         }
@@ -161,11 +165,13 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
         var selected = $index + 1;
         var selectedDate = moment($scope.fecha.date(selected)).format(DATETIME_FORMAT_CONF.dateTimeFormat);
 
+        console.info('selectedDate', selectedDate);
 
         if (selectedDate < moment().format(DATETIME_FORMAT_CONF.dateTimeFormat)) {
             showPopup();
         } else {
             $scope.fecha.date(selected);
+            console.info('$scope.fecha.date(selected)', $scope.fecha.date(selected));
         }
     };
 
@@ -214,6 +220,37 @@ angular.module('app').controller('ScheduleCtrl', function ($scope, $state, $ioni
             $scope.selectedTime = $scope.fecha.format('HH:mm');
         }
     }
+
+    $scope.backNavigation = function () {
+        navigator.app.backHistory();
+    };
+
+    $scope.updateMessage = function () {
+        var objectMessage = JSON.parse(userDatastore.getObjectMessage());
+        console.log('objectMessage', objectMessage);
+        objectMessage.date = moment($scope.fecha,'YYYY-MM-DD HH:mm:ss');
+        objectMessage.at = moment($scope.fecha).format('YYYY-MM-DD HH:mm:ss');
+        console.log('objectMessage.date ', objectMessage.date);
+
+        userDatastore.setObjectMessage(JSON.stringify(objectMessage));
+        console.log('objectMessage change', objectMessage);
+
+        $ionicLoading.show({
+            content: 'Loading',
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 10
+        });
+
+        $timeout(function () {
+            $ionicLoading.hide();
+            navigator.app.backHistory();
+        }, 2000);
+
+
+
+    };
 
     $scope.timePickerObject = {
         inputEpochTime: ($scope.fecha.unix() + ($scope.fecha.utcOffset() * 60)),  //Optional

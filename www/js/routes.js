@@ -98,6 +98,11 @@ angular.module('app.routes', [])
                 url: '/conversation',
                 templateUrl: 'templates/conversation.html',
                 controller: 'ConversationCtrl'
+            })
+            .state('scheduleEditDate', {
+                url: '/scheduleEditDate',
+                templateUrl: 'templates/scheduleEditDate.html',
+                controller: 'ScheduleEditDateCtrl'
             });
 
 

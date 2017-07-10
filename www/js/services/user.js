@@ -102,6 +102,7 @@ angular.module('app.user', [])
                     .then(function (response) {
                         userDatastore.setTokens(response.access_token, response.refresh_token);
                         userDatastore.setRefreshingAccessToken(0);
+                        userDatastore.setDateToken(moment().format('YYYY-MM-DD HH:mm:ss'));
                     })
                     .catch(function () {
                         requestAccessToken(function () {

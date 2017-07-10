@@ -1,4 +1,4 @@
-angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService, messageReceived, userDatastore) {
+angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, delayedMessageService, messageService, messageReceived, userDatastore, user) {
     moment.locale('es');
     $scope.day = moment();
 
@@ -15,7 +15,18 @@ angular.module('app').controller('MainCtrl', function ($scope, $rootScope, $stat
             }
         });
 
-        $scope.stateCurrent = userDatastore.getStateCurrentName()
+        /*if(userDatastore.getDateToken()) {
+            var now = moment();
+            var end = moment(userDatastore.getDateToken());
+            var diffDate = now.diff(end, 'second');
+
+            if(diffDate > 3600){
+                userDatastore.setRefreshingAccessToken(0);
+                user.refreshAccessToken();
+            }
+        }*/
+
+        $scope.stateCurrent = userDatastore.getStateCurrentName();
 
         console.log('$scope.stateCurrent', $scope.stateCurrent);
     });

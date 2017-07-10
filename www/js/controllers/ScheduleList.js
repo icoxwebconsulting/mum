@@ -6,10 +6,9 @@ angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $
     $ionicLoading.show();
     messageService.getSchedulesByDate($scope.dateParam.date).then(function (messages) {
         for (var i = 0; i < messages.length; i++) {
-            console.log('messages[i].at', ' - ' + messages[i].at);
+            /*console.log('messages[i].at', ' - ' + messages[i].at);
             console.log('moment(messages[i].at)', ' - ' + moment(messages[i].at).format('YYYY-MM-DD HH:mm:ss'));
-            console.log('$scope.dateParam.date', ' - ' +  $scope.dateParam.date);
-            // debugger;
+            console.log('$scope.dateParam.date', ' - ' +  $scope.dateParam.date);*/
             // messages[i].at = moment(moment.utc(messages[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss');
             // messages[i].at = moment(moment.utc(messages[i].at).toDate()).format('YYYY-MM-DD HH:mm:ss');
             var gmtDateTime = moment.utc(messages[i].at, "YYYY-MM-DD HH:mm:ss");
@@ -29,7 +28,7 @@ angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $
 
     $scope.open = function (scheduleMessage) {
         messageService.setMessage(scheduleMessage);
-
+        userDatastore.setObjectMessage(JSON.stringify(scheduleMessage));
         if (popup) {
             popup.close();
         }
@@ -84,5 +83,9 @@ angular.module('app').controller('ScheduleListCtrl', function ($scope, $state, $
             ]
         });
     };
+
+    $scope.$on('$ionicView.enter', function (e) {
+        userDatastore.removeObjectMessage();
+    });
 
 });

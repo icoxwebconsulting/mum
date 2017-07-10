@@ -125,6 +125,38 @@ angular.module('app.userDataStore', [])
             return window.localStorage.removeItem('scheduleDateNow');
         }
 
+        function setDateToken(date) {
+            window.localStorage.setItem('dateToken', date);
+        }
+
+        function getDateToken() {
+            return window.localStorage.getItem('dateToken');
+        }
+
+        function setObjectMessage(object) {
+            window.localStorage.setItem('objectMessage', object);
+        }
+
+        function getObjectMessage() {
+            return window.localStorage.getItem('objectMessage');
+        }
+
+        function removeObjectMessage() {
+            return window.localStorage.removeItem('objectMessage');
+        }
+
+        function setEditMessage(status) {
+            window.localStorage.setItem('editMessage', status);
+        }
+
+        function getEditMessage() {
+            return window.localStorage.getItem('editMessage');
+        }
+
+        function removeEditMessage() {
+            return window.localStorage.removeItem('editMessage');
+        }
+
         return {
             getVerified: getVerified,
             isVerified: isVerified,
@@ -153,6 +185,15 @@ angular.module('app.userDataStore', [])
             getStateCurrentName: getStateCurrentName,
             removeStateCurrentName: removeStateCurrentName,
             setScheduleDateNow: setScheduleDateNow,
-            getScheduleDateNow: getScheduleDateNow
+            getScheduleDateNow: getScheduleDateNow,
+            setDateToken: setDateToken,
+            getDateToken: getDateToken,
+            setObjectMessage: setObjectMessage,
+            getObjectMessage: getObjectMessage,
+            removeObjectMessage: removeObjectMessage,
+            setEditMessage: setEditMessage,
+            getEditMessage: getEditMessage,
+            removeEditMessage: removeEditMessage
+
         };
     });
